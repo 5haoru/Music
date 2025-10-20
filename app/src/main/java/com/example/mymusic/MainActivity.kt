@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -38,34 +39,39 @@ class MainActivity : ComponentActivity(), MainContract.View {
     fun MainScreen() {
         var currentTab by remember { mutableStateOf(0) }
 
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            bottomBar = {
-                NavigationBar {
-                    bottomNavItems.forEachIndexed { index, item ->
-                        NavigationBarItem(
-                            icon = { Icon(item.icon, contentDescription = item.label) },
-                            label = { Text(item.label) },
-                            selected = currentTab == index,
-                            onClick = {
-                                currentTab = index
-                                presenter.onTabSelected(index)
+        // 漫游和播放页面不显示底部导航栏
+        when (currentTab) {
+            1 -> StrollTab(onBackToRecommend = { currentTab = 0 })
+            2 -> PlayTab(onBackToRecommend = { currentTab = 0 })
+            else -> {
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    bottomBar = {
+                        NavigationBar {
+                            bottomNavItems.forEachIndexed { index, item ->
+                                NavigationBarItem(
+                                    icon = { Icon(item.icon, contentDescription = item.label) },
+                                    label = { Text(item.label) },
+                                    selected = currentTab == index,
+                                    onClick = {
+                                        currentTab = index
+                                        presenter.onTabSelected(index)
+                                    }
+                                )
                             }
-                        )
+                        }
                     }
-                }
-            }
-        ) { innerPadding ->
-            Surface(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-            ) {
-                when (currentTab) {
-                    0 -> RecommendTab()
-                    1 -> StrollTab()
-                    2 -> PlayTab()
-                    3 -> MeTab()
+                ) { innerPadding ->
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                    ) {
+                        when (currentTab) {
+                            0 -> RecommendTab()
+                            3 -> MeTab(onNavigateToPlayTab = { currentTab = 2 })
+                        }
+                    }
                 }
             }
         }
@@ -99,7 +105,7 @@ class MainActivity : ComponentActivity(), MainContract.View {
 
     private val bottomNavItems = listOf(
         BottomNavItem("推荐", Icons.Default.Home),
-        BottomNavItem("漫游", Icons.Default.Refresh),
+        BottomNavItem("漫游", Icons.Filled.MusicNote),
         BottomNavItem("播放", Icons.Default.PlayArrow),
         BottomNavItem("我的", Icons.Default.Person)
     )
