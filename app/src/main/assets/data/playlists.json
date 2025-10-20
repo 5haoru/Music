@@ -1,0 +1,65 @@
+[
+  {
+    "playlistId": "playlist_001",
+    "playlistName": "每日推荐",
+    "description": "根据你的喜好为你推荐",
+    "coverUrl": "cover/6.png",
+    "songIds": ["song_001", "song_004", "song_007", "song_011", "song_015"],
+    "createTime": 1697500800000,
+    "songCount": 5
+  },
+  {
+    "playlistId": "playlist_002",
+    "playlistName": "热歌榜",
+    "description": "最热门的歌曲排行",
+    "coverUrl": "cover/7.png",
+    "songIds": ["song_011", "song_004", "song_001", "song_007", "song_006", "song_015"],
+    "createTime": 1697500800000,
+    "songCount": 6
+  },
+  {
+    "playlistId": "playlist_003",
+    "playlistName": "新歌榜",
+    "description": "最新发布的歌曲",
+    "coverUrl": "cover/8.png",
+    "songIds": ["song_011", "song_013", "song_008", "song_004"],
+    "createTime": 1697500800000,
+    "songCount": 4
+  },
+  {
+    "playlistId": "playlist_004",
+    "playlistName": "周杰伦精选",
+    "description": "周杰伦最受欢迎的歌曲",
+    "coverUrl": "cover/9.png",
+    "songIds": ["song_001", "song_002", "song_003", "song_007", "song_009", "song_011"],
+    "createTime": 1697500800000,
+    "songCount": 6
+  },
+  {
+    "playlistId": "playlist_005",
+    "playlistName": "五月天经典",
+    "description": "五月天代表作品集",
+    "coverUrl": "cover/10.png",
+    "songIds": ["song_005", "song_006", "song_010"],
+    "createTime": 1697500800000,
+    "songCount": 3
+  },
+  {
+    "playlistId": "playlist_006",
+    "playlistName": "怀旧金曲",
+    "description": "那些年我们一起听过的歌",
+    "coverUrl": "cover/1.png",
+    "songIds": ["song_014", "song_015", "song_010", "song_003", "song_001"],
+    "createTime": 1697500800000,
+    "songCount": 5
+  },
+  {
+    "playlistId": "playlist_007",
+    "playlistName": "薛之谦热歌",
+    "description": "薛之谦最火歌曲合集",
+    "coverUrl": "cover/2.png",
+    "songIds": ["song_004", "song_008"],
+    "createTime": 1697500800000,
+    "songCount": 2
+  }
+]

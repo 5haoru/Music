@@ -1,0 +1,37 @@
+[
+  {
+    "userId": "user_001",
+    "username": "音乐爱好者",
+    "avatarUrl": "cover/user_avatar_1.jpg",
+    "level": 8,
+    "listenCount": 1520
+  },
+  {
+    "userId": "user_002",
+    "username": "夜空中最亮的星",
+    "avatarUrl": "cover/user_avatar_2.jpg",
+    "level": 6,
+    "listenCount": 856
+  },
+  {
+    "userId": "user_003",
+    "username": "旋律猎人",
+    "avatarUrl": "cover/user_avatar_3.jpg",
+    "level": 10,
+    "listenCount": 3205
+  },
+  {
+    "userId": "user_004",
+    "username": "音符跳动",
+    "avatarUrl": "cover/user_avatar_4.jpg",
+    "level": 5,
+    "listenCount": 632
+  },
+  {
+    "userId": "user_005",
+    "username": "云上飞",
+    "avatarUrl": "cover/user_avatar_5.jpg",
+    "level": 7,
+    "listenCount": 1120
+  }
+]

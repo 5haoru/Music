@@ -1,0 +1,76 @@
+package com.example.mymusic.presenter
+
+import android.content.Context
+import com.example.mymusic.data.Playlist
+import com.example.mymusic.data.Song
+import com.example.mymusic.utils.DataLoader
+
+/**
+ * 推荐页面Presenter
+ */
+class RecommendPresenter(
+    private val view: RecommendContract.View,
+    private val context: Context
+) : RecommendContract.Presenter {
+
+    private var songs: List<Song> = emptyList()
+    private var playlists: List<Playlist> = emptyList()
+
+    override fun loadData() {
+        view.showLoading()
+        try {
+            songs = DataLoader.loadSongs(context)
+            playlists = DataLoader.loadPlaylists(context)
+            view.hideLoading()
+            view.showRecommendedSongs(songs.take(5))
+            view.showDailyRecommendPlaylists(playlists.take(3))
+            view.showRankingPlaylists(playlists.takeLast(3))
+        } catch (e: Exception) {
+            view.hideLoading()
+            view.showError("加载数据失败: ${e.message}")
+        }
+    }
+
+    override fun onSongClick(songId: String) {
+        val song = songs.find { it.songId == songId }
+        song?.let {
+            view.playSong(it)
+        }
+    }
+
+    override fun onPlaylistClick(playlistId: String) {
+        val playlist = playlists.find { it.playlistId == playlistId }
+        playlist?.let {
+            view.openPlaylist(it)
+        }
+    }
+
+    override fun onSearchClick() {
+        view.openSearch()
+    }
+
+    override fun onDestroy() {
+        // Clean up resources
+    }
+}
+
+/**
+ * 推荐页面契约接口
+ */
+interface RecommendContract {
+    interface View : BaseView {
+        fun showRecommendedSongs(songs: List<Song>)
+        fun showDailyRecommendPlaylists(playlists: List<Playlist>)
+        fun showRankingPlaylists(playlists: List<Playlist>)
+        fun playSong(song: Song)
+        fun openPlaylist(playlist: Playlist)
+        fun openSearch()
+    }
+
+    interface Presenter : BasePresenter {
+        fun loadData()
+        fun onSongClick(songId: String)
+        fun onPlaylistClick(playlistId: String)
+        fun onSearchClick()
+    }
+}

@@ -1,0 +1,152 @@
+[
+  {
+    "songId": "song_001",
+    "songName": "晴天",
+    "artist": "周杰伦",
+    "album": "叶惠美",
+    "duration": 269000,
+    "coverUrl": "cover/1.png",
+    "lyrics": "故事的小黄花\n从出生那年就飘着\n童年的荡秋千\n随记忆一直晃到现在",
+    "releaseYear": 2003
+  },
+  {
+    "songId": "song_002",
+    "songName": "稻香",
+    "artist": "周杰伦",
+    "album": "魔杰座",
+    "duration": 223000,
+    "coverUrl": "cover/2.png",
+    "lyrics": "对这个世界如果你有太多的抱怨\n跌倒了就不敢继续往前走\n为什么人要这么的脆弱堕落",
+    "releaseYear": 2008
+  },
+  {
+    "songId": "song_003",
+    "songName": "七里香",
+    "artist": "周杰伦",
+    "album": "七里香",
+    "duration": 300000,
+    "coverUrl": "cover/3.png",
+    "lyrics": "窗外的麻雀在电线杆上多嘴\n你说这一句很有夏天的感觉",
+    "releaseYear": 2004
+  },
+  {
+    "songId": "song_004",
+    "songName": "演员",
+    "artist": "薛之谦",
+    "album": "绅士",
+    "duration": 262000,
+    "coverUrl": "cover/4.png",
+    "lyrics": "简单点说话的方式简单点\n递进的情绪请省略\n你又不是个演员",
+    "releaseYear": 2015
+  },
+  {
+    "songId": "song_005",
+    "songName": "倔强",
+    "artist": "五月天",
+    "album": "神的孩子都在跳舞",
+    "duration": 235000,
+    "coverUrl": "cover/5.png",
+    "lyrics": "当我和世界不一样\n那就让我不一样\n坚持对我来说就是以刚克刚",
+    "releaseYear": 2005
+  },
+  {
+    "songId": "song_006",
+    "songName": "突然好想你",
+    "artist": "五月天",
+    "album": "后青春期的诗",
+    "duration": 241000,
+    "coverUrl": "cover/6.png",
+    "lyrics": "最怕空气突然安静\n最怕朋友突然的关心\n最怕回忆突然翻滚绞痛着不平息",
+    "releaseYear": 2008
+  },
+  {
+    "songId": "song_007",
+    "songName": "青花瓷",
+    "artist": "周杰伦",
+    "album": "我很忙",
+    "duration": 228000,
+    "coverUrl": "cover/7.png",
+    "lyrics": "素胚勾勒出青花笔锋浓转淡\n瓶身描绘的牡丹一如你初妆",
+    "releaseYear": 2007
+  },
+  {
+    "songId": "song_008",
+    "songName": "我好像在哪见过你",
+    "artist": "薛之谦",
+    "album": "意外",
+    "duration": 258000,
+    "coverUrl": "cover/8.png",
+    "lyrics": "我好像在哪见过你\n好像 好像 好像 好像\n我记不得在哪了",
+    "releaseYear": 2013
+  },
+  {
+    "songId": "song_009",
+    "songName": "夜曲",
+    "artist": "周杰伦",
+    "album": "十一月的萧邦",
+    "duration": 214000,
+    "coverUrl": "cover/9.png",
+    "lyrics": "我在弹奏萧邦的夜曲\n纪念我死去的爱情",
+    "releaseYear": 2005
+  },
+  {
+    "songId": "song_010",
+    "songName": "温柔",
+    "artist": "五月天",
+    "album": "人生海海",
+    "duration": 269000,
+    "coverUrl": "cover/10.png",
+    "lyrics": "走在风中今天阳光突然好温柔\n天的温柔地的温柔像你抱着我",
+    "releaseYear": 2001
+  },
+  {
+    "songId": "song_011",
+    "songName": "告白气球",
+    "artist": "周杰伦",
+    "album": "周杰伦的床边故事",
+    "duration": 205000,
+    "coverUrl": "cover/1.png",
+    "lyrics": "塞纳河畔左岸的咖啡\n我手一杯品尝你的美",
+    "releaseYear": 2016
+  },
+  {
+    "songId": "song_012",
+    "songName": "成全",
+    "artist": "林宥嘉",
+    "album": "感官/世界",
+    "duration": 271000,
+    "coverUrl": "cover/2.png",
+    "lyrics": "看透不说透还能当朋友\n分手不说分手才能做朋友",
+    "releaseYear": 2009
+  },
+  {
+    "songId": "song_013",
+    "songName": "匆匆那年",
+    "artist": "王菲",
+    "album": "匆匆那年电影原声带",
+    "duration": 207000,
+    "coverUrl": "cover/3.png",
+    "lyrics": "匆匆那年我们究竟说了几遍再见之后再拖延\n可惜谁有没爱过不是一场七情上面的杂耍",
+    "releaseYear": 2014
+  },
+  {
+    "songId": "song_014",
+    "songName": "后来",
+    "artist": "刘若英",
+    "album": "我等你",
+    "duration": 252000,
+    "coverUrl": "cover/4.png",
+    "lyrics": "后来我总算学会了如何去爱\n可惜你早已远去消失在人海",
+    "releaseYear": 1999
+  },
+  {
+    "songId": "song_015",
+    "songName": "十年",
+    "artist": "陈奕迅",
+    "album": "黑白灰",
+    "duration": 213000,
+    "coverUrl": "cover/5.png",
+    "lyrics": "十年之前我不认识你你不属于我\n我们还是一样陪在一个陌生人左右",
+    "releaseYear": 2003
+  }
+]
