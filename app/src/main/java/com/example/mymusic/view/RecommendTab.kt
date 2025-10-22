@@ -1,13 +1,18 @@
 package com.example.mymusic.view
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.mymusic.data.Playlist
 import com.example.mymusic.data.Song
@@ -21,6 +26,26 @@ import com.example.mymusic.ui.components.*
 @Composable
 fun RecommendTab() {
     val context = LocalContext.current
+
+    // 导航状态：是否显示每日推荐详情页和排行榜详情页
+    var showDailyRecommendDetail by remember { mutableStateOf(false) }
+    var showRankListDetail by remember { mutableStateOf(false) }
+
+    // 如果需要显示每日推荐详情页，则显示DailyRecommendTab
+    if (showDailyRecommendDetail) {
+        DailyRecommendTab(
+            onBackClick = { showDailyRecommendDetail = false }
+        )
+        return
+    }
+
+    // 如果需要显示排行榜详情页，则显示RankListTab
+    if (showRankListDetail) {
+        RankListTab(
+            onBackClick = { showRankListDetail = false }
+        )
+        return
+    }
 
     // 状态
     var recommendedSongs by remember { mutableStateOf<List<Song>>(emptyList()) }
@@ -50,7 +75,12 @@ fun RecommendTab() {
                 }
 
                 override fun openPlaylist(playlist: Playlist) {
-                    // TODO: 打开歌单详情
+                    // 如果点击的是"每日推荐"歌单，打开DailyRecommendTab
+                    if (playlist.playlistId == "playlist_001") {
+                        showDailyRecommendDetail = true
+                    } else {
+                        // TODO: 打开其他歌单详情
+                    }
                 }
 
                 override fun openSearch() {
@@ -164,14 +194,24 @@ fun RecommendTab() {
 
                 // 排行榜区域
                 item {
-                    SectionTitle(title = "排行榜")
+                    SectionTitleWithAction(
+                        title = "排行榜",
+                        onActionClick = { showRankListDetail = true }
+                    )
                     LazyRow(
                         contentPadding = PaddingValues(horizontal = 16.dp),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        items(rankingPlaylists) { playlist ->
+                        items(rankingPlaylists.take(3)) { playlist ->
+                            // 自定义榜单名称
+                            val rankName = when (rankingPlaylists.indexOf(playlist)) {
+                                0 -> "ACG榜"
+                                1 -> "日语榜"
+                                2 -> "国风榜"
+                                else -> playlist.playlistName
+                            }
                             PlaylistCard(
-                                playlist = playlist,
+                                playlist = playlist.copy(playlistName = rankName),
                                 onClick = { presenter.onPlaylistClick(playlist.playlistId) },
                                 showDescription = false
                             )
@@ -194,4 +234,31 @@ private fun SectionTitle(
         style = MaterialTheme.typography.titleLarge,
         modifier = modifier.padding(horizontal = 16.dp, vertical = 12.dp)
     )
+}
+
+@Composable
+private fun SectionTitleWithAction(
+    title: String,
+    onActionClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(onClick = onActionClick)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold
+        )
+        Icon(
+            imageVector = Icons.Default.KeyboardArrowRight,
+            contentDescription = "查看更多",
+            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+        )
+    }
 }

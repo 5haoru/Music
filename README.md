@@ -41,19 +41,26 @@ app/src/main/
 │   ├── presenter/               # MVP Presenter层
 │   │   ├── BasePresenter.kt
 │   │   ├── MainPresenter.kt
-│   │   ├── RecommendPresenter.kt  # 推荐页面Presenter
-│   │   ├── StrollPresenter.kt     # 漫游页面Presenter
-│   │   ├── PlayPresenter.kt       # 播放页面Presenter
-│   │   └── MePresenter.kt         # 我的页面Presenter
+│   │   ├── RecommendPresenter.kt      # 推荐页面Presenter
+│   │   ├── DailyRecommendPresenter.kt # 每日推荐Presenter
+│   │   ├── RankListPresenter.kt       # 排行榜Presenter
+│   │   ├── StrollPresenter.kt         # 漫游页面Presenter
+│   │   ├── PlayPresenter.kt           # 播放页面Presenter
+│   │   └── MePresenter.kt             # 我的页面Presenter
 │   ├── view/                    # MVP View层
-│   │   ├── RecommendTab.kt     # 推荐页面（已完成）
-│   │   ├── StrollTab.kt        # 漫游页面（已完成）
-│   │   ├── PlayTab.kt          # 播放页面（已完成）
-│   │   └── MeTab.kt            # 我的页面（已完成）
+│   │   ├── RecommendTab.kt         # 推荐页面容器（包含子标签）
+│   │   ├── DailyRecommendTab.kt    # 每日推荐子页面（已完成）
+│   │   ├── RankListTab.kt          # 排行榜页面（已完成）
+│   │   ├── StrollTab.kt            # 漫游页面（已完成）
+│   │   ├── PlayTab.kt              # 播放页面（已完成）
+│   │   └── MeTab.kt                # 我的页面（已完成）
 │   ├── ui/components/           # UI组件
 │   │   ├── TopBar.kt           # 顶部搜索栏
 │   │   ├── SongItem.kt         # 歌曲列表项
-│   │   └── PlaylistCard.kt     # 歌单卡片（含大尺寸卡片）
+│   │   ├── DailySongItem.kt    # 每日推荐歌曲项（带标签）
+│   │   ├── PlaylistCard.kt     # 歌单卡片（含大尺寸卡片）
+│   │   ├── FeaturedRankCard.kt # 特色榜单卡片（渐变色）
+│   │   └── OfficialRankItem.kt # 官方榜单列表项
 │   ├── utils/                   # 工具类
 │   │   └── DataLoader.kt       # 数据加载工具
 │   └── ui/theme/                # UI主题
@@ -92,12 +99,33 @@ app/src/main/
 - [x] JSON数据定义
 - [x] 19个数据记录模型
 - [x] 4个页面框架
-- [x] **推荐页面完整实现**
+- [x] **推荐页面完整实现** (RecommendTab)
   - [x] 顶部搜索栏（含搜索框、菜单、设置按钮）
-  - [x] 每日推荐模块（水平滚动大卡片）
+  - [x] 每日推荐模块（水平滚动大卡片，点击进入详情页）
   - [x] 歌曲推荐列表（带封面、标题、艺术家、播放按钮）
   - [x] 精选歌单区（水平滚动卡片）
-  - [x] 排行榜区（水平滚动卡片）
+  - [x] 排行榜区（水平滚动卡片，自定义榜单名：ACG榜、日语榜、国风榜）
+  - [x] 排行榜标题右侧">"图标入口（点击进入排行榜详情页）
+  - [x] **每日推荐详情页** (DailyRecommendTab - 二级页面)
+    - [x] 顶部模式切换（默认推荐/风格推荐）
+    - [x] 返回按钮（返回推荐页）
+    - [x] 日期显示（大字号21/10格式）
+    - [x] 查看今日运势入口
+    - [x] 历史日推入口（带VIP标识）
+    - [x] 播放全部按钮（红色圆形播放图标）
+    - [x] 歌曲列表（序号、封面、歌名/歌手、标签、播放按钮）
+    - [x] 动态标签系统（VIP、超清母带、播放热度、小众佳作等）
+  - [x] **排行榜详情页** (RankListTab - 二级页面)
+    - [x] 顶部标题栏（返回按钮、"排行榜"标题、更多按钮）
+    - [x] Tab切换栏（排行榜/歌单/原创）
+    - [x] 榜单推荐区（水平滚动特色榜单卡片）
+    - [x] 特色榜单卡片（渐变色背景：硬地原创音乐榜、潮流风向榜、国风榜）
+    - [x] 官方榜区域标题（红色圆点图标 + "官方榜"）
+    - [x] 官方榜列表项（飙升榜、新歌榜、热歌榜）
+    - [x] 榜单项左侧封面（100dp，带播放按钮覆盖层）
+    - [x] 榜单项右侧信息（榜单名、更新频率、TOP3歌曲）
+    - [x] TOP3歌曲显示（排名、歌名-歌手、状态标识）
+    - [x] 歌曲状态标识（新歌"新"绿色标签、上升红色△、下降绿色▽）
 - [x] **漫游页面完整实现**
   - [x] 顶部栏（返回按钮、"私人漫游·伤感"标题、分享按钮）
   - [x] 专辑封面展示（使用assets/cover图片，圆角卡片）
@@ -123,10 +151,15 @@ app/src/main/
 - [x] **UI组件库**
   - [x] RecommendTopBar - 推荐页顶部栏
   - [x] SongItem - 歌曲列表项组件
+  - [x] DailySongItem - 每日推荐歌曲项（带丰富标签）
   - [x] PlaylistCard - 歌单卡片组件
   - [x] LargePlaylistCard - 大尺寸歌单卡片
+  - [x] FeaturedRankCard - 特色榜单卡片（渐变色背景）
+  - [x] OfficialRankItem - 官方榜单列表项（封面+TOP3歌曲）
 - [x] **Presenter层**
   - [x] RecommendPresenter - 推荐页面业务逻辑
+  - [x] DailyRecommendPresenter - 每日推荐业务逻辑（歌曲列表加载）
+  - [x] RankListPresenter - 排行榜业务逻辑（榜单数据加载、状态模拟）
   - [x] StrollPresenter - 漫游页面业务逻辑（随机歌曲选择、播放状态管理）
   - [x] PlayPresenter - 播放页面业务逻辑（随机歌曲选择、播放状态管理）
   - [x] MePresenter - 我的页面业务逻辑（用户数据、歌单管理）
@@ -186,7 +219,39 @@ implementation("io.coil-kt:coil-compose:2.5.0")
 
 ## 更新日志
 
-### 2025-10-20 (最新)
+### 2025-10-21 (最新)
+- ✅ 完成排行榜详情页面（RankListTab）作为二级页面
+  - 创建RankListContract和RankListPresenter（MVP模式）
+  - 实现顶部标题栏（返回按钮、"排行榜"标题、更多按钮）
+  - 实现Tab切换栏（排行榜/歌单/原创）
+  - 创建特色榜单推荐区（水平滚动）
+  - 实现FeaturedRankCard组件（160dp x 180dp，渐变色背景）
+  - 创建三个特色榜单：硬地原创音乐榜、潮流风向榜、国风榜
+  - 实现官方榜区域（红色圆点图标 + "官方榜"标题）
+  - 创建OfficialRankItem组件（左侧封面+右侧TOP3歌曲）
+  - 实现三个官方榜单：飙升榜、新歌榜、热歌榜
+  - 实现TOP3歌曲显示（排名、歌名-歌手、状态标识）
+  - 实现歌曲状态标识系统（新歌"新"绿色标签、上升红色△、下降绿色▽）
+  - 修改RecommendTab：排行榜区域自定义名称（ACG榜、日语榜、国风榜）
+  - 添加SectionTitleWithAction组件（标题 + ">" 图标）
+  - 实现从推荐页进入排行榜详情的导航（点击">"图标）
+  - 使用状态管理实现页面导航（showRankListDetail）
+  - 成功构建并验证功能（仅deprecation警告，无错误）
+- ✅ 完成每日推荐详情页面（DailyRecommendTab）作为二级页面
+  - 创建DailyRecommendContract和DailyRecommendPresenter（MVP模式）
+  - 实现顶部模式切换栏（默认推荐/风格推荐）
+  - 添加返回按钮（返回推荐页主页）
+  - 实现日期显示区域（21/10格式大字号）
+  - 添加查看今日运势入口
+  - 添加历史日推入口（带VIP标识）
+  - 创建播放全部功能区（红色圆形播放按钮+歌曲数量）
+  - 实现DailySongItem组件（带序号、封面、歌曲信息、动态标签）
+  - 实现动态标签系统（VIP、超清母带、Hi-Res、播放热度、小众佳作、新歌等）
+  - 修复页面层级：RecommendTab保持原有内容，点击"每日推荐"卡片进入DailyRecommendTab
+  - 使用状态管理实现页面导航（无需复杂路由）
+  - 成功构建并验证功能（仅deprecation警告，无错误）
+
+### 2025-10-20
 - ✅ 简化我的页面（MeTab）- 移除冗余组件
   - 移除底部Mini播放器
   - 移除用户简介（info）
