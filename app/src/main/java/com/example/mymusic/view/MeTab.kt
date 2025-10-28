@@ -32,7 +32,12 @@ import com.example.mymusic.presenter.MePresenter
  * 我的页面Tab - 参考网易云音乐设计
  */
 @Composable
-fun MeTab(onNavigateToPlayTab: () -> Unit = {}) {
+fun MeTab(
+    onNavigateToPlayTab: () -> Unit = {},
+    onNavigateToSubscribe: () -> Unit = {},
+    onNavigateToDuration: () -> Unit = {},
+    onNavigateToPlaylist: (Playlist) -> Unit = {}
+) {
     val context = LocalContext.current
 
     // 状态
@@ -40,6 +45,7 @@ fun MeTab(onNavigateToPlayTab: () -> Unit = {}) {
     var playlists by remember { mutableStateOf<List<Playlist>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+    var showCreatePlaylistDialog by remember { mutableStateOf(false) }
 
     // Presenter
     val presenter = remember {
@@ -59,6 +65,10 @@ fun MeTab(onNavigateToPlayTab: () -> Unit = {}) {
 
                 override fun navigateToPlayTab() {
                     onNavigateToPlayTab()
+                }
+
+                override fun navigateToPlaylist(playlist: Playlist) {
+                    onNavigateToPlaylist(playlist)
                 }
 
                 override fun showLoading() {
@@ -112,7 +122,11 @@ fun MeTab(onNavigateToPlayTab: () -> Unit = {}) {
                 // 用户信息区域
                 item {
                     currentUser?.let { user ->
-                        UserProfileHeader(user = user)
+                        UserProfileHeader(
+                            user = user,
+                            onNavigateToSubscribe = onNavigateToSubscribe,
+                            onNavigateToDuration = onNavigateToDuration
+                        )
                     }
                 }
 
@@ -137,10 +151,25 @@ fun MeTab(onNavigateToPlayTab: () -> Unit = {}) {
                 // 新建和导入歌单选项
                 item {
                     CreateAndImportSection(
-                        onCreatePlaylistClick = { presenter.onCreatePlaylistClick() }
+                        onCreatePlaylistClick = {
+                            presenter.onCreatePlaylistClick()
+                            showCreatePlaylistDialog = true
+                        }
                     )
                 }
             }
+        }
+
+        // 创建歌单对话框
+        if (showCreatePlaylistDialog) {
+            CreatePlaylistDialog(
+                onDismiss = { showCreatePlaylistDialog = false },
+                onCreate = { title, isPrivate, isMusic ->
+                    presenter.createPlaylist(title, isPrivate, isMusic)
+                    showCreatePlaylistDialog = false
+                    android.widget.Toast.makeText(context, "创建成功", android.widget.Toast.LENGTH_SHORT).show()
+                }
+            )
         }
     }
 }
@@ -211,7 +240,11 @@ private fun MeTopBar(username: String, avatarUrl: String) {
  * 用户信息头部
  */
 @Composable
-private fun UserProfileHeader(user: User) {
+private fun UserProfileHeader(
+    user: User,
+    onNavigateToSubscribe: () -> Unit,
+    onNavigateToDuration: () -> Unit
+) {
     val context = LocalContext.current
 
     Column(
@@ -284,7 +317,7 @@ private fun UserProfileHeader(user: User) {
             Text(
                 text = "6 关注",
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.clickable { /* TODO: 打开关注列表 */ }
+                modifier = Modifier.clickable { onNavigateToSubscribe() }
             )
             Text(text = "·", color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(
@@ -300,7 +333,8 @@ private fun UserProfileHeader(user: User) {
             Text(text = "·", color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(
                 text = "${user.listenCount} 小时",
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.clickable { onNavigateToDuration() }
             )
         }
     }

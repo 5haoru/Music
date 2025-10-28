@@ -1,6 +1,7 @@
 package com.example.mymusic.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,7 +30,11 @@ import kotlinx.coroutines.launch
  * 漫游页面Tab
  */
 @Composable
-fun StrollTab(onBackToRecommend: () -> Unit = {}) {
+fun StrollTab(
+    currentMode: String = "伤感",
+    onBackToRecommend: () -> Unit = {},
+    onNavigateToModeSelection: () -> Unit = {}
+) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
@@ -132,8 +137,10 @@ fun StrollTab(onBackToRecommend: () -> Unit = {}) {
                 ) {
                     // 顶部栏
                     StrollTopBar(
+                        currentMode = currentMode,
                         onBackClick = onBackToRecommend,
-                        onShareClick = { /* TODO: 分享功能 */ }
+                        onShareClick = { /* TODO: 分享功能 */ },
+                        onTitleClick = onNavigateToModeSelection
                     )
 
                     // 中央播放器区域
@@ -212,18 +219,22 @@ fun StrollTab(onBackToRecommend: () -> Unit = {}) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun StrollTopBar(
+    currentMode: String,
     onBackClick: () -> Unit,
-    onShareClick: () -> Unit
+    onShareClick: () -> Unit,
+    onTitleClick: () -> Unit
 ) {
     TopAppBar(
         title = {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(onClick = onTitleClick),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "私人漫游 · 伤感",
+                    text = "私人漫游 · $currentMode",
                     style = MaterialTheme.typography.titleMedium
                 )
                 Icon(

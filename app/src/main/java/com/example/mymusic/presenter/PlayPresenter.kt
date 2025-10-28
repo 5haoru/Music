@@ -224,7 +224,9 @@ class PlayPresenter(
     }
 
     override fun onCommentClick() {
-        // TODO: 打开评论页面
+        currentSong?.let { song ->
+            view.navigateToComment(song.songId)
+        }
     }
 
     override fun onMoreClick() {
@@ -270,6 +272,7 @@ interface PlayContract {
         fun updateFavoriteState(isFavorite: Boolean)
         fun updateProgress(progress: Float, currentTime: String)
         fun updatePlayMode(mode: PlayMode)
+        fun navigateToComment(songId: String)
     }
 
     interface Presenter : BasePresenter {

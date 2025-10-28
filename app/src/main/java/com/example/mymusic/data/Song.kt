@@ -12,5 +12,7 @@ data class Song(
     val duration: Long,
     val coverUrl: String,
     val lyrics: String,
-    val releaseYear: Int
+    val releaseYear: Int,
+    val pinyin: String? = null, // 歌曲名拼音，用于拼音搜索
+    val artistPinyin: String? = null // 艺术家名拼音，用于拼音搜索
 )

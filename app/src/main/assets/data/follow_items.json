@@ -1,0 +1,110 @@
+[
+  {
+    "id": "follow_001",
+    "name": "h3R3",
+    "type": "user",
+    "avatarUrl": "avatar/1.png",
+    "subtitle": "昵称：h3R3",
+    "vipType": "svip",
+    "activityType": null,
+    "activityText": null,
+    "timestamp": null,
+    "followTime": 1699000000000
+  },
+  {
+    "id": "follow_002",
+    "name": "宇多田ヒカル",
+    "type": "artist",
+    "avatarUrl": "avatar/2.png",
+    "subtitle": null,
+    "vipType": null,
+    "activityType": "mv",
+    "activityText": "发布了MV",
+    "timestamp": "最近",
+    "followTime": 1698950000000
+  },
+  {
+    "id": "follow_003",
+    "name": "燕云十六声",
+    "type": "artist",
+    "avatarUrl": "avatar/3.png",
+    "subtitle": "昵称：燕云十六声官方",
+    "vipType": "vip",
+    "activityType": null,
+    "activityText": null,
+    "timestamp": null,
+    "followTime": 1698900000000
+  },
+  {
+    "id": "follow_004",
+    "name": "拼命的小熊",
+    "type": "user",
+    "avatarUrl": "avatar/4.png",
+    "subtitle": null,
+    "vipType": "vip",
+    "activityType": null,
+    "activityText": null,
+    "timestamp": null,
+    "followTime": 1698850000000
+  },
+  {
+    "id": "follow_005",
+    "name": "云音乐VIP",
+    "type": "user",
+    "avatarUrl": "avatar/5.png",
+    "subtitle": null,
+    "vipType": "svip",
+    "activityType": "post",
+    "activityText": "发布了新动态",
+    "timestamp": "10小时前",
+    "followTime": 1698800000000
+  },
+  {
+    "id": "follow_006",
+    "name": "Taylor Swift",
+    "type": "artist",
+    "avatarUrl": "avatar/6.png",
+    "subtitle": null,
+    "vipType": "vip",
+    "activityType": "post",
+    "activityText": "发布了新动态",
+    "timestamp": "最近",
+    "followTime": 1698750000000
+  },
+  {
+    "id": "follow_007",
+    "name": "网易CEO丁磊",
+    "type": "user",
+    "avatarUrl": "avatar/7.png",
+    "subtitle": null,
+    "vipType": "svip",
+    "activityType": "post",
+    "activityText": "发布了新动态",
+    "timestamp": "最近",
+    "followTime": 1698700000000
+  },
+  {
+    "id": "follow_008",
+    "name": "周杰伦",
+    "type": "artist",
+    "avatarUrl": "avatar/9.png",
+    "subtitle": null,
+    "vipType": null,
+    "activityType": null,
+    "activityText": null,
+    "timestamp": null,
+    "followTime": 1698650000000
+  },
+  {
+    "id": "follow_009",
+    "name": "五月天",
+    "type": "artist",
+    "avatarUrl": "avatar/10.png",
+    "subtitle": null,
+    "vipType": null,
+    "activityType": "mv",
+    "activityText": "发布了MV",
+    "timestamp": "2天前",
+    "followTime": 1698600000000
+  }
+]

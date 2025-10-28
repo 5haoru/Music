@@ -49,6 +49,10 @@ class RecommendPresenter(
         view.openSearch()
     }
 
+    override fun onMicClick() {
+        view.openListenRecognize()
+    }
+
     override fun onDestroy() {
         // Clean up resources
     }
@@ -65,6 +69,7 @@ interface RecommendContract {
         fun playSong(song: Song)
         fun openPlaylist(playlist: Playlist)
         fun openSearch()
+        fun openListenRecognize()
     }
 
     interface Presenter : BasePresenter {
@@ -72,5 +77,6 @@ interface RecommendContract {
         fun onSongClick(songId: String)
         fun onPlaylistClick(playlistId: String)
         fun onSearchClick()
+        fun onMicClick()
     }
 }

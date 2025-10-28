@@ -2,7 +2,7 @@
   {
     "artistId": "artist_001",
     "artistName": "周杰伦",
-    "avatarUrl": "cover/jay_chou_avatar.jpg",
+    "avatarUrl": "avatar/1.png",
     "description": "华语流行音乐天王，创作型歌手",
     "songCount": 6,
     "albumCount": 15,
@@ -11,7 +11,7 @@
   {
     "artistId": "artist_002",
     "artistName": "五月天",
-    "avatarUrl": "cover/mayday_avatar.jpg",
+    "avatarUrl": "avatar/2.png",
     "description": "华语摇滚乐团，由五位成员组成",
     "songCount": 3,
     "albumCount": 10,
@@ -20,7 +20,7 @@
   {
     "artistId": "artist_003",
     "artistName": "薛之谦",
-    "avatarUrl": "cover/xue_zhiqian_avatar.jpg",
+    "avatarUrl": "avatar/3.png",
     "description": "华语流行男歌手、音乐制作人",
     "songCount": 2,
     "albumCount": 8,
@@ -29,7 +29,7 @@
   {
     "artistId": "artist_004",
     "artistName": "林宥嘉",
-    "avatarUrl": "cover/lin_youjia_avatar.jpg",
+    "avatarUrl": "avatar/4.png",
     "description": "台湾流行男歌手，超级星光大道第一届冠军",
     "songCount": 1,
     "albumCount": 7,
@@ -38,7 +38,7 @@
   {
     "artistId": "artist_005",
     "artistName": "王菲",
-    "avatarUrl": "cover/wang_fei_avatar.jpg",
+    "avatarUrl": "avatar/5.png",
     "description": "华语流行乐女歌手、影视演员",
     "songCount": 1,
     "albumCount": 20,
@@ -47,7 +47,7 @@
   {
     "artistId": "artist_006",
     "artistName": "刘若英",
-    "avatarUrl": "cover/liu_ruoying_avatar.jpg",
+    "avatarUrl": "avatar/6.png",
     "description": "台湾女歌手、演员、作家",
     "songCount": 1,
     "albumCount": 18,
@@ -56,7 +56,7 @@
   {
     "artistId": "artist_007",
     "artistName": "陈奕迅",
-    "avatarUrl": "cover/chen_yixun_avatar.jpg",
+    "avatarUrl": "avatar/7.png",
     "description": "香港流行男歌手、演员，华语乐坛代表人物之一",
     "songCount": 1,
     "albumCount": 30,

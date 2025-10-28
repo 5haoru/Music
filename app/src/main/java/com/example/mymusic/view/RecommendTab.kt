@@ -24,12 +24,16 @@ import com.example.mymusic.ui.components.*
  * 推荐页面Tab
  */
 @Composable
-fun RecommendTab() {
+fun RecommendTab(
+    onNavigateToListenRecognize: () -> Unit = {},
+    onNavigateToSearchResult: (String) -> Unit = {}
+) {
     val context = LocalContext.current
 
-    // 导航状态：是否显示每日推荐详情页和排行榜详情页
+    // 导航状态：是否显示每日推荐详情页、排行榜详情页、搜索页
     var showDailyRecommendDetail by remember { mutableStateOf(false) }
     var showRankListDetail by remember { mutableStateOf(false) }
+    var showSearchPage by remember { mutableStateOf(false) }
 
     // 如果需要显示每日推荐详情页，则显示DailyRecommendTab
     if (showDailyRecommendDetail) {
@@ -43,6 +47,15 @@ fun RecommendTab() {
     if (showRankListDetail) {
         RankListTab(
             onBackClick = { showRankListDetail = false }
+        )
+        return
+    }
+
+    // 如果需要显示搜索页，则显示SearchTab
+    if (showSearchPage) {
+        SearchTab(
+            onBackClick = { showSearchPage = false },
+            onNavigateToSearchResult = onNavigateToSearchResult
         )
         return
     }
@@ -84,7 +97,11 @@ fun RecommendTab() {
                 }
 
                 override fun openSearch() {
-                    // TODO: 打开搜索页面
+                    showSearchPage = true
+                }
+
+                override fun openListenRecognize() {
+                    onNavigateToListenRecognize()
                 }
 
                 override fun showLoading() {
@@ -112,7 +129,8 @@ fun RecommendTab() {
     Scaffold(
         topBar = {
             RecommendTopBar(
-                onSearchClick = { presenter.onSearchClick() }
+                onSearchClick = { presenter.onSearchClick() },
+                onMicClick = { presenter.onMicClick() }
             )
         }
     ) { paddingValues ->

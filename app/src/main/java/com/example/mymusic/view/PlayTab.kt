@@ -1,6 +1,7 @@
 package com.example.mymusic.view
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,7 +30,11 @@ import kotlinx.coroutines.launch
  * 播放页面Tab
  */
 @Composable
-fun PlayTab(onBackToRecommend: () -> Unit = {}) {
+fun PlayTab(
+    onBackToRecommend: () -> Unit = {},
+    onNavigateToComment: (String) -> Unit = {},
+    onNavigateToLyric: (String) -> Unit = {}
+) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
@@ -42,6 +47,8 @@ fun PlayTab(onBackToRecommend: () -> Unit = {}) {
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var playMode by remember { mutableStateOf(com.example.mymusic.presenter.PlayMode.SEQUENTIAL) }
+    var showShare by remember { mutableStateOf(false) } // 分享弹窗状态
+    var showPlayCustomize by remember { mutableStateOf(false) } // 播放定制弹窗状态
 
     // Presenter
     val presenter = remember {
@@ -66,6 +73,10 @@ fun PlayTab(onBackToRecommend: () -> Unit = {}) {
 
                 override fun updatePlayMode(mode: com.example.mymusic.presenter.PlayMode) {
                     playMode = mode
+                }
+
+                override fun navigateToComment(songId: String) {
+                    onNavigateToComment(songId)
                 }
 
                 override fun showLoading() {
@@ -138,7 +149,7 @@ fun PlayTab(onBackToRecommend: () -> Unit = {}) {
                     // 顶部栏
                     PlayTopBar(
                         onBackClick = onBackToRecommend,
-                        onRefreshClick = { presenter.onRefreshClick() }
+                        onShareClick = { showShare = true } // 显示分享弹窗
                     )
 
                     // 中央播放器区域
@@ -159,7 +170,11 @@ fun PlayTab(onBackToRecommend: () -> Unit = {}) {
                             contentDescription = song.songName,
                             modifier = Modifier
                                 .size(280.dp)
-                                .clip(RoundedCornerShape(16.dp)),
+                                .clip(RoundedCornerShape(16.dp))
+                                .clickable {
+                                    // 点击封面进入歌词页面
+                                    onNavigateToLyric(song.songId)
+                                },
                             contentScale = ContentScale.Crop
                         )
 
@@ -169,7 +184,8 @@ fun PlayTab(onBackToRecommend: () -> Unit = {}) {
                         PlaySongInfoSection(
                             song = song,
                             isFavorite = isFavorite,
-                            onFavoriteClick = { presenter.onFavoriteClick() }
+                            onFavoriteClick = { presenter.onFavoriteClick() },
+                            onCommentClick = { presenter.onCommentClick() }
                         )
                     }
 
@@ -204,11 +220,28 @@ fun PlayTab(onBackToRecommend: () -> Unit = {}) {
                         // 底部功能按钮
                         PlayBottomFunctionBar(
                             onCommentClick = { presenter.onCommentClick() },
-                            onMoreClick = { presenter.onMoreClick() }
+                            onMoreClick = { showPlayCustomize = true }
                         )
                     }
                 }
             }
+        }
+
+        // 分享弹窗（作为overlay层叠加显示）
+        if (showShare && currentSong != null) {
+            ShareTab(
+                song = currentSong!!,
+                onCloseClick = { showShare = false }
+            )
+        }
+
+        // 播放定制弹窗（作为overlay层叠加显示）
+        if (showPlayCustomize && currentSong != null) {
+            PlayCustomizeTab(
+                song = currentSong!!,
+                onCloseClick = { showPlayCustomize = false },
+                onShareClick = { showShare = true }
+            )
         }
     }
 }
@@ -220,7 +253,7 @@ fun PlayTab(onBackToRecommend: () -> Unit = {}) {
 @Composable
 private fun PlayTopBar(
     onBackClick: () -> Unit,
-    onRefreshClick: () -> Unit
+    onShareClick: () -> Unit
 ) {
     TopAppBar(
         title = {
@@ -244,10 +277,10 @@ private fun PlayTopBar(
             }
         },
         actions = {
-            IconButton(onClick = onRefreshClick) {
+            IconButton(onClick = onShareClick) {
                 Icon(
-                    imageVector = Icons.Default.Refresh,
-                    contentDescription = "刷新"
+                    imageVector = Icons.Default.Share,
+                    contentDescription = "分享"
                 )
             }
         },
@@ -264,7 +297,8 @@ private fun PlayTopBar(
 private fun PlaySongInfoSection(
     song: Song,
     isFavorite: Boolean,
-    onFavoriteClick: () -> Unit
+    onFavoriteClick: () -> Unit,
+    onCommentClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -336,7 +370,7 @@ private fun PlaySongInfoSection(
             }
 
             // 评论
-            IconButton(onClick = { /* TODO: 评论 */ }) {
+            IconButton(onClick = onCommentClick) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {

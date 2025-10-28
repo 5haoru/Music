@@ -1,0 +1,89 @@
+{
+  "weekly": {
+    "startDate": "10.19",
+    "endDate": "10.25",
+    "badgeTitle": "红心收藏家",
+    "badgeDescription": "本周82%听歌时长来自红心歌单",
+    "totalHours": 24,
+    "totalMinutes": 29,
+    "listenedDays": 7,
+    "totalDays": 7,
+    "dailyDurations": [
+      {"dayLabel": "日", "hours": 4, "minutes": 30},
+      {"dayLabel": "一", "hours": 2, "minutes": 45},
+      {"dayLabel": "二", "hours": 5, "minutes": 20},
+      {"dayLabel": "三", "hours": 1, "minutes": 50},
+      {"dayLabel": "四", "hours": 6, "minutes": 50},
+      {"dayLabel": "五", "hours": 3, "minutes": 14},
+      {"dayLabel": "六", "hours": 0, "minutes": 0}
+    ],
+    "topDate": "2025.10.23",
+    "topHours": 6,
+    "topMinutes": 50,
+    "latestTime": "02:30",
+    "comparisonMinutes": -6
+  },
+  "monthly": {
+    "startDate": "9.1",
+    "endDate": "9.30",
+    "badgeTitle": "听歌全勤奖",
+    "badgeDescription": "本月听歌天数达30天!",
+    "totalHours": 75,
+    "totalMinutes": 30,
+    "listenedDays": 30,
+    "totalDays": 30,
+    "dailyCheckins": [
+      {"day": 1, "hasListened": true},
+      {"day": 2, "hasListened": true},
+      {"day": 3, "hasListened": true},
+      {"day": 4, "hasListened": false},
+      {"day": 5, "hasListened": true},
+      {"day": 6, "hasListened": true},
+      {"day": 7, "hasListened": true},
+      {"day": 8, "hasListened": true},
+      {"day": 9, "hasListened": true},
+      {"day": 10, "hasListened": true},
+      {"day": 11, "hasListened": true},
+      {"day": 12, "hasListened": true},
+      {"day": 13, "hasListened": false},
+      {"day": 14, "hasListened": true},
+      {"day": 15, "hasListened": true},
+      {"day": 16, "hasListened": true},
+      {"day": 17, "hasListened": true},
+      {"day": 18, "hasListened": true},
+      {"day": 19, "hasListened": true},
+      {"day": 20, "hasListened": true},
+      {"day": 21, "hasListened": true},
+      {"day": 22, "hasListened": true},
+      {"day": 23, "hasListened": true},
+      {"day": 24, "hasListened": true},
+      {"day": 25, "hasListened": true},
+      {"day": 26, "hasListened": false},
+      {"day": 27, "hasListened": true},
+      {"day": 28, "hasListened": true},
+      {"day": 29, "hasListened": true},
+      {"day": 30, "hasListened": true}
+    ],
+    "latestTime": "04:55",
+    "comparisonHours": 26,
+    "comparisonMinutes": 12
+  },
+  "yearly": {
+    "years": [
+      {
+        "year": 2024,
+        "totalHours": 894,
+        "totalSongs": 1731,
+        "reportTitle": "2024年度听歌报告",
+        "reportSubtitle": "人生是旷野，音乐也是"
+      },
+      {
+        "year": 2023,
+        "totalHours": 2,
+        "totalSongs": 11,
+        "reportTitle": null,
+        "reportSubtitle": null
+      }
+    ]
+  }
+}

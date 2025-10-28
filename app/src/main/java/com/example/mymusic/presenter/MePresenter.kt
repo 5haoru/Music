@@ -28,8 +28,8 @@ class MePresenter(
                 currentUser?.let { view.showUser(it) }
             }
 
-            // 加载歌单数据
-            userPlaylists = DataLoader.loadPlaylists(context)
+            // 加载歌单数据（优先从缓存加载）
+            userPlaylists = DataLoader.loadPlaylistsWithCache(context)
             view.showPlaylists(userPlaylists)
 
             // 加载当前播放歌曲（使用第一首歌）
@@ -51,12 +51,39 @@ class MePresenter(
     }
 
     override fun onCreatePlaylistClick() {
-        // TODO: 创建新歌单
-        view.showError("创建歌单功能待开发")
+        // 由View层显示创建歌单对话框
+    }
+
+    override fun createPlaylist(title: String, isPrivate: Boolean, isMusic: Boolean) {
+        try {
+            // 生成新歌单
+            val newPlaylist = Playlist(
+                playlistId = DataLoader.generatePlaylistId(),
+                playlistName = title,
+                description = if (isPrivate) "隐私歌单" else "共享歌单",
+                coverUrl = "cover/1.png", // 默认封面
+                songIds = emptyList(),
+                createTime = System.currentTimeMillis(),
+                songCount = 0
+            )
+
+            // 添加到歌单列表
+            val updatedPlaylists = userPlaylists.toMutableList()
+            updatedPlaylists.add(newPlaylist)
+            userPlaylists = updatedPlaylists
+
+            // 保存到本地
+            DataLoader.savePlaylists(context, userPlaylists)
+
+            // 刷新UI
+            view.showPlaylists(userPlaylists)
+        } catch (e: Exception) {
+            view.showError("创建歌单失败: ${e.message}")
+        }
     }
 
     override fun onPlaylistClick(playlist: Playlist) {
-        // TODO: 打开歌单详情
+        view.navigateToPlaylist(playlist)
     }
 
     override fun onMiniPlayerClick() {
@@ -82,12 +109,14 @@ interface MeContract {
         fun showPlaylists(playlists: List<Playlist>)
         fun showCurrentSong(song: Song)
         fun navigateToPlayTab()
+        fun navigateToPlaylist(playlist: Playlist)
     }
 
     interface Presenter : BasePresenter {
         fun loadData()
         fun onFollowClick()
         fun onCreatePlaylistClick()
+        fun createPlaylist(title: String, isPrivate: Boolean, isMusic: Boolean)
         fun onPlaylistClick(playlist: Playlist)
         fun onMiniPlayerClick()
         fun onMiniPlayerPlayPauseClick()
