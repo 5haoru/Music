@@ -1,5 +1,6 @@
 package com.example.mymusic.view
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -46,6 +47,13 @@ fun StrollTab(
     var currentTime by remember { mutableStateOf("00:00") }
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+    var showComment by remember { mutableStateOf(false) } // 评论页面状态
+    var showShare by remember { mutableStateOf(false) } // 分享弹窗状态
+    var showLyric by remember { mutableStateOf(false) } // 歌词页面状态
+    var showPlayCustomize by remember { mutableStateOf(false) } // 播放定制弹窗状态
+    var showPlayerStyle by remember { mutableStateOf(false) } // 播放器样式页面状态
+    var showSongProfile by remember { mutableStateOf(false) } // 歌曲档案页面状态
+    var showCollectSong by remember { mutableStateOf(false) } // 收藏到歌单页面状态
 
     // Presenter
     val presenter = remember {
@@ -66,6 +74,14 @@ fun StrollTab(
                 override fun updateProgress(prog: Float, time: String) {
                     progress = prog
                     currentTime = time
+                }
+
+                override fun navigateToComment(songId: String) {
+                    showComment = true
+                }
+
+                override fun showSuccess(message: String) {
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
 
                 override fun showLoading() {
@@ -139,7 +155,7 @@ fun StrollTab(
                     StrollTopBar(
                         currentMode = currentMode,
                         onBackClick = onBackToRecommend,
-                        onShareClick = { /* TODO: 分享功能 */ },
+                        onShareClick = { showShare = true },
                         onTitleClick = onNavigateToModeSelection
                     )
 
@@ -204,11 +220,82 @@ fun StrollTab(
                         // 底部功能按钮
                         BottomFunctionBar(
                             onCommentClick = { presenter.onCommentClick() },
-                            onMoreClick = { presenter.onMoreClick() }
+                            onMoreClick = { showPlayCustomize = true }
                         )
                     }
                 }
             }
+        }
+
+        // 评论页面（作为全屏页面显示）
+        if (showComment && currentSong != null) {
+            CommentTab(
+                songId = currentSong!!.songId,
+                onBackClick = { showComment = false }
+            )
+        }
+
+        // 分享弹窗（作为overlay层叠加显示）
+        if (showShare && currentSong != null) {
+            ShareTab(
+                song = currentSong!!,
+                onCloseClick = { showShare = false }
+            )
+        }
+
+        // 歌词页面（作为全屏页面显示）
+        if (showLyric && currentSong != null) {
+            LyricTab(
+                songId = currentSong!!.songId,
+                onBackClick = { showLyric = false }
+            )
+        }
+
+        // 播放定制弹窗（作为overlay层叠加显示）
+        if (showPlayCustomize && currentSong != null) {
+            PlayCustomizeTab(
+                song = currentSong!!,
+                onCloseClick = { showPlayCustomize = false },
+                onShareClick = { showShare = true },
+                onNavigateToPlayerStyle = {
+                    showPlayCustomize = false
+                    showPlayerStyle = true
+                },
+                onNavigateToSongProfile = {
+                    showPlayCustomize = false
+                    showSongProfile = true
+                },
+                onNavigateToCollectSong = {
+                    showPlayCustomize = false
+                    showCollectSong = true
+                }
+            )
+        }
+
+        // 播放器样式选择页面（作为全屏页面显示）
+        if (showPlayerStyle) {
+            PlayerTab(
+                onBackClick = { showPlayerStyle = false }
+            )
+        }
+
+        // 歌曲档案页面（作为全屏页面显示）
+        if (showSongProfile && currentSong != null) {
+            SongProfileTab(
+                songId = currentSong!!.songId,
+                onBackClick = { showSongProfile = false }
+            )
+        }
+
+        // 收藏到歌单页面（作为全屏页面显示）
+        if (showCollectSong && currentSong != null) {
+            CollectSongTab(
+                songId = currentSong!!.songId,
+                onBackClick = { showCollectSong = false },
+                onNavigateToCreatePlaylist = {
+                    // 跳转到创建歌单页面（暂未实现）
+                }
+            )
         }
     }
 }

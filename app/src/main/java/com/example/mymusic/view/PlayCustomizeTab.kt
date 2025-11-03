@@ -34,7 +34,10 @@ import com.example.mymusic.presenter.PlayCustomizePresenter
 fun PlayCustomizeTab(
     song: Song,
     onCloseClick: () -> Unit = {},
-    onShareClick: () -> Unit = {}
+    onShareClick: () -> Unit = {},
+    onNavigateToPlayerStyle: () -> Unit = {},
+    onNavigateToSongProfile: () -> Unit = {},
+    onNavigateToCollectSong: () -> Unit = {}
 ) {
     val context = LocalContext.current
 
@@ -71,6 +74,18 @@ fun PlayCustomizeTab(
 
                 override fun close() {
                     onCloseClick()
+                }
+
+                override fun navigateToPlayerStyle() {
+                    onNavigateToPlayerStyle()
+                }
+
+                override fun navigateToSongProfile() {
+                    onNavigateToSongProfile()
+                }
+
+                override fun navigateToCollectSong() {
+                    onNavigateToCollectSong()
                 }
 
                 override fun showLoading() {

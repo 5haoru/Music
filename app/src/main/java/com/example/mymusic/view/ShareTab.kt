@@ -71,7 +71,10 @@ fun ShareTab(
                 }
             },
             context
-        )
+        ).apply {
+            // 设置当前歌曲
+            setSong(song)
+        }
     }
 
     // 半透明深色蒙版背景

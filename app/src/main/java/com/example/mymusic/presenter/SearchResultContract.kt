@@ -17,6 +17,8 @@ interface SearchResultContract {
         fun showError(message: String)
         fun navigateBack()
         fun updateFollowStatus(isFollowing: Boolean)
+        fun navigateToPlay(songId: String)
+        fun navigateToSinger(artistId: String)
     }
 
     interface Presenter {
@@ -26,5 +28,6 @@ interface SearchResultContract {
         fun onMVClick(mvId: String)
         fun onSongClick(songId: String)
         fun onBackClick()
+        fun onArtistClick(artistId: String)
     }
 }

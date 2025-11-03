@@ -21,10 +21,14 @@ class RecommendPresenter(
         try {
             songs = DataLoader.loadSongs(context)
             playlists = DataLoader.loadPlaylists(context)
+
+            // 过滤掉"我喜欢的音乐"，它只在"我的"页面显示
+            val displayPlaylists = playlists.filter { it.playlistId != "my_favorites" }
+
             view.hideLoading()
             view.showRecommendedSongs(songs.take(5))
-            view.showDailyRecommendPlaylists(playlists.take(3))
-            view.showRankingPlaylists(playlists.takeLast(3))
+            view.showDailyRecommendPlaylists(displayPlaylists)
+            view.showRankingPlaylists(displayPlaylists.takeLast(3))
         } catch (e: Exception) {
             view.hideLoading()
             view.showError("加载数据失败: ${e.message}")

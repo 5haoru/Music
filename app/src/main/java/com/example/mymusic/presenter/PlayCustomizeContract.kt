@@ -14,6 +14,9 @@ interface PlayCustomizeContract {
         fun updateFollowState(isFollowed: Boolean)
         fun showSuccess(message: String)
         fun close()
+        fun navigateToPlayerStyle()
+        fun navigateToSongProfile()
+        fun navigateToCollectSong()
     }
 
     interface Presenter : BasePresenter {

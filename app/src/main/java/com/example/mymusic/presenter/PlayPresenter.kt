@@ -2,6 +2,7 @@ package com.example.mymusic.presenter
 
 import android.content.Context
 import com.example.mymusic.data.Song
+import com.example.mymusic.model.CollectionRecord
 import com.example.mymusic.utils.DataLoader
 import kotlin.random.Random
 
@@ -42,6 +43,8 @@ class PlayPresenter(
                 currentSong?.let {
                     view.showSong(it)
                     view.hideLoading()
+                    // 检查是否已收藏到"我喜欢的音乐"
+                    checkFavoriteStatus(it.songId)
                 }
                 view.updatePlayMode(currentPlayMode)
             } else {
@@ -52,6 +55,34 @@ class PlayPresenter(
             view.hideLoading()
             view.showError("加载数据失败: ${e.message}")
         }
+    }
+
+    override fun loadSongById(songId: String) {
+        view.showLoading()
+        try {
+            songs = DataLoader.loadSongs(context)
+            val targetSong = songs.find { it.songId == songId }
+            if (targetSong != null) {
+                currentSong = targetSong
+                currentSongIndex = songs.indexOf(targetSong)
+                view.showSong(targetSong)
+                view.hideLoading()
+                // 检查是否已收藏到"我喜欢的音乐"
+                checkFavoriteStatus(songId)
+                view.updatePlayMode(currentPlayMode)
+            } else {
+                view.hideLoading()
+                view.showError("未找到指定歌曲")
+            }
+        } catch (e: Exception) {
+            view.hideLoading()
+            view.showError("加载数据失败: ${e.message}")
+        }
+    }
+
+    private fun checkFavoriteStatus(songId: String) {
+        isFavorite = DataLoader.isSongInPlaylist(context, "my_favorites", songId)
+        view.updateFavoriteState(isFavorite)
     }
 
     override fun onPlayPauseClick() {
@@ -218,9 +249,39 @@ class PlayPresenter(
     }
 
     override fun onFavoriteClick() {
-        isFavorite = !isFavorite
-        view.updateFavoriteState(isFavorite)
-        // TODO: 保存到collection_records.json
+        currentSong?.let { song ->
+            if (isFavorite) {
+                // 已收藏，提示用户
+                view.showSuccess("已在我喜欢的音乐中")
+            } else {
+                // 未收藏，添加到"我喜欢的音乐"
+                val success = DataLoader.addSongToPlaylist(context, "my_favorites", song.songId)
+                if (success) {
+                    isFavorite = true
+                    view.updateFavoriteState(isFavorite)
+
+                    // 保存收藏记录
+                    try {
+                        val collectionId = DataLoader.generateCollectionId(context)
+                        val record = CollectionRecord(
+                            collectionId = collectionId,
+                            contentType = "song_to_favorites",
+                            contentId = song.songId,
+                            contentName = song.songName,
+                            collectionTime = System.currentTimeMillis(),
+                            isSuccess = true
+                        )
+                        DataLoader.saveCollectionRecord(context, record)
+                        view.showSuccess("成功收藏")
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        view.showSuccess("成功收藏")
+                    }
+                } else {
+                    view.showError("收藏失败")
+                }
+            }
+        }
     }
 
     override fun onCommentClick() {
@@ -273,10 +334,12 @@ interface PlayContract {
         fun updateProgress(progress: Float, currentTime: String)
         fun updatePlayMode(mode: PlayMode)
         fun navigateToComment(songId: String)
+        fun showSuccess(message: String)
     }
 
     interface Presenter : BasePresenter {
         fun loadData()
+        fun loadSongById(songId: String)
         fun onPlayPauseClick()
         fun onPreviousClick()
         fun onNextClick()

@@ -10,6 +10,7 @@ interface SubscribeContract {
         fun showFollowItems(items: List<FollowItem>)
         fun updateFilteredItems(items: List<FollowItem>)
         fun showAggregatedUpdate(artistNames: List<String>, count: Int)
+        fun showUnfollowSuccess(name: String)
     }
 
     interface Presenter : BasePresenter {

@@ -47,10 +47,37 @@ class MainActivity : ComponentActivity(), MainContract.View {
         var showSubscribe by remember { mutableStateOf(false) }
         var showDuration by remember { mutableStateOf(false) }
         var showPlaylist by remember { mutableStateOf(false) }
+        var showPlaylistSetting by remember { mutableStateOf(false) }
+        var showSongSort by remember { mutableStateOf(false) }
+        var showSongDel by remember { mutableStateOf(false) }
         var selectedPlaylist by remember { mutableStateOf<Playlist?>(null) }
+        var selectedSettingPlaylist by remember { mutableStateOf<Playlist?>(null) }
+        var selectedSortPlaylist by remember { mutableStateOf<Playlist?>(null) }
+        var selectedDelSongId by remember { mutableStateOf("") }
+        var selectedDelPlaylistId by remember { mutableStateOf("") }
         var selectedSongId by remember { mutableStateOf("") }
         var searchResultQuery by remember { mutableStateOf("") }
         var selectedStrollMode by remember { mutableStateOf("伤感") }
+        var playTabSongId by remember { mutableStateOf<String?>(null) } // 用于从搜索等页面导航到播放页面时指定歌曲
+        var showSinger by remember { mutableStateOf(false) }
+        var selectedArtistId by remember { mutableStateOf("") }
+
+        // 歌手详情页面不显示底部导航栏
+        if (showSinger && selectedArtistId.isNotEmpty()) {
+            SingerTab(
+                artistId = selectedArtistId,
+                onBackClick = {
+                    showSinger = false
+                    selectedArtistId = ""
+                },
+                onNavigateToPlay = { songId ->
+                    playTabSongId = songId
+                    currentTab = 2
+                    showSinger = false
+                }
+            )
+            return
+        }
 
         // 听歌识曲页面不显示底部导航栏
         if (showListenRecognize) {
@@ -74,7 +101,16 @@ class MainActivity : ComponentActivity(), MainContract.View {
         if (showSearchResult) {
             SearchResultTab(
                 searchQuery = searchResultQuery,
-                onBackClick = { showSearchResult = false }
+                onBackClick = { showSearchResult = false },
+                onNavigateToPlay = { songId ->
+                    playTabSongId = songId
+                    currentTab = 2
+                    showSearchResult = false
+                },
+                onNavigateToSinger = { artistId ->
+                    selectedArtistId = artistId
+                    showSinger = true
+                }
             )
             return
         }
@@ -109,6 +145,48 @@ class MainActivity : ComponentActivity(), MainContract.View {
             return
         }
 
+        // 歌曲排序页面不显示底部导航栏
+        if (showSongSort && selectedSortPlaylist != null) {
+            SongSortTab(
+                playlist = selectedSortPlaylist!!,
+                onBackClick = {
+                    showSongSort = false
+                    selectedSortPlaylist = null
+                }
+            )
+            return
+        }
+
+        // 歌曲删除页面不显示底部导航栏
+        if (showSongDel && selectedDelSongId.isNotEmpty()) {
+            SongDelTab(
+                songId = selectedDelSongId,
+                playlistId = selectedDelPlaylistId,
+                onBackClick = {
+                    showSongDel = false
+                    selectedDelSongId = ""
+                    selectedDelPlaylistId = ""
+                }
+            )
+            return
+        }
+
+        // 歌单设置页面不显示底部导航栏
+        if (showPlaylistSetting && selectedSettingPlaylist != null) {
+            PlaylistSettingTab(
+                playlist = selectedSettingPlaylist!!,
+                onBackClick = {
+                    showPlaylistSetting = false
+                    selectedSettingPlaylist = null
+                },
+                onNavigateToSongSort = { playlist ->
+                    selectedSortPlaylist = playlist
+                    showSongSort = true
+                }
+            )
+            return
+        }
+
         // 歌单详情页面不显示底部导航栏
         if (showPlaylist && selectedPlaylist != null) {
             PlaylistTab(
@@ -122,6 +200,15 @@ class MainActivity : ComponentActivity(), MainContract.View {
                     currentTab = 2
                     showPlaylist = false
                     selectedPlaylist = null
+                },
+                onNavigateToSetting = { playlist ->
+                    selectedSettingPlaylist = playlist
+                    showPlaylistSetting = true
+                },
+                onNavigateToSongDel = { songId, playlistId ->
+                    selectedDelSongId = songId
+                    selectedDelPlaylistId = playlistId
+                    showSongDel = true
                 }
             )
             return
@@ -135,7 +222,11 @@ class MainActivity : ComponentActivity(), MainContract.View {
                 onNavigateToModeSelection = { showModeSelection = true }
             )
             2 -> PlayTab(
-                onBackToRecommend = { currentTab = 0 },
+                initialSongId = playTabSongId,
+                onBackToRecommend = {
+                    currentTab = 0
+                    playTabSongId = null // 返回时清除指定的歌曲ID
+                },
                 onNavigateToComment = { songId ->
                     selectedSongId = songId
                     showComment = true

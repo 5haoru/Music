@@ -102,11 +102,15 @@ class SearchResultPresenter(
     }
 
     override fun onSongClick(songId: String) {
-        // TODO: 播放歌曲
+        view.navigateToPlay(songId)
     }
 
     override fun onBackClick() {
         view.navigateBack()
+    }
+
+    override fun onArtistClick(artistId: String) {
+        view.navigateToSinger(artistId)
     }
 
     private fun loadMusicVideos(): List<MusicVideo> {

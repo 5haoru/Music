@@ -35,7 +35,9 @@ app/src/main/
 │   │   ├── Comment.kt           # 评论数据类
 │   │   ├── Playlist.kt
 │   │   ├── Artist.kt
-│   │   └── User.kt
+│   │   ├── User.kt
+│   │   ├── SortOrderRecord.kt   # 歌曲排序记录
+│   │   └── SongDeletionRecord.kt # 歌曲删除记录
 │   ├── model/                   # 记录数据结构
 │   │   ├── PlayRecord.kt
 │   │   ├── CommentRecord.kt
@@ -57,7 +59,10 @@ app/src/main/
 │   │   ├── SharePresenter.kt               # 分享页面Presenter
 │   │   ├── LyricPresenter.kt               # 歌词页面Presenter
 │   │   ├── SubscribePresenter.kt           # 关注页面Presenter
-│   │   └── MePresenter.kt                  # 我的页面Presenter
+│   │   ├── MePresenter.kt                  # 我的页面Presenter
+│   │   ├── SongSortPresenter.kt            # 歌曲排序Presenter
+│   │   ├── SongDelPresenter.kt             # 歌曲删除Presenter
+│   │   └── CollectSongPresenter.kt         # 收藏到歌单Presenter
 │   ├── view/                    # MVP View层
 │   │   ├── RecommendTab.kt         # 推荐页面容器（包含子标签）
 │   │   ├── DailyRecommendTab.kt    # 每日推荐子页面（已完成）
@@ -72,7 +77,10 @@ app/src/main/
 │   │   ├── ShareTab.kt             # 分享页面（已完成）
 │   │   ├── LyricTab.kt             # 歌词页面（已完成）
 │   │   ├── SubscribeTab.kt         # 关注页面（已完成）
-│   │   └── MeTab.kt                # 我的页面（已完成）
+│   │   ├── MeTab.kt                # 我的页面（已完成）
+│   │   ├── SongSortTab.kt          # 歌曲排序页面（已完成）
+│   │   ├── SongDelTab.kt           # 歌曲删除页面（已完成）
+│   │   └── CollectSongTab.kt       # 收藏到歌单页面（已完成）
 │   ├── ui/components/           # UI组件
 │   │   ├── TopBar.kt           # 顶部搜索栏
 │   │   ├── SongItem.kt         # 歌曲列表项
@@ -87,11 +95,13 @@ app/src/main/
     ├── data/                    # JSON数据文件
     │   ├── songs.json          # 15首歌曲
     │   ├── music_videos.json   # 10个MV数据
-    │   ├── playlists.json      # 7个歌单
+    │   ├── playlists.json      # 11个歌单（含我喜欢的音乐+3个特色歌单）
     │   ├─��� artists.json        # 7位艺术家
     │   ├── users.json          # 5个用户
     │   ├── comments.json       # 评论数据
-    │   └── *_records.json      # 19个记录文件（初始为空）
+    │   ├── sort_order_records.json      # 排序记录（初始为空）
+    │   ├── song_deletion_records.json   # 删除记录（初始为空）
+    │   └── *_records.json      # 其他记录文件（初始为空）
     └── cover/                   # 封面图片
         └── *.png               # 歌曲/歌单封面
 ```
@@ -100,7 +110,7 @@ app/src/main/
 
 ### 基础数据
 - **歌曲库**: 包含15首经典华语歌曲（周杰伦、五月天、薛之谦等）
-- **歌单**: 包含每日推荐、热歌榜、新歌榜等7个歌单
+- **歌单**: 包含每日推荐、热歌榜、新歌榜等11个歌单（含"我喜欢的音乐"和3个特色动漫音乐歌单）
 - **艺术家**: 7位流行歌手信息
 - **用户**: 5个模拟用户账号
 
@@ -162,6 +172,36 @@ app/src/main/
     - [x] 榜单项右侧信息（榜单名、更新频率、TOP3歌曲）
     - [x] TOP3歌曲显示（排名、歌名-歌手、状态标识）
     - [x] 歌曲状态标识（新歌"新"绿色标签、上升红色△、下降绿色▽）
+    - [x] 点击榜单卡片导航到榜单详情页（RankTab）
+  - [x] **榜单详情页** (RankTab - 三级页面)
+    - [x] 顶部导航栏（返回按钮、"歌单"标题、搜索、更多按钮）
+    - [x] **榜单头部信息区**：
+      - [x] 歌单封面（带播放次数显示，如"4000万"）
+      - [x] 榜单名称（如"网易云日语榜"）
+      - [x] 官方认证标识（"网易云音乐"+ 关注按钮）
+      - [x] 更新时间显示（如"10月28日更新"）
+    - [x] **描述区域**：榜单描述文字 + 展开/收起按钮
+    - [x] **互动按钮行**：
+      - [x] 分享按钮（显示分享数）
+      - [x] 评论按钮（显示评论数）
+      - [x] 点赞按钮（金色背景，显示点赞数"11.6万"格式）
+    - [x] **播放控制栏**：
+      - [x] 播放全部按钮（金色圆形图标）
+      - [x] 歌曲数量显示"(100)"
+      - [x] 下载图标和列表图标
+    - [x] **歌曲列表**（100首）：
+      - [x] 排名序号（1-100，前3名红色加粗）
+      - [x] 排名变化指示器（NEW标签、▲上升、▼下降、稳定无标识）
+      - [x] 收藏状态（红心图标）
+      - [x] 音质标签（"超清母带"等）
+      - [x] 歌曲名和歌手信息
+      - [x] NEW标签（新上榜歌曲）
+      - [x] 播放按钮和更多按钮
+    - [x] 点击歌曲导航到播放页面
+    - [x] 快速收藏功能（添加到"我喜欢的音乐"）
+    - [x] MVP架构（RankContract、RankPresenter）
+    - [x] 随机生成排名变化数据
+    - [x] 循环使用15首歌曲填充100首列表
   - [x] **搜索页面** (SearchTab - 二级页面)
     - [x] 顶部搜索栏（返回按钮、搜索输入框、搜索图标）
     - [x] 快捷入口区（5个均匀分布：歌手、曲风、专区、识曲、听书）
@@ -212,12 +252,17 @@ app/src/main/
   - [x] 次要功能栏（音效、评论、详情、更多）
   - [x] 随机歌曲切换功能（漫游模式）
   - [x] 自动播放进度推进（每秒更新）
+  - [x] **快速收藏到"我喜欢的音乐"功能**（点击爱心按钮直接收藏，Toast提示成功）
+  - [x] 收藏记录保存到collection_records.json
 - [x] **播放页面完整实现**
   - [x] 全屏显示（无底部导航栏）
   - [x] 顶部栏（返回按钮、"播放"标题、分享按钮）
   - [x] 与漫游页面相同的UI布局
   - [x] 专辑封面、歌曲信息、进度条、播放控制
   - [x] 完整的播放功能（播放/暂停、上一曲/下一曲）
+  - [x] **快速收藏到"我喜欢的音乐"功能**（点击爱心按钮直接收藏，Toast提示成功）
+  - [x] 收藏记录保存到collection_records.json
+  - [x] 支持从搜索结果页面指定歌曲进入播放
   - [x] **三种播放模式**：
     - [x] 顺序播放（按列表顺序播放）
     - [x] 单曲循环（重复播放当前歌曲）
@@ -230,7 +275,7 @@ app/src/main/
     - [x] Overlay层叠架构（覆盖在播放页面上）
     - [x] **顶部歌曲信息区域**（封面缩略图、歌名、歌手、VIP标识）
     - [x] **第一层核心功能**（4个按钮横排）
-      - [x] 收藏功能（爱心图标，保存到collection_records.json）
+      - [x] 收藏功能（爱心图标，跳转到CollectSongTab）
       - [x] 下载功能（保存到download_records.json，显示"极高VIP"标签）
       - [x] 分享功能（跳转到ShareTab）
       - [x] 一起听功能
@@ -248,6 +293,19 @@ app/src/main/
     - [x] Toast提示操作成功
     - [x] 点击背景关闭浮层
     - [x] MVP架构（PlayCustomizeContract、PlayCustomizePresenter）
+  - [x] **收藏到歌单页面**（CollectSongTab - 全屏页面）
+    - [x] 从PlayCustomizeTab的"收藏"按钮进入
+    - [x] 顶部导航栏（返回按钮、"收藏到歌单"标题、常用/多选按钮）
+    - [x] 新建歌单按钮（位于列表顶部，带加号图标）
+    - [x] **歌单列表展示**（垂直滚动列表）
+      - [x] 歌单封面缩略图（56dp，圆角）
+      - [x] 歌单名称和歌曲数量（例如："153首"）
+      - [x] "已添加"状态标签（歌曲已在歌单中时显示）
+    - [x] 点击歌单收藏歌曲功能
+    - [x] 收藏成功Toast提示（"已成功收藏到「歌单名」"）
+    - [x] 收藏记录保存（collection_records.json）
+    - [x] MVP架构（CollectSongContract、CollectSongPresenter）
+    - [x] 浅色Material Design主题
 - [x] **分享页面完整实现**（Overlay架构）
   - [x] **半透明深色蒙版背景**（60%透明度，覆盖播放界面）
   - [x] **Overlay层叠架构**（作为PlayTab的覆盖层，非独立页面）
@@ -436,6 +494,97 @@ app/src/main/
   - [x] 根据playlist.songIds过滤歌曲列表
   - [x] 点击歌曲导航到播放页面
   - [x] 总时长计算功能
+- [x] **歌单设置页面完整实现**（PlaylistSettingTab - 三级页面）
+  - [x] 从歌单详情页点击右上角三个点进入
+  - [x] **顶部导航栏**：
+    - [x] 返回按钮和"歌单设置"标题
+    - [x] 简洁的白色背景设计
+  - [x] **歌单信息头部**：
+    - [x] 歌单封面（80dp圆角）
+    - [x] 歌单标题和创建者信息
+    - [x] 播放次数统计显示
+  - [x] **功能设置列表**（9个设置项）：
+    - [x] 复制DeepSeek锐评指令（带"限时"红色标签，点击复制到剪贴板）
+    - [x] WiFi下自动下载歌曲（Switch开关+说明文字）
+    - [x] 歌单壁纸（图标：Image）
+    - [x] 添加歌曲（图标：Add）
+    - [x] 歌曲红心记录（图标：Favorite）
+    - [x] 更改歌曲排序（图标：Sort）
+    - [x] 清空下载文件（图标：Delete）
+    - [x] 添加小组件（图标：Widgets）
+    - [x] 展示专辑封面（Switch开关）
+  - [x] MVP架构（PlaylistSettingContract、PlaylistSettingPresenter）
+  - [x] 每个设置项带Material Icons图标
+  - [x] Switch组件用于开关型设置
+  - [x] Toast提示操作结果
+  - [x] DeepSeek锐评功能（复制预设指令到剪贴板）
+- [x] **歌曲排序选择页面完整实现**（SongSortTab - 四级页面）
+  - [x] 从歌单设置页点击"更改歌曲排序"进入
+  - [x] **顶部导航栏**：
+    - [x] 返回按钮和"歌曲排序"标题
+    - [x] 简洁的白色背景设计
+  - [x] **排序选项列表**（7个排序方式）：
+    - [x] 手动排序（RadioButton单选）
+    - [x] 按收藏时间从新到旧排序（默认选中）
+    - [x] 按收藏时间从旧到新排序
+    - [x] 按歌曲名排序
+    - [x] 按专辑名排序
+    - [x] 按歌手名排序
+    - [x] 无音源歌曲置底
+  - [x] MVP架构（SongSortContract、SongSortPresenter）
+  - [x] 数据模型（SortOrderRecord）
+  - [x] 数据持久化到 sort_order_records.json
+  - [x] RadioButton单选框交互
+  - [x] Toast提示选择结果并自动返回
+  - [x] 按歌单ID存储不同歌单的排序偏好
+- [x] **歌曲档案页面完整实现**（SongProfileTab - 三级页面）
+  - [x] 从播放定制页点击"查看歌曲百科"进入
+  - [x] **顶部导航栏**：返回按钮 + "歌曲百科·{歌曲名}"标题 + 更多按钮
+  - [x] **个性化数据卡片**：
+    - [x] 第一次听的时间和场景（"金秋的晚上 2024.10.26 20:07"）
+    - [x] 累计播放次数（大号68次）
+    - [x] 诗意化描述（"如同花香飘过1967条街"）
+  - [x] **歌曲详情区域**：
+    - [x] 基本信息：曲风（红色强调）、专辑、语种、发行时间、BPM
+    - [x] 制作信息（可点击展开）
+    - [x] 简介（可点击展开，显示省略号）
+    - [x] 影综（显示数量"5个"，右箭头）
+    - [x] 奖项（装饰奖杯emoji，显示数量"5个"，右箭头）
+    - [x] 乐谱（横向滚动卡片，显示前4个乐器，数量"10个"，右箭头）
+  - [x] 深色主题：背景#1A1A1A，卡片#2B2B2B，强调红色
+  - [x] MVP架构：SongProfileContract、SongProfilePresenter、SongProfileTab
+  - [x] 数据模型：SongProfile.kt（包含诗意描述生成逻辑）
+  - [x] 从assets/songs.json加载歌曲数据
+  - [x] 导航集成：PlayTab → PlayCustomizeTab → SongProfileTab
+- [x] **播放器样式选择页面完整实现**（PlayerTab - 三级页面）
+  - [x] 从播放定制页点击"播放器样式"进入
+  - [x] **顶部导航栏**：
+    - [x] 返回按钮和"播放器样式"标题
+    - [x] 右侧自定义图标（相机）
+    - [x] 深色背景主题（黑色）
+  - [x] **横向选项卡**（ScrollableTabRow）：
+    - [x] 经典、复古、创意、艺术家、联名 5个类别
+    - [x] 红色指示器标识当前选中
+    - [x] 点击切换不同类别
+  - [x] **播放器样式卡片列表**（横向滑动）：
+    - [x] 经典类别：经典黑胶、全屏封面、唱片封面
+    - [x] 复古类别：复刻·千禧Pod、复刻·镭射CD（默认使用中）、复刻·琉光
+    - [x] LazyRow实现横向滑动
+    - [x] 每个卡片240dp宽，高380dp
+    - [x] 显示播放器预览图（从assets/player加载）
+    - [x] 样式名称和描述文字
+    - [x] "使用中"标签（绿色，当前选中样式）
+  - [x] **确认对话框**：
+    - [x] 点击样式卡片弹出确认对话框
+    - [x] "你确定使用该样式吗？"提示
+    - [x] 取消/确定按钮
+    - [x] 确定后显示"更改样式成功"Toast
+  - [x] MVP架构（PlayerContract、PlayerPresenter）
+  - [x] 数据模型（PlayerStyle、PlayerStyleRecord）
+  - [x] 数据持久化到 playback_style_records.json
+  - [x] 6张播放器样式预览图（assets/player/1-6.jpg）
+  - [x] Coil图片加载库加载本地资源
+  - [x] 支持按styleId记录用户选择
 
 ### 🚧 待开发
 - [ ] 底部播放控制栏（全局组件）
@@ -481,7 +630,401 @@ implementation("io.coil-kt:coil-compose:2.5.0")
 
 ## 更新日志
 
-### 2025-10-27 (最新)
+### 2025-11-03 (最新)
+- ✅ **实现专辑功能（AlbumTab和AlbumListTab）**
+  - 数据准备：
+    - 创建Album.kt数据类（albumId, albumName, artist, artistId, coverUrl, releaseDate, description, songIds, songCount, collectCount, commentCount, shareCount）
+    - 创建albums.json数据文件：为15个专辑提供完整数据（周杰伦6张、五月天3张、薛之谦2张等）
+  - 修改SingerTab.kt：
+    - 将Tab列表中的"等"改为"MV"
+    - 根据selectedTab显示不同内容：
+      * "单曲"：显示歌曲列表
+      * "专辑"：显示AlbumListContent（专辑列表）
+      * 其他：显示占位文本"功能开发中"
+    - 添加AlbumTab条件渲染：点击专辑后全屏显示专辑详情
+  - 创建专辑详情功能（AlbumTab - 三级页面）：
+    - 创建AlbumContract.kt和AlbumPresenter.kt（MVP架构）
+    - 实现AlbumTab.kt完整UI页面：
+      * **顶部栏**：返回按钮、"专辑"标题、更多按钮
+      * **专辑信息区**：封面（150dp）、专辑名、歌手信息（可点击跳转）、发行时间、描述（可展开）
+      * **互动按钮行**：收藏、评论、分享（显示数量，格式化为"万"）
+      * **热卖横幅**："{歌手}实体专辑热卖中 立即支持 >"（带购物车图标）
+      * **播放全部区域**：金色圆形播放按钮（48dp）、歌曲数量、购物车/下载/列表图标
+      * **歌曲列表**：序号、歌名、VIP/音质标签、歌手、播放/更多按钮
+    - AlbumPresenter功能：
+      * loadAlbumDetail()：从albums.json加载专辑信息和歌曲列表
+      * onCollectClick()：显示"成功收藏《专辑名》"Toast
+      * onPlayAllClick()/onSongClick()：导航到播放页面
+      * onArtistClick()：导航到歌手页面
+  - 创建专辑列表功能（AlbumListTab）：
+    - 创建AlbumListContract.kt和AlbumListPresenter.kt（MVP架构）
+    - 实现AlbumListContent组件（嵌入SingerTab使用）：
+      * 专辑列表项：封面（80dp）、专辑名、歌手名、发行日期
+      * 根据artistId过滤专辑列表
+      * 点击专辑触发onAlbumClick回调
+    - AlbumListPresenter功能：
+      * loadAlbumsByArtist()：根据艺术家ID筛选专辑
+      * onAlbumClick()：触发导航到专辑详情
+  - 更新DataLoader.kt：
+    - 添加loadAlbums()方法：加载所有专辑
+    - 添加getAlbumById()方法：根据ID获取专辑
+    - 添加getAlbumsByArtist()方法：根据艺术家ID获取专辑列表
+    - 添加getSongsInAlbum()方法：根据专辑ID获取歌曲列表
+  - 导航流程：
+    - SingerTab → 点击"专辑"Tab → AlbumListContent → 点击专辑 → AlbumTab
+    - AlbumTab → 点击歌手信息 → 返回SingerTab
+    - AlbumTab → 点击歌曲/播放全部 → 导航到播放页面
+  - 编译测试：BUILD SUCCESSFUL in 7m 26s（仅warning，无error）
+
+### 2025-11-02
+- ✅ **实现快速收藏到"我喜欢的音乐"功能**
+  - 创建专用歌单my_favorites（我喜欢的音乐）到playlists.json
+  - 更新DataLoader.kt：
+    - 添加addSongToPlaylist()方法动态添加歌曲到歌单（带去重验证）
+    - 添加isSongInPlaylist()方法检查歌曲是否已在歌单中
+    - 两个方法均使用loadPlaylistsWithCache()优先从内部存储加载
+  - 修改PlayPresenter.kt：
+    - 重写onFavoriteClick()方法：点击爱心按钮直接添加到my_favorites歌单
+    - 添加checkFavoriteStatus()检查歌曲是否已收藏
+    - 已收藏显示"已在我喜欢的音乐中"，未收藏显示"成功收藏"
+    - 保存收藏记录到collection_records.json（contentType: "song_to_favorites"）
+    - PlayContract.View添加showSuccess(message: String)方法
+    - PlayContract.Presenter添加loadSongById(songId: String)方法
+  - 修改StrollPresenter.kt：
+    - 实现同样的onFavoriteClick()逻辑
+    - 在onNextClick()和onPreviousClick()中添加checkFavoriteStatus()调用
+    - StrollContract.View添加showSuccess(message: String)方法
+  - 修改PlayTab.kt：
+    - 添加initialSongId参数支持播放指定歌曲
+    - 实现showSuccess()方法显示Toast提示
+  - 修改StrollTab.kt：
+    - 实现showSuccess()方法显示Toast提示
+  - Toast提示用户收藏成功或已收藏
+
+- ✅ **实现搜索结果导航到播放页面功能**
+  - 修改SearchResultContract.kt：
+    - View接口添加navigateToPlay(songId: String)方法
+  - 修改SearchResultPresenter.kt：
+    - 实现onSongClick()方法调用view.navigateToPlay(songId)
+  - 修改SearchResultTab.kt：
+    - 添加onNavigateToPlay: (String) -> Unit回调参数
+    - 实现navigateToPlay()回调转发
+  - 修改MainActivity.kt：
+    - 添加playTabSongId状态变量用于跨页面传递歌曲ID
+    - SearchResultTab的onNavigateToPlay回调：设置playTabSongId、切换到播放页（currentTab = 2）、关闭搜索页
+    - PlayTab传入initialSongId参数，返回时清除playTabSongId
+  - 实现完整导航流程：SearchResultTab → MainActivity状态管理 → PlayTab指定歌曲播放
+
+- ✅ **添加三个特色动漫音乐歌单**
+  - 更新playlists.json添加3个新歌单：
+    - playlist_009：《空之境界》精选音乐集（描述：空之境界系列精选配乐，梶浦由记经典之作）
+    - playlist_010：eva系列音乐集（描述：新世纪福音战士系列经典音乐合集）
+    - playlist_011：看小说推荐音乐（描述：适合阅读小说时聆听的背景音乐）
+  - 每个歌单包含playlistId、playlistName、description、coverUrl、songIds数组、createTime、songCount
+  - 歌单总数从7个增加到11个（含my_favorites）
+
+- ✅ **实现推荐页面精选歌单导航功能**
+  - 修改RecommendTab.kt：
+    - 添加showPlaylistDetail和selectedPlaylistForDetail状态变量
+    - 修改openPlaylist()方法：除"每日推荐"外的其他歌单通过PlaylistTab打开
+    - 添加PlaylistTab条件渲染，支持从推荐页面导航到歌单详情
+  - 实现导航流程：RecommendTab点击精选歌单 → PlaylistTab显示歌单详情
+  - 支持点击《空之境界》、eva系列、看小说推荐等精选歌单打开详情页
+
+- ✅ **实现歌单详情页收藏功能**
+  - 修改PlaylistPresenter.kt：
+    - 添加currentPlaylist变量保存当前歌单信息
+    - 实现onCollectClick()方法显示Toast提示"成功收藏《歌单名》"
+  - 点击PlaylistTab的收藏按钮显示成功提示
+
+- ✅ **修复"我的"页面"我喜欢的音乐"重复显示问题**
+  - 修改MeTab.kt的PlaylistsSection：
+    - 从playlists中查找my_favorites歌单传递给FavoriteMusicItem
+    - 过滤掉my_favorites，避免在普通歌单列表中重复显示
+  - 修改FavoriteMusicItem：
+    - 添加playlist和onPlaylistClick参数
+    - 实现点击处理，支持导航到"我喜欢的音乐"歌单详情页
+  - 确保"我喜欢的音乐"只显示一次，并且可以正常打开
+
+- ✅ **实现歌手详情页面（SingerTab）**
+  - 数据准备：
+    - 更新artists.json添加pinyin字段（支持拼音搜索）
+    - 更新Artist.kt数据类添加pinyin可选字段
+  - 创建MVP架构：
+    - 创建SingerContract.kt定义View和Presenter接口
+    - 创建SingerPresenter.kt实现业务逻辑：
+      * loadSingerData()：根据artistId加载歌手信息和歌曲列表
+      * generateSongDetail()：为歌曲添加丰富展示信息（标签、热评等）
+      * onFollowClick()：关注/取消关注歌手，Toast提示
+      * onSongClick()：导航到播放页面
+  - 创建UI页面SingerTab.kt：
+    - **顶部搜索栏**：显示歌手名，返回按钮，清除按钮
+    - **Tab切换栏**：综合、单曲、歌单、播客、专辑、歌手、等
+    - **歌手信息区**：圆形头像、歌手名、数据统计（歌曲数·粉丝数）、乐迷团按钮
+    - **AI歌单推荐区**：占位显示AI智能推荐
+    - **单曲列表**：
+      * 列表标题 + 播放全部按钮（金色圆形图标）
+      * 每首歌曲显示：歌名+版本、权限标签（VIP/原唱）、音质标签（超清母带）
+      * 歌手-专辑信息、热评/个性化文案、评论数/收藏数
+      * 播放按钮和更多按钮
+  - 集成导航：
+    - 修改SearchResultTab.kt：
+      * 添加onNavigateToSinger回调参数
+      * ArtistCard添加onArtistClick参数，使其可点击
+    - 修改SearchResultContract.kt：
+      * View接口添加navigateToSinger(artistId)方法
+      * Presenter接口添加onArtistClick(artistId)方法
+    - 修改SearchResultPresenter.kt：
+      * 实现onArtistClick()调用view.navigateToSinger()
+    - 修改MainActivity.kt：
+      * 添加showSinger和selectedArtistId状态变量
+      * 添加SingerTab条件渲染（全屏显示，无底部导航栏）
+      * SearchResultTab添加onNavigateToSinger回调设置状态
+      * SingerTab支持导航到播放页面
+  - 实现导航流程：搜索结果页点击歌手 → 歌手详情页 → 可播放歌曲
+  - 支持拼音搜索歌手（如搜索"zhoujielen"找到周杰伦）
+  - 编译测试成功（BUILD SUCCESSFUL in 2m 46s）
+
+### 2025-10-30
+
+- ✅ **修复分享功能"歌曲信息不存在"问题**
+  - SharePresenter.kt：添加setSong()方法，允许直接设置currentSong
+  - ShareTab.kt：在创建presenter后调用setSong(song)，传入歌曲对象
+  - 修复后点击朋友圈等分享按钮正常显示"已分享到XXX"提示
+
+- ✅ **StrollTab补全PlayTab的所有功能**
+  - 添加状态变量：showComment, showShare, showLyric, showPlayCustomize, showPlayerStyle, showSongProfile, showCollectSong
+  - StrollContract.View添加navigateToComment()方法
+  - StrollPresenter.onCommentClick()实现，调用view.navigateToComment()
+  - StrollTab添加所有功能页面的显示逻辑：
+    - 评论页面（CommentTab）：点击评论按钮进入
+    - 分享弹窗（ShareTab）：点击分享按钮进入
+    - 歌词页面（LyricTab）：从PlayCustomizeTab进入
+    - 播放定制弹窗（PlayCustomizeTab）：点击更多按钮进入
+    - 播放器样式（PlayerTab）：从PlayCustomizeTab进入
+    - 歌曲档案（SongProfileTab）：从PlayCustomizeTab进入
+    - 收藏到歌单（CollectSongTab）：从PlayCustomizeTab进入
+  - 修改顶部栏分享按钮：onShareClick = { showShare = true }
+  - 漫游页面现在具有与播放页面相同的完整功能集
+
+- ✅ **添加取消关注成功提示**
+  - SubscribeContract.View添加showUnfollowSuccess(name: String)方法
+  - SubscribePresenter.unfollowItem()调用view.showUnfollowSuccess()显示成功提示
+  - SubscribeTab实现showUnfollowSuccess()，使用Toast显示"已成功取消关注XXX"
+  - 点击取消关注后显示友好的成功提示弹窗
+
+### 2025-10-29
+- ✅ **完成歌曲档案页面**（SongProfileTab - 三级页面）
+  - 创建SongProfile.kt数据模型：
+    - 字段：songId, songName, artist, firstListenTime, totalPlayCount, poeticDescription, genre, album, language, releaseDate, bpm, production, introduction, filmTvList, awardsList, scoresList
+    - generatePoeticDescription()：根据播放次数生成诗意描述（如"如同花香飘过1967条街"）
+    - fromSong()：从Song对象创建SongProfile，填充默认数据
+  - 创建SongProfileContract.kt和SongProfilePresenter.kt（MVP模式）
+  - 实现SongProfileTab.kt完整UI页面（深色主题）：
+    - **顶部栏**：返回按钮 + "歌曲百科·{歌曲名}"标题 + 更多按钮，深灰背景
+    - **个性化数据卡片**（深色卡片，圆角12dp）：
+      * 左侧：圆形头像占位符（音符emoji）
+      * 中间："第一次听"标签 + 时间（如"金秋的晚上\n2024.10.26 20:07"）
+      * 右侧："累计播放"次数（大号字体68次）+ 诗意描述（灰色小字）
+    - **歌曲详情区域**（深色卡片，圆角12dp）：
+      * 标题"歌曲详情"（18sp粗体）
+      * 基本信息：曲风（红色强调"流行-华语流行"）、专辑、语种、发行时间、BPM
+      * 制作信息（可点击展开）：作词/作曲/编曲，右箭头
+      * 简介（可点击展开）：显示前两行+省略号，右箭头
+      * 影综：预览第一项+数量（"5个"）+ 右箭头
+      * 奖项：装饰奖杯emoji + 前两项预览 + 数量（"5个"）+ 右箭头
+      * 乐谱：横向滚动卡片（80x80dp）显示前4个乐器（钢琴、吉他等）+ 数量（"10个"）+ 右箭头
+  - SongProfilePresenter功能实现：
+    - loadSongProfile()：从assets/songs.json加载歌曲数据
+    - 使用SongProfile.fromSong()生成档案数据（硬编码默认值）
+    - 预留点击事件：onProductionClick、onIntroductionClick、onFilmTvClick、onAwardsClick、onScoresClick
+  - 修改PlayCustomizeContract.kt：
+    - View接口添加navigateToSongProfile()方法
+  - 修改PlayCustomizePresenter.kt：
+    - onSongEncyclopediaClick()从显示Toast改为调用view.navigateToSongProfile()
+  - 修改PlayCustomizeTab.kt：
+    - 添加onNavigateToSongProfile回调参数
+    - Presenter实现navigateToSongProfile接口方法
+  - 修改PlayTab.kt：
+    - 添加showSongProfile状态管理
+    - PlayCustomizeTab传入导航回调，点击后关闭浮层并打开SongProfileTab
+    - SongProfileTab作为全屏页面渲染（与PlayerTab同级）
+  - 导航流程：PlayTab → PlayCustomizeTab（浮层）→ "查看歌曲百科" → SongProfileTab（全屏）
+  - 深色主题配色：背景#1A1A1A，卡片#2B2B2B，文字白色/灰色/浅灰，强调红色
+  - 构建测试通过（BUILD SUCCESSFUL in 8m 38s）
+- ✅ **完成播放器样式选择页面**（PlayerTab - 三级页面）
+  - 创建PlayerStyle.kt数据模型：
+    - 字段：styleId, styleName, category, imageUrl, description, isInUse
+    - 5个样式类别：经典、复古、创意、艺术家、联名
+    - 预设6种播放器样式（经典黑胶、全屏封面、唱片封面、复刻·千禧Pod、复刻·镭射CD、复刻·琉光）
+    - getAllStyles()静态方法获取所有样式
+    - getStylesByCategory()按类别筛选
+  - 创建PlayerStyleRecord.kt记录数据类：
+    - 字段：recordId, styleId, timestamp
+    - 用于保存用户选择到playback_style_records.json
+  - 创建PlayerContract.kt和PlayerPresenter.kt（MVP模式）
+  - 实现PlayerTab.kt完整UI页面（深色主题）：
+    - **顶部栏**：返回按钮 + "播放器样式"标题 + 右侧相机图标，黑色背景
+    - **横向选项卡**（ScrollableTabRow）：
+      * 5个类别标签：经典、复古、创意、艺术家、联名
+      * 红色指示器标识当前选中类别
+      * 点击切换类别，动态加载对应样式
+    - **样式卡片列表**（LazyRow横向滑动）：
+      * 每个卡片240dp宽，高380dp
+      * 使用Coil加载assets/player下的预览图
+      * 圆角12dp设计
+      * 样式名称（16sp粗体）和描述文字（13sp灰色）
+      * "使用中"标签（绿色，显示在右上角）
+      * 点击卡片触发确认对话框
+    - **确认对话框**（AlertDialog）：
+      * 标题"你确定使用该样式吗？"
+      * 显示选中的样式名称
+      * 取消/确定两个按钮
+      * 确定后保存并显示"更改样式成功"Toast
+  - PlayerPresenter功能实现：
+    - loadPlayerStyles()：加载所有样式并标记当前使用的样式
+    - onStyleSelected()：点击样式时显示确认对话框
+    - confirmStyleChange()：保存用户选择到playback_style_records.json
+    - onTabSelected()：切换类别时筛选对应样式
+    - 使用Gson进行JSON序列化/反序列化
+    - 文件存储在app私有目录：context.filesDir
+    - 默认样式：retro_cd（复刻·镭射CD）
+  - 修改PlayCustomizeContract.kt：
+    - View接口添加navigateToPlayerStyle()方法
+  - 修改PlayCustomizePresenter.kt：
+    - onPlayerStyleClick()从显示Toast改为调用view.navigateToPlayerStyle()
+  - 修改PlayCustomizeTab.kt：
+    - 添加onNavigateToPlayerStyle回调参数
+    - Presenter实现navigateToPlayerStyle接口方法
+  - 修改PlayTab.kt：
+    - 添加showPlayerStyle状态管理
+    - PlayCustomizeTab传入导航回调，点击后关闭浮层并打开PlayerTab
+    - PlayerTab作为全屏页面渲染（与ShareTab同级）
+  - 导航流程：PlayTab → PlayCustomizeTab（浮层）→ PlayerTab（全屏）
+  - 使用assets/player下的6张图片（1.jpg-6.jpg）作为样式预览
+  - 构建测试通过（BUILD SUCCESSFUL in 6m 23s）
+
+### 2025-10-28
+- ✅ **完成歌曲排序选择页面**（SongSortTab - 四级页面）
+  - 创建SortOrderRecord.kt数据模型：
+    - 字段：recordId, playlistId, sortType, timestamp
+    - 7个排序类型常量：手动排序、按收藏时间从新到旧/从旧到新、按歌曲名/专辑名/歌手名排序、无音源歌曲置底
+  - 创建SongSortContract.kt和SongSortPresenter.kt（MVP模式）
+  - 实现SongSortTab.kt完整UI页面：
+    - **顶部栏**：返回按钮 + "歌曲排序"标题，简洁白色背景
+    - **排序选项标题**："选择歌曲排序"（18sp粗体）
+    - **7个排序选项列表**：
+      * 每项使用RadioButton单选框 + 文本描述
+      * 默认选中"按收藏时间从新到旧排序"
+      * 点击任一选项立即保存并显示Toast提示
+      * 自动返回到歌单设置页
+  - SongSortPresenter功能实现：
+    - loadCurrentSortOrder()：从文件读取当前歌单的排序设置
+    - onSortOptionSelected()：保存用户选择到sort_order_records.json
+    - 支持多歌单独立排序偏好（按playlistId区分）
+    - 使用Gson进行JSON序列化/反序列化
+    - 文件存储在app私有目录：context.filesDir
+  - 修改PlaylistSettingContract.kt：
+    - View接口添加navigateToSongSort(playlist)方法
+  - 修改PlaylistSettingPresenter.kt：
+    - onChangeSortOrderClick()从显示"功能开发中"改为调用view.navigateToSongSort()
+  - 修改PlaylistSettingTab.kt：
+    - 添加onNavigateToSongSort回调参数
+    - Presenter实现navigateToSongSort接口方法
+  - 修改MainActivity.kt：
+    - 添加showSongSort和selectedSortPlaylist状态管理
+    - 添加SongSortTab页面条件渲染（全屏显示，无底部导航栏）
+    - SongSortTab在PlaylistSettingTab之前检查，实现四级导航
+    - PlaylistSettingTab传入onNavigateToSongSort回调
+  - 导航流程：MainActivity → MeTab → PlaylistTab → PlaylistSettingTab → SongSortTab
+  - 数据持久化到sort_order_records.json（初始为空数组[]）
+  - 构建测试通过（BUILD SUCCESSFUL in 2m 38s）
+
+### 2025-10-29
+- ✅ **完成歌曲删除操作页面**（SongDelTab - 四级页面）
+  - 创建SongDeletionRecord.kt数据模型：
+    - 字段：recordId, playlistId, songId, timestamp
+  - 创建SongDelContract.kt和SongDelPresenter.kt（MVP模式）
+  - 实现SongDelTab.kt完整UI页面（**浅色主题**）：
+    - **顶部栏**：返回按钮，白色背景
+    - **歌曲信息卡片**（浅灰背景#F5F5F5）：
+      * 封面图片（80dp圆角12dp）
+      * 歌曲名称 + VIP金色徽章
+      * 歌手名称
+      * 权限说明文字："下载后仅限VIP有效期内在云音乐本地播放"
+    - **操作按钮区域**：
+      * 评论（显示数量364197）
+      * 分享
+      * 单曲购买（带标签"永久拥有该歌曲"）
+    - **详细信息区域**：
+      * 歌手信息
+      * 创作者信息（硬编码：歌手/郑伟/张宝宇/赵英俊）
+      * 专辑信息
+      * 更多乐谱（硬编码：吉他/钢琴/人声/小提琴/打击乐）
+    - **扩展功能区域**：
+      * 设置铃声或彩铃
+      * 音乐礼品卡（带标签"送好友"）
+      * 删除按钮（**红色高亮**）
+    - **删除确认对话框**：
+      * 显示歌曲名称和歌手
+      * 取消/确定按钮
+  - SongDelPresenter功能实现：
+    - loadSongById()：从assets/songs.json读取歌曲信息
+    - confirmDelete()：保存删除记录到song_deletion_records.json
+    - 支持多歌单歌曲删除记录（按playlistId + songId区分）
+    - 使用Gson进行JSON序列化/反序列化
+    - 文件存储在app私有目录：context.filesDir
+  - 修改PlaylistTab.kt：
+    - 添加onNavigateToSongDel(songId, playlistId)回调参数
+    - SongListItem添加onMoreClick参数
+    - 连接MoreVert三个点按钮到onNavigateToSongDel回调
+  - 修改MainActivity.kt：
+    - 添加showSongDel、selectedDelSongId、selectedDelPlaylistId状态管理
+    - 添加SongDelTab页面条件渲染（全屏显示，无底部导航栏）
+    - SongDelTab在SongSortTab之后检查，实现四级导航
+    - PlaylistTab传入onNavigateToSongDel回调
+  - 导航流程：MainActivity → MeTab → PlaylistTab → 歌曲列表三个点菜单 → SongDelTab
+  - 数据持久化到song_deletion_records.json（初始为空数组[]）
+  - 构建测试通过（BUILD SUCCESSFUL in 6m 19s）
+
+- ✅ **完成歌单设置页面**（PlaylistSettingTab - 三级页面）
+  - 创建PlaylistSettingContract.kt和PlaylistSettingPresenter.kt（MVP模式）
+  - 实现PlaylistSettingTab.kt完整UI页面：
+    - **顶部栏**：返回按钮 + "歌单设置"标题，简洁白色背景
+    - **歌单信息头部**：
+      * 歌单封面（80dp圆角8dp）
+      * 歌单标题和创建者信息
+      * 播放次数统计
+    - **功能设置列表**（9个设置项）：
+      * 复制DeepSeek锐评指令：带"限时"红色标签，点击复制"分析我最近100首红心歌曲,点评我的听歌品味"到剪贴板
+      * WiFi下自动下载歌曲：Switch开关 + 说明文字"下载会员歌曲将占用当月付费下载额度"
+      * 歌单壁纸：点击显示"功能开发中"提示
+      * 添加歌曲、歌曲红心记录、更改歌曲排序：点击显示"功能开发中"提示
+      * 清空下载文件、添加小组件：点击显示"功能开发中"提示
+      * 展示专辑封面：Switch开关
+  - 修改PlaylistTab.kt：
+    - 给顶部栏MoreVert按钮添加点击事件
+    - 添加onNavigateToSetting回调参数
+    - 修改PlaylistTopBar接收onMoreClick参数
+  - 修改MainActivity.kt：
+    - 添加showPlaylistSetting和selectedSettingPlaylist状态管理
+    - 添加PlaylistSettingTab页面条件渲染（全屏显示，无底部导航栏）
+    - PlaylistTab传入onNavigateToSetting回调
+  - PlaylistSettingPresenter功能实现：
+    - loadPlaylistSettings()：加载歌单信息
+    - onCopyDeepSeekClick()：使用ClipboardManager复制预设指令到剪贴板
+    - onWifiAutoDownloadChanged()：处理WiFi自动下载开关变化，显示Toast
+    - onShowAlbumCoverChanged()：处理展示专辑封面开关变化，显示Toast
+    - 其他设置项点击显示"功能开发中"Toast
+  - UI组件实现：
+    - SettingItem：普通可点击设置项（图标+标题+副标题+可选标签）
+    - SettingItemWithSwitch：带开关的设置项（图标+标题+副标题+Switch）
+    - 统一使用Material Icons图标（ContentCopy、CloudDownload、Image、Add、Favorite、Sort、Delete、Widgets、Album）
+    - Divider分隔线（歌单信息和设置列表之间）
+  - 更新README.md记录PlaylistSettingTab功能
+  - 成功构建并验证功能（BUILD SUCCESSFUL in 6m 19s）
+
+### 2025-10-27
 - ✅ **完成歌单详情页面**（PlaylistTab - 二级页面）
   - 创建PlaylistContract.kt和PlaylistPresenter.kt（MVP模式）
   - 实现PlaylistTab.kt完整UI页面：

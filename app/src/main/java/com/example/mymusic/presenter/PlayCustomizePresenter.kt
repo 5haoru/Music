@@ -53,29 +53,8 @@ class PlayCustomizePresenter(
     }
 
     override fun onCollectionClick() {
-        currentSong?.let { song ->
-            try {
-                isCollected = !isCollected
-                view.updateCollectionState(isCollected)
-
-                // 保存收藏记录
-                val collectionId = DataLoader.generateCollectionId(context)
-                val record = CollectionRecord(
-                    collectionId = collectionId,
-                    contentType = "song",
-                    contentId = song.songId,
-                    contentName = song.songName,
-                    collectionTime = System.currentTimeMillis(),
-                    isSuccess = true
-                )
-                DataLoader.saveCollectionRecord(context, record)
-
-                val message = if (isCollected) "已收藏到我喜欢的音乐" else "已取消收藏"
-                view.showSuccess(message)
-            } catch (e: Exception) {
-                view.showError("操作失败: ${e.message}")
-            }
-        }
+        // 打开收藏到歌单页面，让用户选择歌单
+        view.navigateToCollectSong()
     }
 
     override fun onDownloadClick() {
@@ -138,7 +117,7 @@ class PlayCustomizePresenter(
     }
 
     override fun onSongEncyclopediaClick() {
-        view.showSuccess("查看歌曲百科")
+        view.navigateToSongProfile()
     }
 
     override fun onSimilarStrollClick() {
@@ -158,7 +137,7 @@ class PlayCustomizePresenter(
     }
 
     override fun onPlayerStyleClick() {
-        view.showSuccess("播放器样式设置")
+        view.navigateToPlayerStyle()
     }
 
     override fun onCloseClick() {

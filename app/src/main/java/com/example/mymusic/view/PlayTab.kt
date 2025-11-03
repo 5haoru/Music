@@ -1,5 +1,6 @@
 package com.example.mymusic.view
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -31,6 +32,7 @@ import kotlinx.coroutines.launch
  */
 @Composable
 fun PlayTab(
+    initialSongId: String? = null,
     onBackToRecommend: () -> Unit = {},
     onNavigateToComment: (String) -> Unit = {},
     onNavigateToLyric: (String) -> Unit = {}
@@ -49,6 +51,9 @@ fun PlayTab(
     var playMode by remember { mutableStateOf(com.example.mymusic.presenter.PlayMode.SEQUENTIAL) }
     var showShare by remember { mutableStateOf(false) } // 分享弹窗状态
     var showPlayCustomize by remember { mutableStateOf(false) } // 播放定制弹窗状态
+    var showPlayerStyle by remember { mutableStateOf(false) } // 播放器样式页面状态
+    var showSongProfile by remember { mutableStateOf(false) } // 歌曲档案页面状态
+    var showCollectSong by remember { mutableStateOf(false) } // 收藏到歌单页面状态
 
     // Presenter
     val presenter = remember {
@@ -77,6 +82,10 @@ fun PlayTab(
 
                 override fun navigateToComment(songId: String) {
                     onNavigateToComment(songId)
+                }
+
+                override fun showSuccess(message: String) {
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
 
                 override fun showLoading() {
@@ -113,7 +122,11 @@ fun PlayTab(
 
     // 加载数据
     LaunchedEffect(Unit) {
-        presenter.loadData()
+        if (initialSongId != null) {
+            presenter.loadSongById(initialSongId)
+        } else {
+            presenter.loadData()
+        }
     }
 
     // 监听播放状态，自动更新进度
@@ -240,7 +253,45 @@ fun PlayTab(
             PlayCustomizeTab(
                 song = currentSong!!,
                 onCloseClick = { showPlayCustomize = false },
-                onShareClick = { showShare = true }
+                onShareClick = { showShare = true },
+                onNavigateToPlayerStyle = {
+                    showPlayCustomize = false
+                    showPlayerStyle = true
+                },
+                onNavigateToSongProfile = {
+                    showPlayCustomize = false
+                    showSongProfile = true
+                },
+                onNavigateToCollectSong = {
+                    showPlayCustomize = false
+                    showCollectSong = true
+                }
+            )
+        }
+
+        // 播放器样式选择页面（作为全屏页面显示）
+        if (showPlayerStyle) {
+            PlayerTab(
+                onBackClick = { showPlayerStyle = false }
+            )
+        }
+
+        // 歌曲档案页面（作为全屏页面显示）
+        if (showSongProfile && currentSong != null) {
+            SongProfileTab(
+                songId = currentSong!!.songId,
+                onBackClick = { showSongProfile = false }
+            )
+        }
+
+        // 收藏到歌单页面（作为全屏页面显示）
+        if (showCollectSong && currentSong != null) {
+            CollectSongTab(
+                songId = currentSong!!.songId,
+                onBackClick = { showCollectSong = false },
+                onNavigateToCreatePlaylist = {
+                    // 跳转到创建歌单页面（暂未实现）
+                }
             )
         }
     }

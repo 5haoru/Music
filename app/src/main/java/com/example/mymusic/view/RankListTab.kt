@@ -39,6 +39,22 @@ fun RankListTab(
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
+    // 导航状态
+    var showRankDetail by remember { mutableStateOf(false) }
+    var selectedRankId by remember { mutableStateOf<String?>(null) }
+
+    // 如果需要显示榜单详情页，则显示RankTab
+    if (showRankDetail && selectedRankId != null) {
+        RankTab(
+            rankId = selectedRankId!!,
+            onBackClick = {
+                showRankDetail = false
+                selectedRankId = null
+            }
+        )
+        return
+    }
+
     // Presenter
     val presenter = remember {
         RankListPresenter(
@@ -49,6 +65,11 @@ fun RankListTab(
 
                 override fun showOfficialRanks(ranks: List<RankListContract.RankData>) {
                     officialRanks = ranks
+                }
+
+                override fun navigateToRankDetail(rankId: String) {
+                    selectedRankId = rankId
+                    showRankDetail = true
                 }
 
                 override fun showLoading() {

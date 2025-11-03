@@ -61,5 +61,41 @@
     "songIds": ["song_004", "song_008"],
     "createTime": 1697500800000,
     "songCount": 2
+  },
+  {
+    "playlistId": "my_favorites",
+    "playlistName": "我喜欢的音乐",
+    "description": "我喜欢的音乐集合",
+    "coverUrl": "cover/3.png",
+    "songIds": [],
+    "createTime": 1697500800000,
+    "songCount": 0
+  },
+  {
+    "playlistId": "playlist_009",
+    "playlistName": "《空之境界》精选音乐集",
+    "description": "梦幻空灵的音乐世界",
+    "coverUrl": "cover/7.png",
+    "songIds": ["song_007", "song_003", "song_009", "song_015"],
+    "createTime": 1697500800000,
+    "songCount": 4
+  },
+  {
+    "playlistId": "playlist_010",
+    "playlistName": "eva系列音乐集",
+    "description": "经典动漫音乐精选",
+    "coverUrl": "cover/5.png",
+    "songIds": ["song_005", "song_014", "song_013", "song_012"],
+    "createTime": 1697500800000,
+    "songCount": 4
+  },
+  {
+    "playlistId": "playlist_011",
+    "playlistName": "看小说推荐音乐",
+    "description": "安静舒适的阅读伴侣",
+    "coverUrl": "cover/10.png",
+    "songIds": ["song_010", "song_006", "song_001", "song_002", "song_004"],
+    "createTime": 1697500800000,
+    "songCount": 5
   }
 ]

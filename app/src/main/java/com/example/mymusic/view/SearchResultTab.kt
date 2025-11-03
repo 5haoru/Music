@@ -37,7 +37,9 @@ import com.example.mymusic.presenter.SearchResultPresenter
 @Composable
 fun SearchResultTab(
     searchQuery: String,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onNavigateToPlay: (String) -> Unit = {},
+    onNavigateToSinger: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
 
@@ -85,6 +87,14 @@ fun SearchResultTab(
 
                 override fun updateFollowStatus(following: Boolean) {
                     isFollowing = following
+                }
+
+                override fun navigateToPlay(songId: String) {
+                    onNavigateToPlay(songId)
+                }
+
+                override fun navigateToSinger(artistId: String) {
+                    onNavigateToSinger(artistId)
                 }
             },
             context
@@ -148,7 +158,8 @@ fun SearchResultTab(
                             ArtistCard(
                                 artist = artistData,
                                 isFollowing = isFollowing,
-                                onFollowClick = { presenter.onFollowArtist(artistData.artistId) }
+                                onFollowClick = { presenter.onFollowArtist(artistData.artistId) },
+                                onArtistClick = { presenter.onArtistClick(artistData.artistId) }
                             )
                             Spacer(modifier = Modifier.height(16.dp))
                         }
@@ -295,12 +306,14 @@ private fun CategoryTabsRow(
 private fun ArtistCard(
     artist: Artist,
     isFollowing: Boolean,
-    onFollowClick: () -> Unit
+    onFollowClick: () -> Unit,
+    onArtistClick: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .clickable(onClick = onArtistClick)
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         // 歌手头像

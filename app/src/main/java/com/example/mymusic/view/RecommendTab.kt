@@ -30,10 +30,12 @@ fun RecommendTab(
 ) {
     val context = LocalContext.current
 
-    // 导航状态：是否显示每日推荐详情页、排行榜详情页、搜索页
+    // 导航状态：是否显示每日推荐详情页、排行榜详情页、搜索页、歌单详情页
     var showDailyRecommendDetail by remember { mutableStateOf(false) }
     var showRankListDetail by remember { mutableStateOf(false) }
     var showSearchPage by remember { mutableStateOf(false) }
+    var showPlaylistDetail by remember { mutableStateOf(false) }
+    var selectedPlaylistForDetail by remember { mutableStateOf<Playlist?>(null) }
 
     // 如果需要显示每日推荐详情页，则显示DailyRecommendTab
     if (showDailyRecommendDetail) {
@@ -56,6 +58,21 @@ fun RecommendTab(
         SearchTab(
             onBackClick = { showSearchPage = false },
             onNavigateToSearchResult = onNavigateToSearchResult
+        )
+        return
+    }
+
+    // 如果需要显示歌单详情页，则显示PlaylistTab
+    if (showPlaylistDetail && selectedPlaylistForDetail != null) {
+        PlaylistTab(
+            playlist = selectedPlaylistForDetail!!,
+            onBackClick = {
+                showPlaylistDetail = false
+                selectedPlaylistForDetail = null
+            },
+            onNavigateToPlay = { /* TODO: 导航到播放页面 */ },
+            onNavigateToSetting = { /* TODO: 导航到设置页面 */ },
+            onNavigateToSongDel = { _, _ -> /* TODO: 导航到删除页面 */ }
         )
         return
     }
@@ -92,7 +109,9 @@ fun RecommendTab(
                     if (playlist.playlistId == "playlist_001") {
                         showDailyRecommendDetail = true
                     } else {
-                        // TODO: 打开其他歌单详情
+                        // 打开其他歌单详情页（PlaylistTab）
+                        selectedPlaylistForDetail = playlist
+                        showPlaylistDetail = true
                     }
                 }
 
@@ -192,7 +211,7 @@ fun RecommendTab(
                     )
                 }
 
-                // 歌单推荐区域
+                // 歌单推荐区域（显示最后3个歌单，即新添加的动漫音乐歌单）
                 item {
                     Spacer(modifier = Modifier.height(24.dp))
                     SectionTitle(title = "精选歌单")
@@ -200,7 +219,7 @@ fun RecommendTab(
                         contentPadding = PaddingValues(horizontal = 16.dp),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        items(dailyPlaylists.drop(3).take(4)) { playlist ->
+                        items(dailyPlaylists.takeLast(3)) { playlist ->
                             PlaylistCard(
                                 playlist = playlist,
                                 onClick = { presenter.onPlaylistClick(playlist.playlistId) }

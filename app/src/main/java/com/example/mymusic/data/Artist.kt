@@ -11,5 +11,6 @@ data class Artist(
     val description: String,
     val songCount: Int,
     val albumCount: Int,
-    val fans: Int
+    val fans: Int,
+    val pinyin: String? = null // 歌手名拼音，用于拼音搜索
 )

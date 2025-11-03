@@ -92,6 +92,9 @@ class SubscribePresenter(
 
         // 根据当前筛选条件更新显示
         filterByType(currentFilterType)
+
+        // 显示成功提示
+        view.showUnfollowSuccess(item.name)
     }
 
     override fun onDestroy() {

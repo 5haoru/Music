@@ -37,7 +37,9 @@ import com.example.mymusic.presenter.PlaylistPresenter
 fun PlaylistTab(
     playlist: Playlist,
     onBackClick: () -> Unit = {},
-    onNavigateToPlay: (Song) -> Unit = {}
+    onNavigateToPlay: (Song) -> Unit = {},
+    onNavigateToSetting: (Playlist) -> Unit = {},
+    onNavigateToSongDel: (String, String) -> Unit = { _, _ -> }
 ) {
     val context = LocalContext.current
 
@@ -95,7 +97,10 @@ fun PlaylistTab(
                 modifier = Modifier.fillMaxSize()
             ) {
                 // 顶部栏
-                PlaylistTopBar(onBackClick = onBackClick)
+                PlaylistTopBar(
+                    onBackClick = onBackClick,
+                    onMoreClick = { onNavigateToSetting(playlist) }
+                )
 
                 // 内容区域
                 LazyColumn(
@@ -141,7 +146,8 @@ fun PlaylistTab(
                     items(songs) { song ->
                         SongListItem(
                             song = song,
-                            onClick = { presenter.onSongClick(song) }
+                            onClick = { presenter.onSongClick(song) },
+                            onMoreClick = { onNavigateToSongDel(song.songId, playlist.playlistId) }
                         )
                     }
                 }
@@ -155,7 +161,10 @@ fun PlaylistTab(
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PlaylistTopBar(onBackClick: () -> Unit) {
+private fun PlaylistTopBar(
+    onBackClick: () -> Unit,
+    onMoreClick: () -> Unit = {}
+) {
     TopAppBar(
         title = { },
         navigationIcon = {
@@ -175,7 +184,7 @@ private fun PlaylistTopBar(onBackClick: () -> Unit) {
                     tint = Color.White
                 )
             }
-            IconButton(onClick = { /* TODO: 更多 */ }) {
+            IconButton(onClick = onMoreClick) {
                 Icon(
                     imageVector = Icons.Default.MoreVert,
                     contentDescription = "更多",
@@ -451,7 +460,8 @@ private fun ContinuePlayingBanner(songName: String) {
 @Composable
 private fun SongListItem(
     song: Song,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onMoreClick: () -> Unit = {}
 ) {
     val context = LocalContext.current
 
@@ -549,7 +559,7 @@ private fun SongListItem(
         }
 
         // 更多按钮
-        IconButton(onClick = { /* TODO: 更多选项 */ }) {
+        IconButton(onClick = onMoreClick) {
             Icon(
                 imageVector = Icons.Default.MoreVert,
                 contentDescription = "更多",

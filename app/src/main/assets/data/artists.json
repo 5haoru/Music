@@ -6,7 +6,8 @@
     "description": "华语流行音乐天王，创作型歌手",
     "songCount": 6,
     "albumCount": 15,
-    "fans": 35000000
+    "fans": 35000000,
+    "pinyin": "zhoujielen"
   },
   {
     "artistId": "artist_002",
@@ -15,7 +16,8 @@
     "description": "华语摇滚乐团，由五位成员组成",
     "songCount": 3,
     "albumCount": 10,
-    "fans": 28000000
+    "fans": 28000000,
+    "pinyin": "wuyuetian"
   },
   {
     "artistId": "artist_003",
@@ -24,7 +26,8 @@
     "description": "华语流行男歌手、音乐制作人",
     "songCount": 2,
     "albumCount": 8,
-    "fans": 22000000
+    "fans": 22000000,
+    "pinyin": "xuezhiqian"
   },
   {
     "artistId": "artist_004",
@@ -33,7 +36,8 @@
     "description": "台湾流行男歌手，超级星光大道第一届冠军",
     "songCount": 1,
     "albumCount": 7,
-    "fans": 12000000
+    "fans": 12000000,
+    "pinyin": "linyoujia"
   },
   {
     "artistId": "artist_005",
@@ -42,7 +46,8 @@
     "description": "华语流行乐女歌手、影视演员",
     "songCount": 1,
     "albumCount": 20,
-    "fans": 30000000
+    "fans": 30000000,
+    "pinyin": "wangfei"
   },
   {
     "artistId": "artist_006",
@@ -51,7 +56,8 @@
     "description": "台湾女歌手、演员、作家",
     "songCount": 1,
     "albumCount": 18,
-    "fans": 15000000
+    "fans": 15000000,
+    "pinyin": "liuruoying"
   },
   {
     "artistId": "artist_007",
@@ -60,6 +66,7 @@
     "description": "香港流行男歌手、演员，华语乐坛代表人物之一",
     "songCount": 1,
     "albumCount": 30,
-    "fans": 32000000
+    "fans": 32000000,
+    "pinyin": "chenyixun"
   }
 ]

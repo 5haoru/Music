@@ -68,6 +68,10 @@ fun SubscribeTab(
                     aggregatedCount = count
                 }
 
+                override fun showUnfollowSuccess(name: String) {
+                    android.widget.Toast.makeText(context, "已成功取消关注$name", android.widget.Toast.LENGTH_SHORT).show()
+                }
+
                 override fun showLoading() {
                     isLoading = true
                 }

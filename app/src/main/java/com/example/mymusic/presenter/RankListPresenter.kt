@@ -103,7 +103,7 @@ class RankListPresenter(
     }
 
     override fun onRankClick(rankId: String) {
-        // TODO: 打开榜单详情
+        view.navigateToRankDetail(rankId)
     }
 
     override fun onSongClick(songId: String) {

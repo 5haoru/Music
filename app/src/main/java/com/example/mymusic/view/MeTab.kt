@@ -460,12 +460,18 @@ private fun PlaylistsSection(
             .padding(horizontal = 16.dp)
     ) {
         // 我喜欢的音乐（特殊样式）
-        FavoriteMusicItem()
+        val myFavoritesPlaylist = playlists.find { it.playlistId == "my_favorites" }
+        if (myFavoritesPlaylist != null) {
+            FavoriteMusicItem(
+                playlist = myFavoritesPlaylist,
+                onPlaylistClick = onPlaylistClick
+            )
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // 其他歌单
-        playlists.forEach { playlist ->
+        // 其他歌单（过滤掉"我喜欢的音乐"）
+        playlists.filter { it.playlistId != "my_favorites" }.forEach { playlist ->
             PlaylistItem(
                 playlist = playlist,
                 onClick = { onPlaylistClick(playlist) }
@@ -478,13 +484,16 @@ private fun PlaylistsSection(
  * 我喜欢的音乐项
  */
 @Composable
-private fun FavoriteMusicItem() {
+private fun FavoriteMusicItem(
+    playlist: Playlist,
+    onPlaylistClick: (Playlist) -> Unit
+) {
     val context = LocalContext.current
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { /* TODO */ }
+            .clickable { onPlaylistClick(playlist) }
             .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

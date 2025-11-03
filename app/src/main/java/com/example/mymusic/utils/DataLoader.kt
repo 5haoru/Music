@@ -500,4 +500,102 @@ object DataLoader {
     fun generatePlaylistId(): String {
         return "playlist_${System.currentTimeMillis()}"
     }
+
+    /**
+     * 添加歌曲到指定歌单
+     * @param context 上下文
+     * @param playlistId 歌单ID
+     * @param songId 歌曲ID
+     * @return 是否成功添加（如果歌曲已存在则返回false）
+     */
+    fun addSongToPlaylist(context: Context, playlistId: String, songId: String): Boolean {
+        try {
+            // 加载歌单列表（优先从内部存储）
+            val playlists = loadPlaylistsWithCache(context).toMutableList()
+
+            // 查找目标歌单
+            val playlistIndex = playlists.indexOfFirst { it.playlistId == playlistId }
+            if (playlistIndex == -1) {
+                return false // 歌单不存在
+            }
+
+            val playlist = playlists[playlistIndex]
+
+            // 检查歌曲是否已在歌单中
+            if (playlist.songIds.contains(songId)) {
+                return false // 歌曲已存在
+            }
+
+            // 添加歌曲到歌单
+            val updatedSongIds = playlist.songIds.toMutableList()
+            updatedSongIds.add(songId)
+
+            // 更新歌单
+            val updatedPlaylist = playlist.copy(
+                songIds = updatedSongIds,
+                songCount = updatedSongIds.size
+            )
+            playlists[playlistIndex] = updatedPlaylist
+
+            // 保存更新后的歌单列表
+            savePlaylists(context, playlists)
+
+            return true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return false
+        }
+    }
+
+    /**
+     * 检查歌曲是否已在指定歌单中
+     * @param context 上下文
+     * @param playlistId 歌单ID
+     * @param songId 歌曲ID
+     * @return 是否已存在
+     */
+    fun isSongInPlaylist(context: Context, playlistId: String, songId: String): Boolean {
+        return try {
+            val playlists = loadPlaylistsWithCache(context)
+            val playlist = playlists.find { it.playlistId == playlistId }
+            playlist?.songIds?.contains(songId) ?: false
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+    }
+
+    /**
+     * 加载专辑列表
+     */
+    fun loadAlbums(context: Context): List<com.example.mymusic.data.Album> {
+        val json = loadJsonFromAssets(context, "albums.json")
+        val type = object : TypeToken<List<com.example.mymusic.data.Album>>() {}.type
+        return gson.fromJson(json, type)
+    }
+
+    /**
+     * 根据ID获取专辑
+     */
+    fun getAlbumById(context: Context, albumId: String): com.example.mymusic.data.Album? {
+        return loadAlbums(context).find { it.albumId == albumId }
+    }
+
+    /**
+     * 根据艺术家ID获取专辑列表
+     */
+    fun getAlbumsByArtist(context: Context, artistId: String): List<com.example.mymusic.data.Album> {
+        return loadAlbums(context).filter { it.artistId == artistId }
+    }
+
+    /**
+     * 根据专辑ID获取专辑中的歌曲列表
+     */
+    fun getSongsInAlbum(context: Context, albumId: String): List<Song> {
+        val album = getAlbumById(context, albumId) ?: return emptyList()
+        val allSongs = loadSongs(context)
+        return album.songIds.mapNotNull { songId ->
+            allSongs.find { it.songId == songId }
+        }
+    }
 }

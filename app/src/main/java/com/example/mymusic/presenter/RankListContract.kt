@@ -56,6 +56,11 @@ interface RankListContract {
          * 显示官方榜单列表
          */
         fun showOfficialRanks(ranks: List<RankData>)
+
+        /**
+         * 导航到榜单详情页
+         */
+        fun navigateToRankDetail(rankId: String)
     }
 
     interface Presenter : BasePresenter {

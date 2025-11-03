@@ -1,0 +1,59 @@
+package com.example.mymusic.presenter
+
+import com.example.mymusic.data.Artist
+import com.example.mymusic.data.SongDetail
+
+/**
+ * 歌手详情页面的 MVP 契约
+ */
+interface SingerContract {
+
+    interface View : BaseView {
+        /**
+         * 显示歌手信息
+         */
+        fun showSingerInfo(artist: Artist)
+
+        /**
+         * 显示歌曲列表
+         */
+        fun showSongs(songs: List<SongDetail>)
+
+        /**
+         * 更新关注状态
+         */
+        fun updateFollowStatus(isFollowing: Boolean)
+
+        /**
+         * 导航返回
+         */
+        fun navigateBack()
+
+        /**
+         * 导航到播放页面
+         */
+        fun navigateToPlay(songId: String)
+    }
+
+    interface Presenter : BasePresenter {
+        /**
+         * 加载歌手数据
+         */
+        fun loadSingerData(artistId: String)
+
+        /**
+         * 点击关注/取消关注
+         */
+        fun onFollowClick()
+
+        /**
+         * 点击歌曲
+         */
+        fun onSongClick(songId: String)
+
+        /**
+         * 点击返回
+         */
+        fun onBackClick()
+    }
+}

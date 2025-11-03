@@ -2,6 +2,7 @@ package com.example.mymusic.presenter
 
 import android.content.Context
 import com.example.mymusic.data.Song
+import com.example.mymusic.model.CollectionRecord
 import com.example.mymusic.utils.DataLoader
 import kotlin.random.Random
 
@@ -30,6 +31,8 @@ class StrollPresenter(
                 currentSong?.let {
                     view.showSong(it)
                     view.hideLoading()
+                    // 检查是否已收藏到"我喜欢的音乐"
+                    checkFavoriteStatus(it.songId)
                 }
             } else {
                 view.hideLoading()
@@ -39,6 +42,11 @@ class StrollPresenter(
             view.hideLoading()
             view.showError("加载数据失败: ${e.message}")
         }
+    }
+
+    private fun checkFavoriteStatus(songId: String) {
+        isFavorite = DataLoader.isSongInPlaylist(context, "my_favorites", songId)
+        view.updateFavoriteState(isFavorite)
     }
 
     override fun onPlayPauseClick() {
@@ -97,6 +105,8 @@ class StrollPresenter(
                 view.showSong(it)
                 currentProgress = 0f
                 view.updateProgress(0f, "00:00")
+                // 检查是否已收藏到"我喜欢的音乐"
+                checkFavoriteStatus(it.songId)
                 // 如果之前在播放，继续播放新歌
                 if (wasPlaying) {
                     startPlayback()
@@ -114,6 +124,8 @@ class StrollPresenter(
                 view.showSong(it)
                 currentProgress = 0f
                 view.updateProgress(0f, "00:00")
+                // 检查是否已收藏到"我喜欢的音乐"
+                checkFavoriteStatus(it.songId)
                 // 如果之前在播放，继续播放新歌
                 if (wasPlaying) {
                     startPlayback()
@@ -123,17 +135,49 @@ class StrollPresenter(
     }
 
     override fun onFavoriteClick() {
-        isFavorite = !isFavorite
-        view.updateFavoriteState(isFavorite)
-        // TODO: 保存到collection_records.json
+        currentSong?.let { song ->
+            if (isFavorite) {
+                // 已收藏，提示用户
+                view.showSuccess("已在我喜欢的音乐中")
+            } else {
+                // 未收藏，添加到"我喜欢的音乐"
+                val success = DataLoader.addSongToPlaylist(context, "my_favorites", song.songId)
+                if (success) {
+                    isFavorite = true
+                    view.updateFavoriteState(isFavorite)
+
+                    // 保存收藏记录
+                    try {
+                        val collectionId = DataLoader.generateCollectionId(context)
+                        val record = CollectionRecord(
+                            collectionId = collectionId,
+                            contentType = "song_to_favorites",
+                            contentId = song.songId,
+                            contentName = song.songName,
+                            collectionTime = System.currentTimeMillis(),
+                            isSuccess = true
+                        )
+                        DataLoader.saveCollectionRecord(context, record)
+                        view.showSuccess("成功收藏")
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        view.showSuccess("成功收藏")
+                    }
+                } else {
+                    view.showError("收藏失败")
+                }
+            }
+        }
     }
 
     override fun onCommentClick() {
-        // TODO: 打开评论页面
+        currentSong?.let { song ->
+            view.navigateToComment(song.songId)
+        }
     }
 
     override fun onMoreClick() {
-        // TODO: 显示更多选项
+        // 打开更多选项（播放定制），由View层处理显示PlayCustomizeTab
     }
 
     override fun onRefreshClick() {
@@ -174,6 +218,8 @@ interface StrollContract {
         fun updatePlayState(isPlaying: Boolean)
         fun updateFavoriteState(isFavorite: Boolean)
         fun updateProgress(progress: Float, currentTime: String)
+        fun navigateToComment(songId: String)
+        fun showSuccess(message: String)
     }
 
     interface Presenter : BasePresenter {

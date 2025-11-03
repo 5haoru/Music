@@ -15,9 +15,11 @@ class PlaylistPresenter(
 ) : PlaylistContract.Presenter {
 
     private var playlistSongs: List<Song> = emptyList()
+    private var currentPlaylist: Playlist? = null
 
     override fun loadPlaylistSongs(playlist: Playlist) {
         view.showLoading()
+        currentPlaylist = playlist
         try {
             // 加载所有歌曲
             val allSongs = DataLoader.loadSongs(context)
@@ -58,8 +60,14 @@ class PlaylistPresenter(
     }
 
     override fun onCollectClick() {
-        // TODO: 收藏功能
-        view.showError("收藏功能待开发")
+        currentPlaylist?.let { playlist ->
+            // 显示收藏成功提示
+            android.widget.Toast.makeText(
+                context,
+                "成功收藏《${playlist.playlistName}》",
+                android.widget.Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     override fun onDestroy() {

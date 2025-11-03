@@ -15,6 +15,13 @@ class SharePresenter(
 
     private var currentSong: Song? = null
 
+    /**
+     * 直接设置当前歌曲（用于从外部传入Song对象）
+     */
+    fun setSong(song: Song) {
+        currentSong = song
+    }
+
     override fun loadData(songId: String) {
         view.showLoading()
         try {
