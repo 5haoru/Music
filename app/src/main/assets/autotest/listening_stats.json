@@ -1,0 +1,17 @@
+{
+  "weeklyStats": {
+    "totalMinutes": 320,
+    "weekStartDate": "2025-10-28",
+    "weekEndDate": "2025-11-03"
+  },
+  "monthlyStats": {
+    "totalMinutes": 1450,
+    "month": "2025-11",
+    "year": 2025
+  },
+  "viewedStats": {
+    "weekly": false,
+    "monthly": false
+  },
+  "lastUpdated": "2025-11-03 10:55:00"
+}

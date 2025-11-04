@@ -1,0 +1,17 @@
+{
+  "currentMV": {
+    "mvId": "mv_001",
+    "songId": "song_001",
+    "songName": "晴天",
+    "artist": "周杰伦",
+    "isPlaying": true
+  },
+  "mvHistory": [
+    {
+      "mvId": "mv_001",
+      "timestamp": "2025-11-03 11:00:00",
+      "action": "play"
+    }
+  ],
+  "lastUpdated": "2025-11-03 11:00:00"
+}

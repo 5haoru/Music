@@ -17,6 +17,7 @@ import com.example.mymusic.data.Playlist
 import com.example.mymusic.presenter.MainContract
 import com.example.mymusic.presenter.MainPresenter
 import com.example.mymusic.ui.theme.MyMusicTheme
+import com.example.mymusic.utils.AutoTestHelper
 import com.example.mymusic.view.*
 
 class MainActivity : ComponentActivity(), MainContract.View {
@@ -64,6 +65,11 @@ class MainActivity : ComponentActivity(), MainContract.View {
 
         // 歌手详情页面不显示底部导航栏
         if (showSinger && selectedArtistId.isNotEmpty()) {
+            // 记录页面导航
+            LaunchedEffect(Unit) {
+                AutoTestHelper.updateCurrentPage("singer")
+            }
+
             SingerTab(
                 artistId = selectedArtistId,
                 onBackClick = {
@@ -216,26 +222,38 @@ class MainActivity : ComponentActivity(), MainContract.View {
 
         // 漫游和播放页面不显示底部导航栏
         when (currentTab) {
-            1 -> StrollTab(
-                currentMode = selectedStrollMode,
-                onBackToRecommend = { currentTab = 0 },
-                onNavigateToModeSelection = { showModeSelection = true }
-            )
-            2 -> PlayTab(
-                initialSongId = playTabSongId,
-                onBackToRecommend = {
-                    currentTab = 0
-                    playTabSongId = null // 返回时清除指定的歌曲ID
-                },
-                onNavigateToComment = { songId ->
-                    selectedSongId = songId
-                    showComment = true
-                },
-                onNavigateToLyric = { songId ->
-                    selectedSongId = songId
-                    showLyric = true
+            1 -> {
+                // 记录页面导航
+                LaunchedEffect(Unit) {
+                    AutoTestHelper.updateCurrentPage("stroll")
                 }
-            )
+                StrollTab(
+                    currentMode = selectedStrollMode,
+                    onBackToRecommend = { currentTab = 0 },
+                    onNavigateToModeSelection = { showModeSelection = true }
+                )
+            }
+            2 -> {
+                // 记录页面导航
+                LaunchedEffect(Unit) {
+                    AutoTestHelper.updateCurrentPage("play")
+                }
+                PlayTab(
+                    initialSongId = playTabSongId,
+                    onBackToRecommend = {
+                        currentTab = 0
+                        playTabSongId = null // 返回时清除指定的歌曲ID
+                    },
+                    onNavigateToComment = { songId ->
+                        selectedSongId = songId
+                        showComment = true
+                    },
+                    onNavigateToLyric = { songId ->
+                        selectedSongId = songId
+                        showLyric = true
+                    }
+                )
+            }
             else -> {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
@@ -261,22 +279,34 @@ class MainActivity : ComponentActivity(), MainContract.View {
                             .padding(innerPadding)
                     ) {
                         when (currentTab) {
-                            0 -> RecommendTab(
-                                onNavigateToListenRecognize = { showListenRecognize = true },
-                                onNavigateToSearchResult = { query ->
-                                    searchResultQuery = query
-                                    showSearchResult = true
+                            0 -> {
+                                // 记录页面导航
+                                LaunchedEffect(Unit) {
+                                    AutoTestHelper.updateCurrentPage("recommend")
                                 }
-                            )
-                            3 -> MeTab(
-                                onNavigateToPlayTab = { currentTab = 2 },
-                                onNavigateToSubscribe = { showSubscribe = true },
-                                onNavigateToDuration = { showDuration = true },
-                                onNavigateToPlaylist = { playlist ->
-                                    selectedPlaylist = playlist
-                                    showPlaylist = true
+                                RecommendTab(
+                                    onNavigateToListenRecognize = { showListenRecognize = true },
+                                    onNavigateToSearchResult = { query ->
+                                        searchResultQuery = query
+                                        showSearchResult = true
+                                    }
+                                )
+                            }
+                            3 -> {
+                                // 记录页面导航
+                                LaunchedEffect(Unit) {
+                                    AutoTestHelper.updateCurrentPage("my")
                                 }
-                            )
+                                MeTab(
+                                    onNavigateToPlayTab = { currentTab = 2 },
+                                    onNavigateToSubscribe = { showSubscribe = true },
+                                    onNavigateToDuration = { showDuration = true },
+                                    onNavigateToPlaylist = { playlist ->
+                                        selectedPlaylist = playlist
+                                        showPlaylist = true
+                                    }
+                                )
+                            }
                         }
                     }
                 }

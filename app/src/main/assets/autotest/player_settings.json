@@ -1,0 +1,13 @@
+{
+  "playerStyle": {
+    "styleId": "style_001",
+    "styleName": "经典黑胶",
+    "changedTime": "2025-11-03 10:45:00"
+  },
+  "strollMode": {
+    "isActive": true,
+    "scene": "伪感",
+    "activatedTime": "2025-11-03 10:50:00"
+  },
+  "lastUpdated": "2025-11-03 10:50:00"
+}

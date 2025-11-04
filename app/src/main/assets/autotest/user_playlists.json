@@ -1,0 +1,14 @@
+{
+  "playlists": [
+    {
+      "playlistId": "user_playlist_001",
+      "playlistName": "我的最爱",
+      "songIds": ["song_001", "song_002"],
+      "songCount": 2,
+      "createdTime": "2025-11-03 10:15:00",
+      "sortOrder": "default"
+    }
+  ],
+  "currentViewingPlaylist": null,
+  "lastUpdated": "2025-11-03 10:15:00"
+}

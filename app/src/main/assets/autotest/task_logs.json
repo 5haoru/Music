@@ -1,0 +1,14 @@
+{
+  "tasks": [
+    {
+      "taskId": "task_001",
+      "taskName": "打开app并进入推荐首页",
+      "status": "TASK_COMPLETED",
+      "completedTime": "2025-11-03 09:00:00",
+      "detail": {
+        "currentPage": "recommend"
+      }
+    }
+  ],
+  "lastUpdated": "2025-11-03 09:00:00"
+}

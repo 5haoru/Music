@@ -2,6 +2,7 @@ package com.example.mymusic.presenter
 
 import android.content.Context
 import com.example.mymusic.presenter.ModeSelectionContract.*
+import com.example.mymusic.utils.AutoTestHelper
 
 /**
  * 模式选择页面的Presenter
@@ -112,6 +113,10 @@ class ModeSelectionPresenter(
             "motivation" -> "励志"
             else -> "伤感"
         }
+
+        // 记录漫游场景设置
+        AutoTestHelper.updateStrollMode(sceneName, true)
+
         // 回调通知View层场景模式已选择
         view.onModeSelectedCallback(sceneName)
         // 返回上一页

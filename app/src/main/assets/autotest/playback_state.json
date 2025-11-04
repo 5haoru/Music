@@ -1,0 +1,22 @@
+{
+  "currentSong": {
+    "songId": "song_001",
+    "songName": "晴天",
+    "artist": "周杰伦",
+    "source": "daily_recommend",
+    "sourceDetail": "第3首"
+  },
+  "isPlaying": true,
+  "playbackMode": "shuffle",
+  "volume": 75,
+  "progress": 120,
+  "duration": 240,
+  "playbackHistory": [
+    {
+      "songId": "song_002",
+      "timestamp": "2025-11-03 09:55:00",
+      "action": "play"
+    }
+  ],
+  "lastUpdated": "2025-11-03 10:00:00"
+}

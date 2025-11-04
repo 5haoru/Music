@@ -3,6 +3,7 @@ package com.example.mymusic.presenter
 import android.content.Context
 import com.example.mymusic.data.Song
 import com.example.mymusic.model.CollectionRecord
+import com.example.mymusic.utils.AutoTestHelper
 import com.example.mymusic.utils.DataLoader
 import kotlin.random.Random
 
@@ -88,6 +89,18 @@ class PlayPresenter(
     override fun onPlayPauseClick() {
         isPlaying = !isPlaying
         view.updatePlayState(isPlaying)
+
+        // 记录播放状态
+        currentSong?.let { song ->
+            AutoTestHelper.updatePlayback(
+                songId = song.songId,
+                songName = song.songName,
+                artist = song.artist,
+                isPlaying = isPlaying
+            )
+            AutoTestHelper.addPlaybackHistory(song.songId, if (isPlaying) "play" else "pause")
+        }
+
         if (isPlaying) {
             startPlayback()
         } else {
@@ -209,6 +222,14 @@ class PlayPresenter(
             PlayMode.RANDOM -> PlayMode.SEQUENTIAL
         }
         view.updatePlayMode(currentPlayMode)
+
+        // 记录播放模式
+        val mode = when (currentPlayMode) {
+            PlayMode.SEQUENTIAL -> "sequential"
+            PlayMode.SINGLE_LOOP -> "single_loop"
+            PlayMode.RANDOM -> "shuffle"
+        }
+        AutoTestHelper.updatePlayback(playbackMode = mode)
     }
 
     private fun playNextSongSequential() {
@@ -272,6 +293,10 @@ class PlayPresenter(
                             isSuccess = true
                         )
                         DataLoader.saveCollectionRecord(context, record)
+
+                        // 记录到自动化测试文件
+                        AutoTestHelper.addFavoriteSong(song.songId, song.songName, song.artist)
+
                         view.showSuccess("成功收藏")
                     } catch (e: Exception) {
                         e.printStackTrace()

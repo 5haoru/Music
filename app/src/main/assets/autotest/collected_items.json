@@ -1,0 +1,19 @@
+{
+  "collectedPlaylists": [
+    {
+      "playlistId": "playlist_001",
+      "playlistName": "华语热歌榜",
+      "collectedTime": "2025-11-03 10:20:00"
+    }
+  ],
+  "collectedAlbums": [
+    {
+      "albumId": "album_001",
+      "albumName": "叶惠美",
+      "artist": "周杰伦",
+      "artistId": "artist_001",
+      "collectedTime": "2025-11-03 10:25:00"
+    }
+  ],
+  "lastUpdated": "2025-11-03 10:25:00"
+}

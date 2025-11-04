@@ -1,0 +1,13 @@
+{
+  "searches": [
+    {
+      "searchId": "search_001",
+      "query": "烟雨",
+      "timestamp": "2025-11-03 10:35:00",
+      "resultType": "song",
+      "resultId": "song_010",
+      "action": "play"
+    }
+  ],
+  "lastUpdated": "2025-11-03 10:35:00"
+}

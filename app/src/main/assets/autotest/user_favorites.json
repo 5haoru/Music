@@ -1,0 +1,11 @@
+{
+  "favoriteSongs": [
+    {
+      "songId": "song_001",
+      "songName": "晴天",
+      "artist": "周杰伦",
+      "addedTime": "2025-11-03 10:10:00"
+    }
+  ],
+  "lastUpdated": "2025-11-03 10:10:00"
+}
