@@ -27,6 +27,10 @@ class MainActivity : ComponentActivity(), MainContract.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // 初始化自动化测试辅助工具
+        AutoTestHelper.init(this)
+
         presenter = MainPresenter(this, this)
 
         enableEdgeToEdge()
@@ -62,6 +66,25 @@ class MainActivity : ComponentActivity(), MainContract.View {
         var playTabSongId by remember { mutableStateOf<String?>(null) } // 用于从搜索等页面导航到播放页面时指定歌曲
         var showSinger by remember { mutableStateOf(false) }
         var selectedArtistId by remember { mutableStateOf("") }
+        var showMVPlayer by remember { mutableStateOf(false) }
+        var selectedMVId by remember { mutableStateOf("") }
+
+        // MV播放页面不显示底部导航栏
+        if (showMVPlayer && selectedMVId.isNotEmpty()) {
+            // 记录页面导航
+            LaunchedEffect(Unit) {
+                AutoTestHelper.updateCurrentPage("mv_player")
+            }
+
+            MVPlayerTab(
+                mvId = selectedMVId,
+                onBackClick = {
+                    showMVPlayer = false
+                    selectedMVId = ""
+                }
+            )
+            return
+        }
 
         // 歌手详情页面不显示底部导航栏
         if (showSinger && selectedArtistId.isNotEmpty()) {
@@ -80,6 +103,10 @@ class MainActivity : ComponentActivity(), MainContract.View {
                     playTabSongId = songId
                     currentTab = 2
                     showSinger = false
+                },
+                onNavigateToMVPlayer = { mvId ->
+                    selectedMVId = mvId
+                    showMVPlayer = true
                 }
             )
             return
@@ -289,6 +316,10 @@ class MainActivity : ComponentActivity(), MainContract.View {
                                     onNavigateToSearchResult = { query ->
                                         searchResultQuery = query
                                         showSearchResult = true
+                                    },
+                                    onNavigateToPlay = { songId ->
+                                        playTabSongId = songId
+                                        currentTab = 2
                                     }
                                 )
                             }

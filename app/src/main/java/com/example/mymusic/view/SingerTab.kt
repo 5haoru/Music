@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.mymusic.data.Artist
+import com.example.mymusic.data.MusicVideo
 import com.example.mymusic.data.SongDetail
 import com.example.mymusic.presenter.SingerContract
 import com.example.mymusic.presenter.SingerPresenter
@@ -37,13 +38,15 @@ fun SingerTab(
     artistId: String,
     onBackClick: () -> Unit,
     onNavigateToPlay: (String) -> Unit = {},
-    onNavigateToAlbum: (String) -> Unit = {}
+    onNavigateToAlbum: (String) -> Unit = {},
+    onNavigateToMVPlayer: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
 
     // 状态
     var artist by remember { mutableStateOf<Artist?>(null) }
     var songs by remember { mutableStateOf<List<SongDetail>>(emptyList()) }
+    var mvs by remember { mutableStateOf<List<MusicVideo>>(emptyList()) }
     var isFollowing by remember { mutableStateOf(false) }
     var selectedTab by remember { mutableStateOf("单曲") }
     var isLoading by remember { mutableStateOf(true) }
@@ -63,6 +66,10 @@ fun SingerTab(
                     songs = songList
                 }
 
+                override fun showMVs(mvList: List<MusicVideo>) {
+                    mvs = mvList
+                }
+
                 override fun updateFollowStatus(following: Boolean) {
                     isFollowing = following
                 }
@@ -73,6 +80,10 @@ fun SingerTab(
 
                 override fun navigateToPlay(songId: String) {
                     onNavigateToPlay(songId)
+                }
+
+                override fun navigateToMVPlayer(mvId: String) {
+                    onNavigateToMVPlayer(mvId)
                 }
 
                 override fun showLoading() {
@@ -219,6 +230,37 @@ fun SingerTab(
                                     showAlbumDetail = true
                                 }
                             )
+                        }
+                    }
+                    "MV" -> {
+                        if (mvs.isEmpty()) {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = "暂无MV",
+                                    fontSize = 14.sp,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        } else {
+                            LazyColumn(
+                                modifier = Modifier.fillMaxSize(),
+                                contentPadding = PaddingValues(16.dp),
+                                verticalArrangement = Arrangement.spacedBy(16.dp)
+                            ) {
+                                items(mvs) { mv ->
+                                    MVListItem(
+                                        mv = mv,
+                                        onClick = { presenter.onMVClick(mv.mvId) }
+                                    )
+                                }
+                                // 底部留白
+                                item {
+                                    Spacer(modifier = Modifier.height(64.dp))
+                                }
+                            }
                         }
                     }
                     else -> {
@@ -690,6 +732,115 @@ private fun SongListItem(
                 fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+        }
+    }
+}
+
+/**
+ * MV列表项
+ */
+@Composable
+private fun MVListItem(
+    mv: MusicVideo,
+    onClick: () -> Unit
+) {
+    val context = LocalContext.current
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(8.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Column {
+            // MV封面
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(16f / 9f)
+            ) {
+                AsyncImage(
+                    model = ImageRequest.Builder(context)
+                        .data("file:///android_asset/${mv.coverUrl}")
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = mv.title,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+
+                // 播放按钮覆盖层
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Black.copy(alpha = 0.3f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.PlayArrow,
+                        contentDescription = "播放",
+                        modifier = Modifier.size(48.dp),
+                        tint = Color.White
+                    )
+                }
+
+                // 播放次数和时长
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomEnd)
+                        .padding(8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "${mv.playCount / 10000}万次播放",
+                        fontSize = 12.sp,
+                        color = Color.White,
+                        modifier = Modifier
+                            .background(
+                                color = Color.Black.copy(alpha = 0.5f),
+                                shape = RoundedCornerShape(4.dp)
+                            )
+                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                    )
+                    Text(
+                        text = mv.duration,
+                        fontSize = 12.sp,
+                        color = Color.White,
+                        modifier = Modifier
+                            .background(
+                                color = Color.Black.copy(alpha = 0.5f),
+                                shape = RoundedCornerShape(4.dp)
+                            )
+                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                    )
+                }
+            }
+
+            // MV信息
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp)
+            ) {
+                Text(
+                    text = mv.title,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = mv.artist,
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
     }
 }

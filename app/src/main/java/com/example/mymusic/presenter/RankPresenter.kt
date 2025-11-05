@@ -1,6 +1,7 @@
 package com.example.mymusic.presenter
 
 import android.content.Context
+import com.example.mymusic.utils.AutoTestHelper
 import com.example.mymusic.utils.DataLoader
 import kotlin.random.Random
 
@@ -163,12 +164,35 @@ class RankPresenter(
     override fun onPlayAllClick() {
         currentRankDetail?.let { detail ->
             if (detail.songs.isNotEmpty()) {
-                view.navigateToPlay(detail.songs[0].song.songId)
+                val firstSong = detail.songs[0]
+                // 记录播放来源到AutoTestHelper
+                AutoTestHelper.updatePlayback(
+                    songId = firstSong.song.songId,
+                    songName = firstSong.song.songName,
+                    artist = firstSong.song.artist,
+                    source = "rank_list",
+                    sourceDetail = "${detail.rankName} - 播放全部"
+                )
+                view.navigateToPlay(firstSong.song.songId)
             }
         }
     }
 
     override fun onSongClick(songId: String) {
+        currentRankDetail?.let { detail ->
+            // 获取歌曲信息
+            val song = detail.songs.find { it.song.songId == songId }
+            song?.let {
+                // 记录播放来源到AutoTestHelper
+                AutoTestHelper.updatePlayback(
+                    songId = it.song.songId,
+                    songName = it.song.songName,
+                    artist = it.song.artist,
+                    source = "rank_list",
+                    sourceDetail = "${detail.rankName} - 第${it.rank}名"
+                )
+            }
+        }
         view.navigateToPlay(songId)
     }
 

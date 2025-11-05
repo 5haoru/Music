@@ -2,6 +2,7 @@ package com.example.mymusic.presenter
 
 import android.content.Context
 import com.example.mymusic.data.Artist
+import com.example.mymusic.data.MusicVideo
 import com.example.mymusic.data.Song
 import com.example.mymusic.data.SongDetail
 import com.example.mymusic.utils.DataLoader
@@ -44,10 +45,43 @@ class SingerPresenter(
             }
 
             view.showSongs(songDetails)
+
+            // 加载该歌手的MV列表
+            loadMVs(currentArtist!!.artistName)
+
             view.hideLoading()
         } catch (e: Exception) {
             view.hideLoading()
             view.showError("加载数据失败: ${e.message}")
+        }
+    }
+
+    /**
+     * 加载歌手的MV列表
+     */
+    private fun loadMVs(artistName: String) {
+        try {
+            // 加载所有歌曲，为该歌手创建模拟MV数据
+            val allSongs = DataLoader.loadSongs(context)
+            val artistSongs = allSongs.filter { it.artist == artistName }
+
+            // 为前3首歌曲生成MV数据
+            val mvs = artistSongs.take(3).mapIndexed { index, song ->
+                MusicVideo(
+                    mvId = "mv_${song.songId}",
+                    title = song.songName,
+                    artist = song.artist,
+                    duration = "03:30",
+                    playCount = (100000 + index * 50000).toLong(),
+                    coverUrl = song.coverUrl,
+                    songId = song.songId
+                )
+            }
+
+            view.showMVs(mvs)
+        } catch (e: Exception) {
+            // MV加载失败不影响主流程，显示空列表
+            view.showMVs(emptyList())
         }
     }
 
@@ -126,6 +160,10 @@ class SingerPresenter(
 
     override fun onSongClick(songId: String) {
         view.navigateToPlay(songId)
+    }
+
+    override fun onMVClick(mvId: String) {
+        view.navigateToMVPlayer(mvId)
     }
 
     override fun onBackClick() {

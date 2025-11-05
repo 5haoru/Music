@@ -20,7 +20,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from verification_functions import task_17_check_stroll_scene_setting
 
-def test(scene_name="伤感"):
+def test(scene_name="欢快"):
     print("=" * 70)
     print(f"任务17：漫游播放并设置播放场景为'{scene_name}'")
     print("=" * 70)
@@ -48,6 +48,6 @@ if __name__ == "__main__":
     # 可以通过命令行参数传入场景名称
     # 用法：python test_task_17.py 伤感
     # 或：python test_task_17.py 欢快
-    scene_name = sys.argv[1] if len(sys.argv) > 1 else "伤感"
+    scene_name = sys.argv[1] if len(sys.argv) > 1 else "欢快"
     success = test(scene_name)
     sys.exit(0 if success else 1)

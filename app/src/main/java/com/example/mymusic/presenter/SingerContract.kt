@@ -1,6 +1,7 @@
 package com.example.mymusic.presenter
 
 import com.example.mymusic.data.Artist
+import com.example.mymusic.data.MusicVideo
 import com.example.mymusic.data.SongDetail
 
 /**
@@ -20,6 +21,11 @@ interface SingerContract {
         fun showSongs(songs: List<SongDetail>)
 
         /**
+         * 显示MV列表
+         */
+        fun showMVs(mvs: List<MusicVideo>)
+
+        /**
          * 更新关注状态
          */
         fun updateFollowStatus(isFollowing: Boolean)
@@ -33,6 +39,11 @@ interface SingerContract {
          * 导航到播放页面
          */
         fun navigateToPlay(songId: String)
+
+        /**
+         * 导航到MV播放页面
+         */
+        fun navigateToMVPlayer(mvId: String)
     }
 
     interface Presenter : BasePresenter {
@@ -50,6 +61,11 @@ interface SingerContract {
          * 点击歌曲
          */
         fun onSongClick(songId: String)
+
+        /**
+         * 点击MV
+         */
+        fun onMVClick(mvId: String)
 
         /**
          * 点击返回

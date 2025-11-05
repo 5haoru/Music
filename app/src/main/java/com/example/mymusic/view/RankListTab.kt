@@ -29,7 +29,8 @@ import com.example.mymusic.ui.components.OfficialRankItem
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RankListTab(
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onNavigateToPlay: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
 
@@ -50,7 +51,8 @@ fun RankListTab(
             onBackClick = {
                 showRankDetail = false
                 selectedRankId = null
-            }
+            },
+            onNavigateToPlay = onNavigateToPlay
         )
         return
     }
@@ -70,6 +72,10 @@ fun RankListTab(
                 override fun navigateToRankDetail(rankId: String) {
                     selectedRankId = rankId
                     showRankDetail = true
+                }
+
+                override fun navigateToPlay(songId: String) {
+                    onNavigateToPlay(songId)
                 }
 
                 override fun showLoading() {

@@ -3,6 +3,7 @@ package com.example.mymusic.presenter
 import android.content.Context
 import com.example.mymusic.data.Playlist
 import com.example.mymusic.data.Song
+import com.example.mymusic.utils.AutoTestHelper
 import com.example.mymusic.utils.DataLoader
 
 /**
@@ -61,6 +62,12 @@ class PlaylistPresenter(
 
     override fun onCollectClick() {
         currentPlaylist?.let { playlist ->
+            // 记录收藏到AutoTestHelper
+            AutoTestHelper.addCollectedPlaylist(
+                playlistId = playlist.playlistId,
+                playlistName = playlist.playlistName
+            )
+
             // 显示收藏成功提示
             android.widget.Toast.makeText(
                 context,

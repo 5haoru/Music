@@ -2,6 +2,7 @@ package com.example.mymusic.presenter
 
 import android.content.Context
 import com.example.mymusic.data.Song
+import com.example.mymusic.utils.AutoTestHelper
 import com.example.mymusic.utils.DataLoader
 
 /**
@@ -31,11 +32,19 @@ class DailyRecommendPresenter(
         }
     }
 
-    override fun onSongClick(songId: String) {
-        val song = allSongs.find { it.songId == songId }
-        if (song != null) {
-            view.playSong(song)
+    override fun onSongClick(songId: String, songIndex: Int) {
+        // 获取歌曲信息并记录到AutoTestHelper
+        val song = dailyRecommendedSongs.find { it.songId == songId }
+        song?.let {
+            AutoTestHelper.updatePlayback(
+                songId = it.songId,
+                songName = it.songName,
+                artist = it.artist,
+                source = "daily_recommend",
+                sourceDetail = "第${songIndex}首"
+            )
         }
+        view.navigateToPlay(songId)
     }
 
     override fun onPlayAllClick() {

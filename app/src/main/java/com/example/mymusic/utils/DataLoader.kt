@@ -548,6 +548,51 @@ object DataLoader {
     }
 
     /**
+     * 从指定歌单移除歌曲
+     * @param context 上下文
+     * @param playlistId 歌单ID
+     * @param songId 歌曲ID
+     * @return 是否成功移除
+     */
+    fun removeSongFromPlaylist(context: Context, playlistId: String, songId: String): Boolean {
+        try {
+            // 加载歌单列表（优先从内部存储）
+            val playlists = loadPlaylistsWithCache(context).toMutableList()
+
+            // 查找目标歌单
+            val playlistIndex = playlists.indexOfFirst { it.playlistId == playlistId }
+            if (playlistIndex == -1) {
+                return false // 歌单不存在
+            }
+
+            val playlist = playlists[playlistIndex]
+
+            // 检查歌曲是否在歌单中
+            if (!playlist.songIds.contains(songId)) {
+                return false // 歌曲不在歌单中
+            }
+
+            // 从歌单移除歌曲
+            val updatedSongIds = playlist.songIds.filter { it != songId }
+
+            // 更新歌单
+            val updatedPlaylist = playlist.copy(
+                songIds = updatedSongIds,
+                songCount = updatedSongIds.size
+            )
+            playlists[playlistIndex] = updatedPlaylist
+
+            // 保存更新后的歌单列表
+            savePlaylists(context, playlists)
+
+            return true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return false
+        }
+    }
+
+    /**
      * 检查歌曲是否已在指定歌单中
      * @param context 上下文
      * @param playlistId 歌单ID

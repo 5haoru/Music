@@ -32,7 +32,8 @@ import java.util.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DailyRecommendTab(
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onNavigateToPlay: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
 
@@ -50,8 +51,8 @@ fun DailyRecommendTab(
                     dailySongs = songs
                 }
 
-                override fun playSong(song: Song) {
-                    // TODO: 实现播放功能
+                override fun navigateToPlay(songId: String) {
+                    onNavigateToPlay(songId)
                 }
 
                 override fun playAllSongs(songs: List<Song>) {
@@ -134,8 +135,8 @@ fun DailyRecommendTab(
                     DailySongItem(
                         index = index,
                         song = song,
-                        onSongClick = { presenter.onSongClick(song.songId) },
-                        onPlayClick = { presenter.onSongClick(song.songId) }
+                        onSongClick = { presenter.onSongClick(song.songId, index + 1) },
+                        onPlayClick = { presenter.onSongClick(song.songId, index + 1) }
                     )
                 }
 

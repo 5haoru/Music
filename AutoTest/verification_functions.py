@@ -174,31 +174,51 @@ def task_11_check_daily_recommend_third_song():
     return False
 
 
-def task_12_check_create_playlist_and_add_song(playlist_name):
+def task_12_check_create_playlist_and_add_song(playlist_name=None):
     """
     任务12: 创建一个新的歌单,并添加首音乐
     验证: 检查user_playlists.json中是否有指定名称的歌单,且songCount > 0
-    :param playlist_name: 新建歌单的名称
+    :param playlist_name: 新建歌单的名称。如果为None，则检查最新创建的歌单；否则检查指定名称的歌单
     """
     data = read_json_from_device('autotest/user_playlists.json')
     if data and 'playlists' in data:
-        for playlist in data['playlists']:
-            if playlist.get('playlistName') == playlist_name:
-                return playlist.get('songCount', 0) > 0
+        playlists = data['playlists']
+
+        if playlist_name is None:
+            # 不传参数时，检查最新创建的歌单
+            if not playlists:
+                return False
+            # 按创建时间排序，取最新的
+            sorted_playlists = sorted(playlists, key=lambda x: x.get('createTime', 0), reverse=True)
+            latest = sorted_playlists[0]
+            print(f"  → 检查最新创建的歌单: 《{latest.get('playlistName')}》")
+            print(f"  → 歌曲数量: {latest.get('songCount', 0)}")
+            return latest.get('songCount', 0) > 0
+        else:
+            # 传参数时，检查指定名称的歌单
+            print(f"  → 检查指定歌单: 《{playlist_name}》")
+            for playlist in playlists:
+                if playlist.get('playlistName') == playlist_name:
+                    print(f"  → 歌曲数量: {playlist.get('songCount', 0)}")
+                    return playlist.get('songCount', 0) > 0
+            print(f"  → 未找到名称为《{playlist_name}》的歌单")
     return False
 
 
-def task_13_check_search_and_play(search_query):
+def task_13_check_search_and_play(search_query='稻香'):
     """
-    任务13: 搜索"烟雨"并播放
+    任务13: 搜索"稻香"并播放
     验证: 检查search_history.json中有该搜索记录,且action为"play"
-    :param search_query: 搜索关键词
+    :param search_query: 搜索关键词，默认'稻香'
     """
     data = read_json_from_device('autotest/search_history.json')
     if data and 'searches' in data:
+        print(f"  → 检查搜索记录: 《{search_query}》")
         for search in data['searches']:
             if search.get('query') == search_query and search.get('action') == 'play':
+                print(f"  → 找到匹配的搜索并播放记录")
                 return True
+        print(f"  → 未找到搜索《{search_query}》并播放的记录")
     return False
 
 

@@ -46,6 +46,12 @@ class PlayPresenter(
                     view.hideLoading()
                     // 检查是否已收藏到"我喜欢的音乐"
                     checkFavoriteStatus(it.songId)
+                    // 记录当前歌曲到AutoTestHelper
+                    AutoTestHelper.updatePlayback(
+                        songId = it.songId,
+                        songName = it.songName,
+                        artist = it.artist
+                    )
                 }
                 view.updatePlayMode(currentPlayMode)
             } else {
@@ -70,6 +76,16 @@ class PlayPresenter(
                 view.hideLoading()
                 // 检查是否已收藏到"我喜欢的音乐"
                 checkFavoriteStatus(songId)
+                // 记录当前歌曲到AutoTestHelper，保留已有的source信息
+                val currentState = AutoTestHelper.getPlaybackState()
+                val hasSource = currentState.currentSong?.source?.isNotEmpty() == true
+                AutoTestHelper.updatePlayback(
+                    songId = targetSong.songId,
+                    songName = targetSong.songName,
+                    artist = targetSong.artist,
+                    source = if (hasSource) currentState.currentSong?.source else null,
+                    sourceDetail = if (hasSource) currentState.currentSong?.sourceDetail else null
+                )
                 view.updatePlayMode(currentPlayMode)
             } else {
                 view.hideLoading()
@@ -239,6 +255,8 @@ class PlayPresenter(
             view.showSong(it)
             currentProgress = 0f
             view.updateProgress(0f, "00:00")
+            // 检查新歌曲的收藏状态
+            checkFavoriteStatus(it.songId)
         }
     }
 
@@ -249,6 +267,8 @@ class PlayPresenter(
             view.showSong(it)
             currentProgress = 0f
             view.updateProgress(0f, "00:00")
+            // 检查新歌曲的收藏状态
+            checkFavoriteStatus(it.songId)
         }
     }
 
@@ -266,14 +286,27 @@ class PlayPresenter(
             view.showSong(it)
             currentProgress = 0f
             view.updateProgress(0f, "00:00")
+            // 检查新歌曲的收藏状态
+            checkFavoriteStatus(it.songId)
         }
     }
 
     override fun onFavoriteClick() {
         currentSong?.let { song ->
             if (isFavorite) {
-                // 已收藏，提示用户
-                view.showSuccess("已在我喜欢的音乐中")
+                // 已收藏，取消收藏
+                val success = DataLoader.removeSongFromPlaylist(context, "my_favorites", song.songId)
+                if (success) {
+                    isFavorite = false
+                    view.updateFavoriteState(isFavorite)
+
+                    // 从AutoTestHelper移除收藏记录
+                    AutoTestHelper.removeFavoriteSong(song.songId)
+
+                    view.showSuccess("已取消收藏")
+                } else {
+                    view.showError("取消收藏失败")
+                }
             } else {
                 // 未收藏，添加到"我喜欢的音乐"
                 val success = DataLoader.addSongToPlaylist(context, "my_favorites", song.songId)

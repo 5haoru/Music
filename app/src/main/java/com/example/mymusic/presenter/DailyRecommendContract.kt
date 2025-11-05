@@ -14,9 +14,9 @@ interface DailyRecommendContract {
         fun showDailyRecommendedSongs(songs: List<Song>)
 
         /**
-         * 播放指定歌曲
+         * 导航到播放页面播放指定歌曲
          */
-        fun playSong(song: Song)
+        fun navigateToPlay(songId: String)
 
         /**
          * 播放全部歌曲
@@ -32,8 +32,10 @@ interface DailyRecommendContract {
 
         /**
          * 点击歌曲
+         * @param songId 歌曲ID
+         * @param songIndex 歌曲索引（从1开始）
          */
-        fun onSongClick(songId: String)
+        fun onSongClick(songId: String, songIndex: Int)
 
         /**
          * 点击播放全部

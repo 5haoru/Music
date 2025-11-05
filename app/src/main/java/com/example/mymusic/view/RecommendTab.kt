@@ -26,7 +26,8 @@ import com.example.mymusic.ui.components.*
 @Composable
 fun RecommendTab(
     onNavigateToListenRecognize: () -> Unit = {},
-    onNavigateToSearchResult: (String) -> Unit = {}
+    onNavigateToSearchResult: (String) -> Unit = {},
+    onNavigateToPlay: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
 
@@ -40,7 +41,8 @@ fun RecommendTab(
     // 如果需要显示每日推荐详情页，则显示DailyRecommendTab
     if (showDailyRecommendDetail) {
         DailyRecommendTab(
-            onBackClick = { showDailyRecommendDetail = false }
+            onBackClick = { showDailyRecommendDetail = false },
+            onNavigateToPlay = onNavigateToPlay
         )
         return
     }
@@ -48,7 +50,8 @@ fun RecommendTab(
     // 如果需要显示排行榜详情页，则显示RankListTab
     if (showRankListDetail) {
         RankListTab(
-            onBackClick = { showRankListDetail = false }
+            onBackClick = { showRankListDetail = false },
+            onNavigateToPlay = onNavigateToPlay
         )
         return
     }

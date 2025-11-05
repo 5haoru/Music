@@ -350,6 +350,22 @@ object AutoTestHelper {
         saveUserPlaylists(playlists.copy(playlists = list, lastUpdated = getCurrentTimestamp()))
     }
 
+    /**
+     * 更新歌单的歌曲列表
+     * 用于添加或删除歌曲后同步更新歌单信息
+     */
+    fun updatePlaylistSongs(playlistId: String, songIds: List<String>) {
+        val playlists = getUserPlaylists()
+        val list = playlists.playlists.map {
+            if (it.playlistId == playlistId) {
+                it.copy(songIds = songIds, songCount = songIds.size)
+            } else {
+                it
+            }
+        }
+        saveUserPlaylists(playlists.copy(playlists = list, lastUpdated = getCurrentTimestamp()))
+    }
+
     // ==================== 收藏项 ====================
 
     fun getCollectedItems(): CollectedItems {

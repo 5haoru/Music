@@ -107,7 +107,7 @@ class RankListPresenter(
     }
 
     override fun onSongClick(songId: String) {
-        // TODO: 播放歌曲
+        view.navigateToPlay(songId)
     }
 
     override fun onDestroy() {

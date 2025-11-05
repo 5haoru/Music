@@ -5,13 +5,20 @@
 人工操作步骤：
   1. 进入我的页面
   2. 点击创建歌单
-  3. 输入歌单名称
+  3. 输入歌单名称（可以是任意数字或名称，如"1"、"2"、"测试歌单"等）
   4. 添加歌曲
 
 验证标准：
 调用task_12_check_create_playlist_and_add_song函数进行验证
 
-参数：playlist_name（歌单名称），默认'我的最爱'
+使用方式：
+  方式1（推荐）：不传参数，自动检查最新创建的歌单
+    python test_task_12.py
+
+  方式2：传入歌单名称，检查指定歌单
+    python test_task_12.py 1
+    python test_task_12.py 2
+    python test_task_12.py 测试歌单
 """
 
 import sys
@@ -27,9 +34,13 @@ def test(*args):
     print("\n📋 人工操作步骤：")
     print("  1. 进入我的页面")
     print("  2. 点击创建歌单")
-    print("  3. 输入歌单名称")
-    print("  4. 添加歌曲")
-    print("\n🔍 开始验证...")
+    print("  3. 输入歌单名称（可以是任意数字或名称）")
+    print("  4. 添加至少一首歌曲")
+
+    if args:
+        print(f"\n🔍 开始验证...（检查歌单名称: {args[0]}）")
+    else:
+        print("\n🔍 开始验证...（检查最新创建的歌单）")
 
     # 根据函数签名调用验证函数
     if args:
@@ -44,8 +55,12 @@ def test(*args):
         return True
     else:
         print("✗ 测试失败 - 任务12未完成")
-        print("提示：请检查操作步骤是否正确执行")
-        print("提示：参数：playlist_name（歌单名称），默认'我的最爱'")
+        print("\n提示：")
+        print("  - 方式1（推荐）：不传参数，自动检查最新创建的歌单")
+        print("    python test_task_12.py")
+        print("  - 方式2：传入歌单名称（可以是数字如 1, 2, 3）")
+        print("    python test_task_12.py 1")
+        print("    python test_task_12.py 测试歌单")
         print("=" * 70)
         return False
 

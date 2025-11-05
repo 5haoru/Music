@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.mymusic.data.Playlist
 import com.example.mymusic.data.Song
 import com.example.mymusic.data.User
+import com.example.mymusic.utils.AutoTestHelper
 import com.example.mymusic.utils.DataLoader
 
 /**
@@ -75,6 +76,13 @@ class MePresenter(
             // 保存到本地
             DataLoader.savePlaylists(context, userPlaylists)
 
+            // 同步到AutoTestHelper用于自动化测试
+            AutoTestHelper.addPlaylist(
+                playlistId = newPlaylist.playlistId,
+                playlistName = newPlaylist.playlistName,
+                songIds = newPlaylist.songIds
+            )
+
             // 刷新UI
             view.showPlaylists(userPlaylists)
         } catch (e: Exception) {
@@ -83,6 +91,8 @@ class MePresenter(
     }
 
     override fun onPlaylistClick(playlist: Playlist) {
+        // 记录当前正在查看的歌单到AutoTestHelper
+        AutoTestHelper.updateCurrentViewingPlaylist(playlist.playlistId)
         view.navigateToPlaylist(playlist)
     }
 

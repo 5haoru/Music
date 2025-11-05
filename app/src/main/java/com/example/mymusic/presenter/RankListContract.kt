@@ -61,6 +61,11 @@ interface RankListContract {
          * 导航到榜单详情页
          */
         fun navigateToRankDetail(rankId: String)
+
+        /**
+         * 导航到播放页面播放指定歌曲
+         */
+        fun navigateToPlay(songId: String)
     }
 
     interface Presenter : BasePresenter {

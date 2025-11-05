@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import com.example.mymusic.data.SongProfile
 import com.example.mymusic.presenter.SongProfileContract
 import com.example.mymusic.presenter.SongProfilePresenter
+import com.example.mymusic.utils.AutoTestHelper
 
 // 浅色主题颜色
 private val LightBackground = Color(0xFFFFFFFF)
@@ -86,6 +87,19 @@ fun SongProfileTab(
     // 加载数据
     LaunchedEffect(songId) {
         presenter.loadSongProfile(songId)
+    }
+
+    // 更新AutoTest状态，记录当前查看的歌曲详情页面
+    LaunchedEffect(songId) {
+        AutoTestHelper.updateCurrentPage("song_detail")
+        AutoTestHelper.updateCurrentSongId(songId)
+    }
+
+    // 退出时清除歌曲详情状态
+    DisposableEffect(Unit) {
+        onDispose {
+            AutoTestHelper.updateCurrentSongId(null)
+        }
     }
 
     Box(

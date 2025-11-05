@@ -3,6 +3,7 @@ package com.example.mymusic.presenter
 import android.content.Context
 import com.example.mymusic.data.Playlist
 import com.example.mymusic.model.CollectionRecord
+import com.example.mymusic.utils.AutoTestHelper
 import com.example.mymusic.utils.DataLoader
 
 /**
@@ -23,8 +24,8 @@ class CollectSongPresenter(
         try {
             currentSongId = songId
 
-            // 加载所有歌单
-            playlists = DataLoader.loadPlaylists(context)
+            // 加载所有歌单（优先从缓存加载用户创建的歌单）
+            playlists = DataLoader.loadPlaylistsWithCache(context)
 
             // 检查歌曲是否已在各个歌单中
             checkSongInPlaylists(songId)
@@ -67,6 +68,13 @@ class CollectSongPresenter(
                 return
             }
 
+            // 将歌曲添加到歌单
+            val addResult = DataLoader.addSongToPlaylist(context, playlistId, songId)
+            if (!addResult) {
+                view.showError("添加歌曲到歌单失败")
+                return
+            }
+
             // 保存收藏记录
             val collectionId = DataLoader.generateCollectionId(context)
             val song = DataLoader.getSongById(context, songId)
@@ -79,6 +87,15 @@ class CollectSongPresenter(
                 isSuccess = true
             )
             DataLoader.saveCollectionRecord(context, record)
+
+            // 重新加载歌单列表以获取最新数据
+            playlists = DataLoader.loadPlaylistsWithCache(context)
+
+            // 同步到AutoTestHelper用于自动化测试
+            val updatedPlaylist = playlists.find { it.playlistId == playlistId }
+            updatedPlaylist?.let {
+                AutoTestHelper.updatePlaylistSongs(playlistId, it.songIds)
+            }
 
             // 更新UI状态
             addedPlaylistIds.add(playlistId)

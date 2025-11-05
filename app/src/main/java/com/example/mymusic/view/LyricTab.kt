@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import com.example.mymusic.data.Song
 import com.example.mymusic.presenter.LyricContract
 import com.example.mymusic.presenter.LyricPresenter
+import com.example.mymusic.utils.AutoTestHelper
 import kotlinx.coroutines.launch
 
 /**
@@ -107,6 +108,19 @@ fun LyricTab(
     // 加载数据
     LaunchedEffect(songId) {
         presenter.loadData(songId)
+    }
+
+    // 更新AutoTest状态，记录当前正在查看歌词
+    LaunchedEffect(Unit) {
+        AutoTestHelper.updateCurrentPage("lyrics")
+        AutoTestHelper.updateShowLyrics(true)
+    }
+
+    // 退出时清除歌词状态
+    DisposableEffect(Unit) {
+        onDispose {
+            AutoTestHelper.updateShowLyrics(false)
+        }
     }
 
     Box(
