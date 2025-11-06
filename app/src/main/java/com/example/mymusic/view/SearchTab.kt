@@ -190,7 +190,8 @@ fun SearchTab(
                             song = song,
                             onClick = {
                                 // 点击搜索结果项，导航到详细搜索结果页面
-                                onNavigateToSearchResult(song.songName)
+                                // 传入原始搜索词，以便在结果页显示完整的歌手/歌曲信息
+                                onNavigateToSearchResult(searchQuery)
                             }
                         )
                     }

@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.mymusic.data.Comment
 import com.example.mymusic.data.CommentRecord
 import com.example.mymusic.data.Song
+import com.example.mymusic.utils.AutoTestHelper
 import com.example.mymusic.utils.DataLoader
 
 /**
@@ -162,6 +163,9 @@ class CommentPresenter(
 
             // 保存评论记录
             DataLoader.saveCommentRecord(context, commentRecord)
+
+            // 同步到AutoTest
+            AutoTestHelper.addComment(currentSong!!.songId, content)
 
             // 更新本地评论列表
             allComments = allComments + newComment

@@ -338,6 +338,31 @@ object AutoTestHelper {
         saveUserPlaylists(playlists.copy(currentViewingPlaylist = playlistId, lastUpdated = getCurrentTimestamp()))
     }
 
+    /**
+     * 确保歌单在AutoTest中被跟踪
+     * 如果歌单不存在于跟踪列表中，自动添加
+     */
+    fun ensurePlaylistTracked(playlistId: String, playlistName: String, songIds: List<String>) {
+        val playlists = getUserPlaylists()
+
+        // 检查歌单是否已存在
+        val exists = playlists.playlists.any { it.playlistId == playlistId }
+
+        if (!exists) {
+            // 如果不存在，添加到跟踪列表
+            val newPlaylist = PlaylistRecord(
+                playlistId = playlistId,
+                playlistName = playlistName,
+                songIds = songIds,
+                songCount = songIds.size,
+                createdTime = getCurrentTimestamp()
+            )
+            val updatedList = playlists.playlists + newPlaylist
+            saveUserPlaylists(playlists.copy(playlists = updatedList, lastUpdated = getCurrentTimestamp()))
+            Log.d(TAG, "已将歌单添加到AutoTest跟踪: $playlistName ($playlistId)")
+        }
+    }
+
     fun updatePlaylistSortOrder(playlistId: String, sortOrder: String) {
         val playlists = getUserPlaylists()
         val list = playlists.playlists.map {

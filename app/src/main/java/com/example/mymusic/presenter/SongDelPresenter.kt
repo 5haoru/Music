@@ -3,6 +3,8 @@ package com.example.mymusic.presenter
 import android.content.Context
 import com.example.mymusic.data.Song
 import com.example.mymusic.data.SongDeletionRecord
+import com.example.mymusic.utils.AutoTestHelper
+import com.example.mymusic.utils.DataLoader
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
@@ -97,13 +99,32 @@ class SongDelPresenter(
             try {
                 view.showLoading()
 
-                // 保存删除记录
+                // 1. 实际从歌单中删除歌曲
+                val deleteSuccess = withContext(Dispatchers.IO) {
+                    DataLoader.removeSongFromPlaylist(context, currentPlaylistId, currentSongId)
+                }
+
+                if (!deleteSuccess) {
+                    view.hideLoading()
+                    view.showError("删除失败：歌曲不在歌单中")
+                    return@launch
+                }
+
+                // 2. 同步到AutoTest
+                withContext(Dispatchers.IO) {
+                    val updatedPlaylist = DataLoader.getPlaylistById(context, currentPlaylistId)
+                    updatedPlaylist?.let {
+                        AutoTestHelper.updatePlaylistSongs(currentPlaylistId, it.songIds)
+                    }
+                }
+
+                // 3. 保存删除记录
                 withContext(Dispatchers.IO) {
                     saveDeletionRecord()
                 }
 
                 view.hideLoading()
-                view.showError("删除成功")
+                android.widget.Toast.makeText(context, "删除成功", android.widget.Toast.LENGTH_SHORT).show()
                 view.close()
             } catch (e: Exception) {
                 view.hideLoading()

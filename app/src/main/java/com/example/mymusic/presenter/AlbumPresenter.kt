@@ -3,6 +3,7 @@ package com.example.mymusic.presenter
 import android.content.Context
 import com.example.mymusic.data.Album
 import com.example.mymusic.data.Song
+import com.example.mymusic.utils.AutoTestHelper
 import com.example.mymusic.utils.DataLoader
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -50,6 +51,14 @@ class AlbumPresenter(
 
     override fun onCollectClick() {
         currentAlbum?.let { album ->
+            // 记录收藏到AutoTestHelper
+            AutoTestHelper.addCollectedAlbum(
+                albumId = album.albumId,
+                albumName = album.albumName,
+                artist = album.artist,
+                artistId = album.artistId
+            )
+
             view.showSuccess("成功收藏《${album.albumName}》")
         }
     }

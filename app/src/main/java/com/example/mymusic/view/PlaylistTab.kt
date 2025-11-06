@@ -28,6 +28,7 @@ import com.example.mymusic.data.Playlist
 import com.example.mymusic.data.Song
 import com.example.mymusic.presenter.PlaylistContract
 import com.example.mymusic.presenter.PlaylistPresenter
+import com.example.mymusic.utils.AutoTestHelper
 
 /**
  * 歌单详情页面Tab（二级页面）
@@ -47,6 +48,11 @@ fun PlaylistTab(
     var songs by remember { mutableStateOf<List<Song>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    // 歌曲删除导航状态
+    var showSongDelTab by remember { mutableStateOf(false) }
+    var selectedSongId by remember { mutableStateOf<String?>(null) }
+    var needReload by remember { mutableStateOf(false) }
 
     // Presenter
     val presenter = remember {
@@ -83,12 +89,50 @@ fun PlaylistTab(
         presenter.loadPlaylistSongs(playlist)
     }
 
+    // 更新AutoTest状态，记录当前查看的歌单
+    LaunchedEffect(playlist.playlistId) {
+        // 确保歌单在AutoTest中被跟踪（对于默认歌单如"我喜欢的音乐"）
+        AutoTestHelper.ensurePlaylistTracked(
+            playlistId = playlist.playlistId,
+            playlistName = playlist.playlistName,
+            songIds = playlist.songIds
+        )
+        // 记录当前查看的歌单
+        AutoTestHelper.updateCurrentViewingPlaylist(playlist.playlistId)
+    }
+
+    // 退出时清除当前查看的歌单
+    DisposableEffect(Unit) {
+        onDispose {
+            AutoTestHelper.updateCurrentViewingPlaylist(null)
+        }
+    }
+
+    // 监听needReload，重新加载歌单数据
+    LaunchedEffect(needReload) {
+        if (needReload) {
+            presenter.loadPlaylistSongs(playlist)
+            needReload = false
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        if (isLoading) {
+        // 歌曲删除页面
+        if (showSongDelTab && selectedSongId != null) {
+            SongDelTab(
+                songId = selectedSongId!!,
+                playlistId = playlist.playlistId,
+                onBackClick = {
+                    showSongDelTab = false
+                    selectedSongId = null
+                    needReload = true // 返回时重新加载歌单
+                }
+            )
+        } else if (isLoading) {
             CircularProgressIndicator(
                 modifier = Modifier.align(Alignment.Center)
             )
@@ -147,7 +191,10 @@ fun PlaylistTab(
                         SongListItem(
                             song = song,
                             onClick = { presenter.onSongClick(song) },
-                            onMoreClick = { onNavigateToSongDel(song.songId, playlist.playlistId) }
+                            onMoreClick = {
+                                selectedSongId = song.songId
+                                showSongDelTab = true
+                            }
                         )
                     }
                 }

@@ -2,6 +2,7 @@ package com.example.mymusic.presenter
 
 import android.content.Context
 import com.example.mymusic.data.FollowItem
+import com.example.mymusic.utils.AutoTestHelper
 import com.example.mymusic.utils.DataLoader
 
 /**
@@ -89,6 +90,12 @@ class SubscribePresenter(
     override fun unfollowItem(item: FollowItem) {
         // 从列表中移除该关注项
         allFollowItems = allFollowItems.filter { it.id != item.id }
+
+        // 如果是歌手类型，同步到AutoTest
+        // 注意：这里使用item.id作为artistId，用于测试验证
+        if (item.type == "artist") {
+            AutoTestHelper.removeFollowedArtist(item.id)
+        }
 
         // 根据当前筛选条件更新显示
         filterByType(currentFilterType)

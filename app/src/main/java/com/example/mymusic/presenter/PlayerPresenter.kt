@@ -3,6 +3,7 @@ package com.example.mymusic.presenter
 import android.content.Context
 import com.example.mymusic.data.PlayerStyle
 import com.example.mymusic.data.PlayerStyleRecord
+import com.example.mymusic.utils.AutoTestHelper
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
@@ -64,6 +65,9 @@ class PlayerPresenter(
             saveStyleRecords(records)
 
             currentStyleId = style.styleId
+
+            // 通知自动化测试系统
+            AutoTestHelper.updatePlayerStyle(style.styleId, style.styleName)
 
             view.showToast("更改样式成功")
 

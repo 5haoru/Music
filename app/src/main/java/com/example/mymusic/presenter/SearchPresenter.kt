@@ -3,6 +3,7 @@ package com.example.mymusic.presenter
 import android.content.Context
 import com.example.mymusic.data.Song
 import com.example.mymusic.model.SearchRecord
+import com.example.mymusic.utils.AutoTestHelper
 import com.example.mymusic.utils.DataLoader
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -19,6 +20,7 @@ class SearchPresenter(
     private var allSongs: List<Song> = emptyList()
     private var searchHistory: MutableList<String> = mutableListOf()
     private val searchRecordsFile = File(context.filesDir, "search_records.json")
+    private var currentSearchQuery: String = "" // 保存当前搜索词，用于AutoTest记录
 
     override fun loadData() {
         view.showLoading()
@@ -49,14 +51,20 @@ class SearchPresenter(
     override fun onSearchTextChanged(query: String) {
         if (query.isEmpty()) {
             // 清空搜索结果，显示默认内容
+            currentSearchQuery = ""
             loadData()
         } else {
-            // 搜索歌曲（支持中文、英文、拼音搜索）
+            // 保存当前搜索词
+            currentSearchQuery = query
+
+            // 搜索歌曲
+            // 中文：部分匹配（contains）
+            // 拼音：完全匹配（equals），只有输入完整拼音才能搜索到
             val results = allSongs.filter { song ->
                 song.songName.contains(query, ignoreCase = true) ||
                 song.artist.contains(query, ignoreCase = true) ||
-                song.pinyin?.contains(query, ignoreCase = true) == true ||
-                song.artistPinyin?.contains(query, ignoreCase = true) == true
+                song.pinyin?.equals(query, ignoreCase = true) == true ||
+                song.artistPinyin?.equals(query, ignoreCase = true) == true
             }
             view.showSearchResults(results)
 
@@ -80,6 +88,10 @@ class SearchPresenter(
     override fun onSongClick(songId: String) {
         val song = allSongs.find { it.songId == songId }
         song?.let {
+            // 记录搜索并播放到AutoTest（任务13）
+            if (currentSearchQuery.isNotEmpty()) {
+                AutoTestHelper.addSearchRecord(currentSearchQuery, "song", songId, "play")
+            }
             view.playSong(it)
         }
     }

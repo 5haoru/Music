@@ -5,6 +5,7 @@ import com.example.mymusic.data.Artist
 import com.example.mymusic.data.MusicVideo
 import com.example.mymusic.data.Song
 import com.example.mymusic.data.SongDetail
+import com.example.mymusic.utils.AutoTestHelper
 import com.example.mymusic.utils.DataLoader
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -21,18 +22,25 @@ class SearchResultPresenter(
     private var allArtists: List<Artist> = emptyList()
     private var allMVs: List<MusicVideo> = emptyList()
     private var isFollowing = false
+    private var currentSearchQuery: String = "" // 保存当前搜索词，用于AutoTest记录
 
     override fun loadSearchResults(query: String) {
         view.showLoading()
         try {
+            // 保存当前搜索词
+            currentSearchQuery = query
+
             // 加载所有数据
             allSongs = DataLoader.loadSongs(context)
             allArtists = DataLoader.loadArtists(context)
             allMVs = loadMusicVideos()
 
             // 搜索匹配的歌手
+            // 中文：部分匹配（contains）
+            // 拼音：完全匹配（equals），只有输入完整拼音才能搜索到
             val matchedArtist = allArtists.find { artist ->
                 artist.artistName.contains(query, ignoreCase = true) ||
+                artist.pinyin?.equals(query, ignoreCase = true) == true ||
                 allSongs.any { song ->
                     song.songName.contains(query, ignoreCase = true) && song.artist == artist.artistName
                 }
@@ -45,9 +53,14 @@ class SearchResultPresenter(
             }
             view.showMusicVideo(matchedMV)
 
-            // 搜索匹配的歌曲并转换为SongDetail
+            // 搜索匹配的歌曲
+            // 中文：部分匹配（contains）
+            // 拼音：完全匹配（equals），只有输入完整拼音才能搜索到
             val matchedSongs = allSongs.filter { song ->
-                song.songName.contains(query, ignoreCase = true)
+                song.songName.contains(query, ignoreCase = true) ||
+                song.pinyin?.equals(query, ignoreCase = true) == true ||
+                song.artist.contains(query, ignoreCase = true) ||
+                song.artistPinyin?.equals(query, ignoreCase = true) == true
             }
 
             // 为歌曲添加丰富的展示信息
@@ -102,6 +115,10 @@ class SearchResultPresenter(
     }
 
     override fun onSongClick(songId: String) {
+        // 记录搜索并播放到AutoTest（任务13）
+        if (currentSearchQuery.isNotEmpty()) {
+            AutoTestHelper.addSearchRecord(currentSearchQuery, "song", songId, "play")
+        }
         view.navigateToPlay(songId)
     }
 
@@ -110,6 +127,11 @@ class SearchResultPresenter(
     }
 
     override fun onArtistClick(artistId: String) {
+        // 记录搜索歌手到AutoTest（任务14、任务28）
+        // 点击歌手即认为会播放歌曲，记录action为"play"
+        if (currentSearchQuery.isNotEmpty()) {
+            AutoTestHelper.addSearchRecord(currentSearchQuery, "artist", artistId, "play")
+        }
         view.navigateToSinger(artistId)
     }
 

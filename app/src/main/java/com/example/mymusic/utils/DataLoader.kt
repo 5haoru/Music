@@ -59,9 +59,10 @@ object DataLoader {
 
     /**
      * 根据ID获取歌单
+     * 优先从内部存储加载，确保获取最新的用户修改
      */
     fun getPlaylistById(context: Context, playlistId: String): Playlist? {
-        return loadPlaylists(context).find { it.playlistId == playlistId }
+        return loadPlaylistsWithCache(context).find { it.playlistId == playlistId }
     }
 
     /**

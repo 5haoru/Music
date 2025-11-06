@@ -2,6 +2,7 @@ package com.example.mymusic.presenter
 
 import android.content.Context
 import com.example.mymusic.data.ListeningDuration
+import com.example.mymusic.utils.AutoTestHelper
 import com.example.mymusic.utils.DataLoader
 
 /**
@@ -23,6 +24,8 @@ class DurationPresenter(
             if (durationData != null) {
                 view.showDurationData(durationData!!)
                 view.hideLoading()
+                // 默认进入周统计页面，记录到AutoTest
+                AutoTestHelper.updateViewedStats("weekly")
             } else {
                 view.hideLoading()
                 view.showError("暂无听歌数据")
@@ -34,7 +37,12 @@ class DurationPresenter(
     }
 
     override fun onTabSelected(tab: Int) {
-        // Tab切换逻辑，View层自行切换显示内容
+        // 记录用户查看的统计类型到AutoTest
+        when (tab) {
+            0 -> AutoTestHelper.updateViewedStats("weekly")   // 周统计
+            1 -> AutoTestHelper.updateViewedStats("monthly")  // 月统计
+            // tab=2 是年度统计，测试任务不需要记录
+        }
     }
 
     override fun onBackClick() {
