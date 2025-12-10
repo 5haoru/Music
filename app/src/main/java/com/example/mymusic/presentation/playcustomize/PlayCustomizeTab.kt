@@ -13,9 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.mymusic.data.Song
-import com.example.mymusic.data.repository.ArtistFollowRecordRepository
-import com.example.mymusic.data.repository.DownloadRecordRepository
-import com.example.mymusic.data.repository.SongRepository
+import com.example.mymusic.data.repository.RepositoryProvider
 import com.example.mymusic.presentation.playcustomize.components.*
 
 /**
@@ -42,9 +40,7 @@ fun PlayCustomizeTab(
 
     // Presenter
     val presenter = remember {
-        val songRepository = SongRepository(context)
-        val downloadRecordRepository = DownloadRecordRepository(context)
-        val artistFollowRecordRepository = ArtistFollowRecordRepository(context)
+        RepositoryProvider.initialize(context)
         PlayCustomizePresenter(
             object : PlayCustomizeContract.View {
                 override fun showSong(song: Song) {
@@ -95,9 +91,9 @@ fun PlayCustomizeTab(
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
             },
-            songRepository,
-            downloadRecordRepository,
-            artistFollowRecordRepository
+            RepositoryProvider.getSongRepository(),
+            RepositoryProvider.getDownloadRecordRepository(),
+            RepositoryProvider.getArtistFollowRecordRepository()
         )
     }
 

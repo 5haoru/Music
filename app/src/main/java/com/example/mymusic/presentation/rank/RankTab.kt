@@ -10,8 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.mymusic.data.repository.PlaylistRepository
-import com.example.mymusic.data.repository.SongRepository
+import com.example.mymusic.data.repository.RepositoryProvider
 import com.example.mymusic.presentation.rank.RankContract
 import com.example.mymusic.presentation.rank.RankPresenter
 import com.example.mymusic.presentation.rank.components.*
@@ -36,8 +35,7 @@ fun RankTab(
 
     // Presenter
     val presenter = remember {
-        val songRepository = SongRepository(context)
-        val playlistRepository = PlaylistRepository(context)
+        RepositoryProvider.initialize(context)
         RankPresenter(
             object : RankContract.View {
                 override fun showRankDetail(detail: RankContract.RankDetail) {
@@ -86,8 +84,8 @@ fun RankTab(
                     isLoading = false
                 }
             },
-            songRepository,
-            playlistRepository
+            RepositoryProvider.getSongRepository(),
+            RepositoryProvider.getPlaylistRepository()
         )
     }
 

@@ -9,8 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.example.mymusic.data.RecognitionRecord
 import com.example.mymusic.data.Song
-import com.example.mymusic.data.repository.RecognitionHistoryRepository
-import com.example.mymusic.data.repository.SongRepository
+import com.example.mymusic.data.repository.RepositoryProvider
 import com.example.mymusic.presentation.listenrecognize.components.*
 import kotlinx.coroutines.delay
 
@@ -37,8 +36,7 @@ fun ListenRecognizeTab(
 
     // Presenter
     val presenter = remember {
-        val songRepository = SongRepository(context)
-        val recognitionHistoryRepository = RecognitionHistoryRepository(context)
+        RepositoryProvider.initialize(context)
         ListenRecognizePresenter(
             object : ListenRecognizeContract.View {
                 override fun showRecordingStatus(recording: Boolean) {
@@ -91,8 +89,8 @@ fun ListenRecognizeTab(
                     // TODO: Show a specific UI state for recognizing
                 }
             },
-            songRepository,
-            recognitionHistoryRepository
+            RepositoryProvider.getSongRepository(),
+            RepositoryProvider.getRecognitionHistoryRepository()
         )
     }
 

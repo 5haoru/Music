@@ -8,7 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.example.mymusic.data.ListeningDuration
-import com.example.mymusic.data.repository.DurationRepository
+import com.example.mymusic.data.repository.RepositoryProvider
 import com.example.mymusic.presentation.duration.DurationContract
 import com.example.mymusic.presentation.duration.DurationPresenter
 import com.example.mymusic.presentation.duration.components.*
@@ -32,7 +32,7 @@ fun DurationTab(
 
     // Presenter
     val presenter = remember {
-        val durationRepository = DurationRepository(context)
+        RepositoryProvider.initialize(context)
         DurationPresenter(
             object : DurationContract.View {
                 override fun showDurationData(data: ListeningDuration) {
@@ -56,7 +56,7 @@ fun DurationTab(
                     android.widget.Toast.makeText(context, message, android.widget.Toast.LENGTH_SHORT).show()
                 }
             },
-            durationRepository
+            RepositoryProvider.getDurationRepository()
         )
     }
 

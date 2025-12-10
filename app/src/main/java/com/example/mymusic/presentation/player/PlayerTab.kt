@@ -9,8 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.example.mymusic.data.PlayerStyle
-import com.example.mymusic.data.repository.PlaybackStyleRecordRepository
-import com.example.mymusic.data.repository.PlayerStyleRepository
+import com.example.mymusic.data.repository.RepositoryProvider
 import com.example.mymusic.presentation.player.PlayerContract
 import com.example.mymusic.presentation.player.PlayerPresenter
 import com.example.mymusic.presentation.player.components.*
@@ -36,8 +35,7 @@ fun PlayerTab(
 
     // Presenter
     val presenter = remember {
-        val playerStyleRepository = PlayerStyleRepository(context)
-        val playbackStyleRecordRepository = PlaybackStyleRecordRepository(context)
+        RepositoryProvider.initialize(context)
         PlayerPresenter(
             object : PlayerContract.View {
                 override fun showPlayerStyles(styles: List<PlayerStyle>) {
@@ -79,8 +77,8 @@ fun PlayerTab(
                     android.widget.Toast.makeText(context, message, android.widget.Toast.LENGTH_SHORT).show()
                 }
             },
-            playerStyleRepository,
-            playbackStyleRecordRepository
+            RepositoryProvider.getPlayerStyleRepository(),
+            RepositoryProvider.getPlaybackStyleRecordRepository()
         )
     }
 

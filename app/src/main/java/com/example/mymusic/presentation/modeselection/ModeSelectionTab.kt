@@ -24,7 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mymusic.data.repository.PlayerStyleRepository
+import com.example.mymusic.data.repository.RepositoryProvider
 import com.example.mymusic.presentation.modeselection.ModeSelectionContract
 import com.example.mymusic.presentation.modeselection.ModeSelectionContract.*
 import com.example.mymusic.presentation.modeselection.ModeSelectionPresenter
@@ -46,7 +46,7 @@ fun ModeSelectionTab(
 
     // Presenter
     val presenter = remember {
-        val playerStyleRepository = PlayerStyleRepository(context)
+        RepositoryProvider.initialize(context)
         ModeSelectionPresenter(
             object : ModeSelectionContract.View {
                 override fun showModes(modeList: List<ModeItem>) {
@@ -78,7 +78,7 @@ fun ModeSelectionTab(
                     android.widget.Toast.makeText(context, message, android.widget.Toast.LENGTH_SHORT).show()
                 }
             },
-            playerStyleRepository
+            RepositoryProvider.getPlayerStyleRepository()
         )
     }
 

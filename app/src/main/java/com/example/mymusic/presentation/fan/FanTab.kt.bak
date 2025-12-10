@@ -50,6 +50,10 @@ fun FanTab(
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
 
+                override fun showSuccess(message: String) {
+                    android.widget.Toast.makeText(context, message, android.widget.Toast.LENGTH_SHORT).show()
+                }
+
                 override fun navigateBack() {
                     onBackClick()
                 }
@@ -64,10 +68,6 @@ fun FanTab(
 
     // Load data when the Composable is first launched
     LaunchedEffect(Unit) {
-                override fun showSuccess(message: String) {
-                    android.widget.Toast.makeText(context, message, android.widget.Toast.LENGTH_SHORT).show()
-                }
-
         presenter.loadFans()
     }
 

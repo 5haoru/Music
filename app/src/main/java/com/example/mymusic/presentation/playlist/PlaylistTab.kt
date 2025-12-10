@@ -12,8 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.mymusic.data.Playlist
 import com.example.mymusic.data.Song
-import com.example.mymusic.data.repository.CollectionRepository
-import com.example.mymusic.data.repository.SongRepository
+import com.example.mymusic.data.repository.RepositoryProvider
 import com.example.mymusic.presentation.playlist.components.*
 import com.example.mymusic.presentation.songdel.SongDelTab
 import com.example.mymusic.utils.AutoTestHelper
@@ -44,8 +43,7 @@ fun PlaylistTab(
 
     // Presenter
     val presenter = remember {
-        val songRepository = SongRepository(context)
-        val collectionRepository = CollectionRepository(context)
+        RepositoryProvider.initialize(context)
         PlaylistPresenter(
             object : PlaylistContract.View {
                 override fun showSongs(songList: List<Song>) {
@@ -74,8 +72,8 @@ fun PlaylistTab(
                     android.widget.Toast.makeText(context, message, android.widget.Toast.LENGTH_SHORT).show()
                 }
             },
-            songRepository,
-            collectionRepository
+            RepositoryProvider.getSongRepository(),
+            RepositoryProvider.getCollectionRepository()
         )
     }
 

@@ -9,10 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.example.mymusic.data.Song
-import com.example.mymusic.data.repository.CollectionRepository
-import com.example.mymusic.data.repository.LyricRepository
-import com.example.mymusic.data.repository.PlaylistRepository
-import com.example.mymusic.data.repository.SongRepository
+import com.example.mymusic.data.repository.RepositoryProvider
 import com.example.mymusic.presentation.lyric.components.LyricBottomSection
 import com.example.mymusic.presentation.lyric.components.LyricDisplaySection
 import com.example.mymusic.presentation.lyric.components.LyricTopSection
@@ -45,10 +42,7 @@ fun LyricTab(
 
     // Presenter
     val presenter = remember {
-        val songRepository = SongRepository(context)
-        val lyricRepository = LyricRepository(context)
-        val playlistRepository = PlaylistRepository(context)
-        val collectionRepository = CollectionRepository(context)
+        RepositoryProvider.initialize(context)
         LyricPresenter(
             object : LyricContract.View {
                 override fun showSong(song: Song) {
@@ -101,10 +95,10 @@ fun LyricTab(
                     android.widget.Toast.makeText(context, message, android.widget.Toast.LENGTH_SHORT).show()
                 }
             },
-            songRepository,
-            lyricRepository,
-            playlistRepository,
-            collectionRepository
+            RepositoryProvider.getSongRepository(),
+            RepositoryProvider.getLyricRepository(),
+            RepositoryProvider.getPlaylistRepository(),
+            RepositoryProvider.getCollectionRepository()
         )
     }
 

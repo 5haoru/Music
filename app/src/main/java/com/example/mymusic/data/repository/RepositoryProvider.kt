@@ -12,8 +12,8 @@ import android.content.Context
  *     RepositoryProvider.initialize(context)
  *     XxxPresenter(
  *         view,
- *         RepositoryProvider.songRepository,
- *         RepositoryProvider.playlistRepository
+ *         RepositoryProvider.getSongRepository(),
+ *         RepositoryProvider.getPlaylistRepository()
  *     )
  * }
  * ```
@@ -23,77 +23,77 @@ object RepositoryProvider {
     private var _context: Context? = null
 
     // Lazy初始化所有Repository
-    private val songRepository: SongRepository by lazy {
+    private val _songRepository: SongRepository by lazy {
         checkInitialized()
         SongRepository(_context!!)
     }
 
-    private val playlistRepository: PlaylistRepository by lazy {
+    private val _playlistRepository: PlaylistRepository by lazy {
         checkInitialized()
         PlaylistRepository(_context!!)
     }
 
-    private val albumRepository: AlbumRepository by lazy {
+    private val _albumRepository: AlbumRepository by lazy {
         checkInitialized()
         AlbumRepository(_context!!)
     }
 
-    private val artistRepository: ArtistRepository by lazy {
+    private val _artistRepository: ArtistRepository by lazy {
         checkInitialized()
         ArtistRepository(_context!!)
     }
 
-    private val musicVideoRepository: MusicVideoRepository by lazy {
+    private val _musicVideoRepository: MusicVideoRepository by lazy {
         checkInitialized()
         MusicVideoRepository(_context!!)
     }
 
-    private val collectionRepository: CollectionRepository by lazy {
+    private val _collectionRepository: CollectionRepository by lazy {
         checkInitialized()
         CollectionRepository(_context!!)
     }
 
-    private val commentRepository: CommentRepository by lazy {
+    private val _commentRepository: CommentRepository by lazy {
         checkInitialized()
         CommentRepository(_context!!)
     }
 
-    private val artistFollowRecordRepository: ArtistFollowRecordRepository by lazy {
+    private val _artistFollowRecordRepository: ArtistFollowRecordRepository by lazy {
         checkInitialized()
         ArtistFollowRecordRepository(_context!!)
     }
 
-    private val downloadRecordRepository: DownloadRecordRepository by lazy {
+    private val _downloadRecordRepository: DownloadRecordRepository by lazy {
         checkInitialized()
         DownloadRecordRepository(_context!!)
     }
 
-    private val playerStyleRepository: PlayerStyleRepository by lazy {
+    private val _playerStyleRepository: PlayerStyleRepository by lazy {
         checkInitialized()
         PlayerStyleRepository(_context!!)
     }
 
-    private val playbackStyleRecordRepository: PlaybackStyleRecordRepository by lazy {
+    private val _playbackStyleRecordRepository: PlaybackStyleRecordRepository by lazy {
         checkInitialized()
         PlaybackStyleRecordRepository(_context!!)
     }
 
-    private val fanRepository: FanRepository by lazy {
+    private val _fanRepository: FanRepository by lazy {
         checkInitialized()
         FanRepository(_context!!)
     }
 
-    private val recognitionHistoryRepository: RecognitionHistoryRepository by lazy {
+    private val _recognitionHistoryRepository: RecognitionHistoryRepository by lazy {
         checkInitialized()
         RecognitionHistoryRepository(_context!!)
     }
 
-    private val durationRepository: DurationRepository by lazy {
+    private val _durationRepository: DurationRepository by lazy {
         checkInitialized()
         DurationRepository(_context!!)
     }
 
-    private val lyricRepository: LyricRepository by lazy {
+    private val _lyricRepository: LyricRepository by lazy {
         checkInitialized()
         LyricRepository(_context!!)
     }
@@ -115,19 +115,19 @@ object RepositoryProvider {
     }
 
     // 公开访问器
-    fun getSongRepository(): SongRepository = songRepository
-    fun getPlaylistRepository(): PlaylistRepository = playlistRepository
-    fun getAlbumRepository(): AlbumRepository = albumRepository
-    fun getArtistRepository(): ArtistRepository = artistRepository
-    fun getMusicVideoRepository(): MusicVideoRepository = musicVideoRepository
-    fun getCollectionRepository(): CollectionRepository = collectionRepository
-    fun getCommentRepository(): CommentRepository = commentRepository
-    fun getArtistFollowRecordRepository(): ArtistFollowRecordRepository = artistFollowRecordRepository
-    fun getDownloadRecordRepository(): DownloadRecordRepository = downloadRecordRepository
-    fun getPlayerStyleRepository(): PlayerStyleRepository = playerStyleRepository
-    fun getPlaybackStyleRecordRepository(): PlaybackStyleRecordRepository = playbackStyleRecordRepository
-    fun getFanRepository(): FanRepository = fanRepository
-    fun getRecognitionHistoryRepository(): RecognitionHistoryRepository = recognitionHistoryRepository
-    fun getDurationRepository(): DurationRepository = durationRepository
-    fun getLyricRepository(): LyricRepository = lyricRepository
+    fun getSongRepository(): SongRepository = _songRepository
+    fun getPlaylistRepository(): PlaylistRepository = _playlistRepository
+    fun getAlbumRepository(): AlbumRepository = _albumRepository
+    fun getArtistRepository(): ArtistRepository = _artistRepository
+    fun getMusicVideoRepository(): MusicVideoRepository = _musicVideoRepository
+    fun getCollectionRepository(): CollectionRepository = _collectionRepository
+    fun getCommentRepository(): CommentRepository = _commentRepository
+    fun getArtistFollowRecordRepository(): ArtistFollowRecordRepository = _artistFollowRecordRepository
+    fun getDownloadRecordRepository(): DownloadRecordRepository = _downloadRecordRepository
+    fun getPlayerStyleRepository(): PlayerStyleRepository = _playerStyleRepository
+    fun getPlaybackStyleRecordRepository(): PlaybackStyleRecordRepository = _playbackStyleRecordRepository
+    fun getFanRepository(): FanRepository = _fanRepository
+    fun getRecognitionHistoryRepository(): RecognitionHistoryRepository = _recognitionHistoryRepository
+    fun getDurationRepository(): DurationRepository = _durationRepository
+    fun getLyricRepository(): LyricRepository = _lyricRepository
 }

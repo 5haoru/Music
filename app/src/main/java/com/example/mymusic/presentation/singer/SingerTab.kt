@@ -15,10 +15,7 @@ import androidx.compose.ui.unit.sp
 import com.example.mymusic.data.Artist
 import com.example.mymusic.data.MusicVideo
 import com.example.mymusic.data.SongDetail
-import com.example.mymusic.data.repository.ArtistFollowRecordRepository
-import com.example.mymusic.data.repository.ArtistRepository
-import com.example.mymusic.data.repository.MusicVideoRepository
-import com.example.mymusic.data.repository.SongRepository
+import com.example.mymusic.data.repository.RepositoryProvider
 import com.example.mymusic.presentation.album.AlbumTab
 import com.example.mymusic.presentation.albumlist.AlbumListContent
 import com.example.mymusic.presentation.singer.components.*
@@ -50,10 +47,7 @@ fun SingerTab(
 
     // Presenter
     val presenter = remember {
-        val artistRepository = ArtistRepository(context)
-        val songRepository = SongRepository(context)
-        val musicVideoRepository = MusicVideoRepository(context)
-        val artistFollowRecordRepository = ArtistFollowRecordRepository(context)
+        RepositoryProvider.initialize(context)
         SingerPresenter(
             object : SingerContract.View {
                 override fun showSingerInfo(artistData: Artist) {
@@ -101,10 +95,10 @@ fun SingerTab(
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
             },
-            artistRepository,
-            songRepository,
-            musicVideoRepository,
-            artistFollowRecordRepository
+            RepositoryProvider.getArtistRepository(),
+            RepositoryProvider.getSongRepository(),
+            RepositoryProvider.getMusicVideoRepository(),
+            RepositoryProvider.getArtistFollowRecordRepository()
         )
     }
 

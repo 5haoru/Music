@@ -16,9 +16,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.mymusic.data.Song
-import com.example.mymusic.data.repository.CollectionRepository
-import com.example.mymusic.data.repository.PlaylistRepository
-import com.example.mymusic.data.repository.SongRepository
+import com.example.mymusic.data.repository.RepositoryProvider
 import com.example.mymusic.presentation.collectsong.CollectSongTab
 import com.example.mymusic.presentation.play.components.*
 import com.example.mymusic.presentation.playcustomize.PlayCustomizeTab
@@ -55,9 +53,7 @@ fun PlayTab(
 
     // Presenter
     val presenter = remember {
-        val songRepository = SongRepository(context)
-        val playlistRepository = PlaylistRepository(context)
-        val collectionRepository = CollectionRepository(context)
+        RepositoryProvider.initialize(context)
         PlayPresenter(
             object : PlayContract.View {
                 override fun showSong(song: Song) {
@@ -102,9 +98,9 @@ fun PlayTab(
                     isLoading = false
                 }
             },
-            songRepository,
-            playlistRepository,
-            collectionRepository
+            RepositoryProvider.getSongRepository(),
+            RepositoryProvider.getPlaylistRepository(),
+            RepositoryProvider.getCollectionRepository()
         )
     }
 

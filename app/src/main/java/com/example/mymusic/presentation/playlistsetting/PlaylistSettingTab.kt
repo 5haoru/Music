@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.mymusic.data.Playlist
-import com.example.mymusic.data.repository.PlaylistRepository
+import com.example.mymusic.data.repository.RepositoryProvider
 import com.example.mymusic.presentation.playlistsetting.PlaylistSettingContract
 import com.example.mymusic.presentation.playlistsetting.PlaylistSettingPresenter
 import com.example.mymusic.presentation.playlistsetting.components.*
@@ -38,7 +38,7 @@ fun PlaylistSettingTab(
 
     // Presenter
     val presenter = remember {
-        val playlistRepository = PlaylistRepository(context)
+        RepositoryProvider.initialize(context)
         PlaylistSettingPresenter(
             object : PlaylistSettingContract.View {
                 override fun showPlaylistInfo(playlist: Playlist) {
@@ -75,7 +75,7 @@ fun PlaylistSettingTab(
                     android.widget.Toast.makeText(context, message, android.widget.Toast.LENGTH_SHORT).show()
                 }
             },
-            playlistRepository,
+            RepositoryProvider.getPlaylistRepository(),
             context
         )
     }

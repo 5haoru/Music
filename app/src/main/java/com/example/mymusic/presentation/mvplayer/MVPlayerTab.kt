@@ -21,8 +21,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.mymusic.data.MusicVideo
-import com.example.mymusic.data.repository.MusicVideoRepository
-import com.example.mymusic.data.repository.PlaylistRepository
+import com.example.mymusic.data.repository.RepositoryProvider
 import com.example.mymusic.presentation.mvplayer.MVPlayerContract
 import com.example.mymusic.presentation.mvplayer.MVPlayerPresenter
 import kotlinx.coroutines.delay
@@ -50,8 +49,7 @@ fun MVPlayerTab(
 
     // Presenter
     val presenter = remember {
-        val musicVideoRepository = MusicVideoRepository(context)
-        val playlistRepository = PlaylistRepository(context)
+        RepositoryProvider.initialize(context)
         MVPlayerPresenter(
             object : MVPlayerContract.View {
                 override fun showMV(mv: MusicVideo) {
@@ -84,8 +82,8 @@ fun MVPlayerTab(
                     isLoading = false
                 }
             },
-            musicVideoRepository,
-            playlistRepository
+            RepositoryProvider.getMusicVideoRepository(),
+            RepositoryProvider.getPlaylistRepository()
         )
     }
 

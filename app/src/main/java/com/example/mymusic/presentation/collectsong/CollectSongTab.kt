@@ -15,9 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.mymusic.data.Playlist
-import com.example.mymusic.data.repository.CollectionRepository
-import com.example.mymusic.data.repository.PlaylistRepository
-import com.example.mymusic.data.repository.SongRepository
+import com.example.mymusic.data.repository.RepositoryProvider
 import com.example.mymusic.presentation.collectsong.components.NewPlaylistButton
 import com.example.mymusic.presentation.collectsong.components.PlaylistItem
 
@@ -41,9 +39,7 @@ fun CollectSongTab(
 
     // Presenter
     val presenter = remember {
-        val playlistRepository = PlaylistRepository(context)
-        val songRepository = SongRepository(context)
-        val collectionRepository = CollectionRepository(context)
+        RepositoryProvider.initialize(context)
         CollectSongPresenter(
             object : CollectSongContract.View {
                 override fun showPlaylists(playlistList: List<Playlist>) {
@@ -78,9 +74,9 @@ fun CollectSongTab(
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
             },
-            playlistRepository,
-            songRepository,
-            collectionRepository
+            RepositoryProvider.getPlaylistRepository(),
+            RepositoryProvider.getSongRepository(),
+            RepositoryProvider.getCollectionRepository()
         )
     }
 

@@ -13,7 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mymusic.data.Album
-import com.example.mymusic.data.repository.AlbumRepository
+import com.example.mymusic.data.repository.RepositoryProvider
 import com.example.mymusic.presentation.albumlist.components.AlbumListItem
 
 /**
@@ -33,7 +33,7 @@ fun AlbumListContent(
 
     // Presenter
     val presenter = remember {
-        val albumRepository = AlbumRepository(context)
+        RepositoryProvider.initialize(context)
         AlbumListPresenter(
             object : AlbumListContract.View {
                 override fun showAlbums(albumList: List<Album>) {
@@ -65,7 +65,7 @@ fun AlbumListContent(
                     android.widget.Toast.makeText(context, message, android.widget.Toast.LENGTH_SHORT).show()
                 }
             },
-            albumRepository
+            RepositoryProvider.getAlbumRepository()
         )
     }
 

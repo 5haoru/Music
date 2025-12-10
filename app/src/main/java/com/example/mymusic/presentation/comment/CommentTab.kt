@@ -17,8 +17,7 @@ import androidx.compose.ui.unit.dp
 import android.widget.Toast
 import com.example.mymusic.data.Comment
 import com.example.mymusic.data.Song
-import com.example.mymusic.data.repository.CommentRepository
-import com.example.mymusic.data.repository.SongRepository
+import com.example.mymusic.data.repository.RepositoryProvider
 import com.example.mymusic.presentation.comment.components.CommentBottomBar
 import com.example.mymusic.presentation.comment.components.CommentItem
 import com.example.mymusic.presentation.comment.components.CommentSongInfo
@@ -49,8 +48,7 @@ fun CommentTab(
 
     // Presenter
     val presenter = remember {
-        val songRepository = SongRepository(context)
-        val commentRepository = CommentRepository(context)
+        RepositoryProvider.initialize(context)
         CommentPresenter(
             object : CommentContract.View {
                 override fun showSong(song: Song) {
@@ -111,8 +109,8 @@ fun CommentTab(
                     commentText = ""
                 }
             },
-            songRepository,
-            commentRepository
+            RepositoryProvider.getSongRepository(),
+            RepositoryProvider.getCommentRepository()
         )
     }
 

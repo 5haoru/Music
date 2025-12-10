@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.mymusic.data.model.FanRecord
-import com.example.mymusic.data.repository.FanRepository
+import com.example.mymusic.data.repository.RepositoryProvider
 import com.example.mymusic.presentation.fan.components.FanItemCard
 import com.example.mymusic.presentation.fan.components.FanTabTopBar
 
@@ -30,7 +30,7 @@ fun FanTab(
 
     // Presenter
     val presenter = remember {
-        val fanRepository = FanRepository(context)
+        RepositoryProvider.initialize(context)
         FanPresenter(
             object : FanContract.View {
                 override fun showFans(newFans: List<FanRecord>) {
@@ -62,7 +62,7 @@ fun FanTab(
                     onFanCountUpdated(count)
                 }
             },
-            fanRepository
+            RepositoryProvider.getFanRepository()
         )
     }
 

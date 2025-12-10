@@ -15,8 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.mymusic.data.Album
 import com.example.mymusic.data.Song
-import com.example.mymusic.data.repository.AlbumRepository
-import com.example.mymusic.data.repository.SongRepository
+import com.example.mymusic.data.repository.RepositoryProvider
 import com.example.mymusic.presentation.album.components.*
 
 /**
@@ -40,8 +39,7 @@ fun AlbumTab(
 
     // Presenter
     val presenter = remember {
-        val albumRepository = AlbumRepository(context)
-        val songRepository = SongRepository(context)
+        RepositoryProvider.initialize(context)
         AlbumPresenter(
             object : AlbumContract.View {
                 override fun showAlbumInfo(albumData: Album) {
@@ -81,8 +79,8 @@ fun AlbumTab(
                     isLoading = false
                 }
             },
-            albumRepository,
-            songRepository
+            RepositoryProvider.getAlbumRepository(),
+            RepositoryProvider.getSongRepository()
         )
     }
 

@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.mymusic.data.Song
-import com.example.mymusic.data.repository.SongRepository
+import com.example.mymusic.data.repository.RepositoryProvider
 import com.example.mymusic.presentation.dailyrecommend.components.DailyHeaderSection
 import com.example.mymusic.presentation.dailyrecommend.components.DailyRecommendTopBar
 import com.example.mymusic.presentation.dailyrecommend.components.PlayAllSection
@@ -40,7 +40,7 @@ fun DailyRecommendTab(
 
     // Presenter
     val presenter = remember {
-        val songRepository = SongRepository(context)
+        RepositoryProvider.initialize(context)
         DailyRecommendPresenter(
             object : DailyRecommendContract.View {
                 override fun showDailyRecommendedSongs(songs: List<Song>) {
@@ -72,7 +72,7 @@ fun DailyRecommendTab(
                     android.widget.Toast.makeText(context, message, android.widget.Toast.LENGTH_SHORT).show()
                 }
             },
-            songRepository
+            RepositoryProvider.getSongRepository()
         )
     }
 
