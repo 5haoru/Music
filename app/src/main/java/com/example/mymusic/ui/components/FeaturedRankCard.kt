@@ -16,7 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mymusic.presenter.RankListContract
+import com.example.mymusic.presentation.rank.RankListContract
 
 /**
  * 特色榜单推荐卡片

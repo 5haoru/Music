@@ -39,7 +39,7 @@
     "playlistId": "playlist_005",
     "playlistName": "五月天经典",
     "description": "五月天代表作品集",
-    "coverUrl": "cover/10.png",
+    "coverUrl": "cover/11.png",
     "songIds": ["song_005", "song_006", "song_010"],
     "createTime": 1697500800000,
     "songCount": 3
@@ -48,7 +48,7 @@
     "playlistId": "playlist_006",
     "playlistName": "怀旧金曲",
     "description": "那些年我们一起听过的歌",
-    "coverUrl": "cover/1.png",
+    "coverUrl": "cover/12.png",
     "songIds": ["song_014", "song_015", "song_010", "song_003", "song_001"],
     "createTime": 1697500800000,
     "songCount": 5
@@ -57,7 +57,7 @@
     "playlistId": "playlist_007",
     "playlistName": "薛之谦热歌",
     "description": "薛之谦最火歌曲合集",
-    "coverUrl": "cover/2.png",
+    "coverUrl": "cover/13.png",
     "songIds": ["song_004", "song_008"],
     "createTime": 1697500800000,
     "songCount": 2
@@ -73,28 +73,55 @@
   },
   {
     "playlistId": "playlist_009",
-    "playlistName": "《空之境界》精选音乐集",
+    "playlistName": "国风榜",
     "description": "梦幻空灵的音乐世界",
-    "coverUrl": "cover/7.png",
+    "coverUrl": "cover/14.png",
     "songIds": ["song_007", "song_003", "song_009", "song_015"],
     "createTime": 1697500800000,
     "songCount": 4
   },
   {
     "playlistId": "playlist_010",
-    "playlistName": "eva系列音乐集",
+    "playlistName": "ACG榜",
     "description": "经典动漫音乐精选",
-    "coverUrl": "cover/5.png",
+    "coverUrl": "cover/15.png",
     "songIds": ["song_005", "song_014", "song_013", "song_012"],
     "createTime": 1697500800000,
     "songCount": 4
   },
   {
     "playlistId": "playlist_011",
-    "playlistName": "看小说推荐音乐",
+    "playlistName": "日语榜",
     "description": "安静舒适的阅读伴侣",
-    "coverUrl": "cover/10.png",
+    "coverUrl": "cover/1.png",
     "songIds": ["song_010", "song_006", "song_001", "song_002", "song_004"],
+    "createTime": 1697500800000,
+    "songCount": 5
+  },
+  {
+    "playlistId": "playlist_012",
+    "playlistName": "飙升榜",
+    "description": "每周飙升最快的歌曲",
+    "coverUrl": "cover/2.png",
+    "songIds": ["song_016", "song_017", "song_018", "song_019", "song_020"],
+    "createTime": 1697500800000,
+    "songCount": 5
+  },
+  {
+    "playlistId": "playlist_013",
+    "playlistName": "硬地原创音乐榜",
+    "description": "最新最酷的独立音乐",
+    "coverUrl": "cover/4.png",
+    "songIds": ["song_021", "song_022", "song_023", "song_024", "song_025"],
+    "createTime": 1697500800000,
+    "songCount": 5
+  },
+  {
+    "playlistId": "playlist_014",
+    "playlistName": "潮流风向榜",
+    "description": "引领潮流的风向标",
+    "coverUrl": "cover/5.png",
+    "songIds": ["song_026", "song_027", "song_028", "song_029", "song_030"],
     "createTime": 1697500800000,
     "songCount": 5
   }

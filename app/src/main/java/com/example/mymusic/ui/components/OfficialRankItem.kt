@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.mymusic.presenter.RankListContract
+import com.example.mymusic.presentation.rank.RankListContract
 
 /**
  * 官方榜单列表项
@@ -119,7 +119,7 @@ fun OfficialRankItem(
                 Column(
                     verticalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
-                    rankData.topSongs.forEach { topSong ->
+                    for (topSong in rankData.topSongs) {
                         TopSongRow(
                             topSong = topSong,
                             onSongClick = { onSongClick(topSong.song.songId) }

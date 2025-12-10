@@ -1,6 +1,7 @@
 package com.example.mymusic.presenter
 
 import android.content.Context
+import com.example.mymusic.contract.MainContract
 
 /**
  * 主页面Presenter
@@ -21,19 +22,5 @@ class MainPresenter(
 
     override fun onDestroy() {
         // Clean up resources if needed
-    }
-}
-
-/**
- * Main页面契约接口
- */
-interface MainContract {
-    interface View : BaseView {
-        fun switchTab(index: Int)
-    }
-
-    interface Presenter : BasePresenter {
-        fun onTabSelected(index: Int)
-        fun getCurrentTab(): Int
     }
 }

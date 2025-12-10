@@ -9,10 +9,11 @@ import com.example.mymusic.data.ListeningDuration
 import com.example.mymusic.data.Playlist
 import com.example.mymusic.data.Song
 import com.example.mymusic.data.User
-import com.example.mymusic.model.ShareRecord
-import com.example.mymusic.model.CollectionRecord
-import com.example.mymusic.model.DownloadRecord
-import com.example.mymusic.model.ArtistFollowRecord
+import com.example.mymusic.data.model.ShareRecord
+import com.example.mymusic.data.model.CollectionRecord
+import com.example.mymusic.data.model.DownloadRecord
+import com.example.mymusic.data.model.ArtistFollowRecord
+import com.example.mymusic.data.model.FanRecord
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
@@ -30,6 +31,14 @@ object DataLoader {
      */
     private fun loadJsonFromAssets(context: Context, fileName: String): String {
         return context.assets.open("data/$fileName").bufferedReader().use { it.readText() }
+    }
+
+    /**
+     * 从内部存储加载JSON文件 (autotest 目录)
+     */
+    private fun loadJsonFromInternalStorage(context: Context, fileName: String): String {
+        val file = File(context.filesDir, "autotest/$fileName")
+        return file.readText()
     }
 
     /**
@@ -443,6 +452,38 @@ object DataLoader {
     }
 
     /**
+     * 加载粉丝列表
+     */
+    fun loadFanItems(context: Context): List<FanRecord> {
+        val json = loadJsonFromInternalStorage(context, "fan_items.json")
+        val type = object : TypeToken<List<FanRecord>>() {}.type
+        return gson.fromJson(json, type)
+    }
+
+    /**
+     * 初始化粉丝数据文件，如果内部存储中不存在，则从assets复制
+     */
+    fun initFanItems(context: Context) {
+        val autoTestDir = File(context.filesDir, "autotest")
+        if (!autoTestDir.exists()) {
+            autoTestDir.mkdirs()
+        }
+
+        val fanFile = File(autoTestDir, "fan_items.json")
+        if (!fanFile.exists()) {
+            try {
+                context.assets.open("data/fan_items.json").use { inputStream ->
+                    FileOutputStream(fanFile).use { outputStream ->
+                        inputStream.copyTo(outputStream)
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    /**
      * 加载听歌时长数据
      */
     fun loadDurationData(context: Context): ListeningDuration {
@@ -476,17 +517,8 @@ object DataLoader {
      */
     fun loadPlaylistsWithCache(context: Context): List<Playlist> {
         try {
-            val dataDir = File(context.filesDir, "data")
-            val playlistsFile = File(dataDir, "playlists.json")
-
-            val json = if (playlistsFile.exists()) {
-                // 从内部存储加载
-                playlistsFile.readText()
-            } else {
-                // 从assets加载
-                loadJsonFromAssets(context, "playlists.json")
-            }
-
+            // 始终从assets加载以确保数据最新
+            val json = loadJsonFromAssets(context, "playlists.json")
             val type = object : TypeToken<List<Playlist>>() {}.type
             return gson.fromJson(json, type)
         } catch (e: Exception) {

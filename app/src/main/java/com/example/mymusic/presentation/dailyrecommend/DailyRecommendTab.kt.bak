@@ -1,0 +1,150 @@
+package com.example.mymusic.presentation.dailyrecommend
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import com.example.mymusic.data.Song
+import com.example.mymusic.data.repository.SongRepository
+import com.example.mymusic.presentation.dailyrecommend.components.DailyHeaderSection
+import com.example.mymusic.presentation.dailyrecommend.components.DailyRecommendTopBar
+import com.example.mymusic.presentation.dailyrecommend.components.PlayAllSection
+import com.example.mymusic.ui.components.DailySongItem
+
+/**
+ * 每日推荐页面
+ */
+@Composable
+fun DailyRecommendTab(
+    onNavigateToPlay: (String) -> Unit,
+    onNavigateToListenRecognize: () -> Unit,
+    onNavigateToSearchResult: (String) -> Unit,
+    onBackClick: () -> Unit = {}
+) {
+    val context = LocalContext.current
+
+    // 状�?
+    var dailySongs by remember { mutableStateOf<List<Song>>(emptyList()) }
+    var isLoading by remember { mutableStateOf(true) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    var selectedMode by remember { mutableStateOf(0) } // 0: 默认推荐, 1: 风格推荐
+
+    // Presenter
+    val presenter = remember {
+        val songRepository = SongRepository(context)
+        DailyRecommendPresenter(
+            object : DailyRecommendContract.View {
+                override fun showDailyRecommendedSongs(songs: List<Song>) {
+                    dailySongs = songs
+                }
+
+                override fun navigateToPlay(songId: String) {
+                    onNavigateToPlay(songId)
+                }
+
+                override fun playAllSongs(songs: List<Song>) {
+                    // TODO: 实现播放全部功能
+                }
+
+                override fun showLoading() {
+                    isLoading = true
+                }
+
+                override fun hideLoading() {
+                    isLoading = false
+                }
+
+                override fun showError(message: String) {
+                    errorMessage = message
+                    isLoading = false
+                }
+            },
+                override fun showSuccess(message: String) {
+                    android.widget.Toast.makeText(context, message, android.widget.Toast.LENGTH_SHORT).show()
+                }
+
+            songRepository
+        )
+    }
+
+    // 加载数据
+    LaunchedEffect(Unit) {
+        presenter.loadDailyRecommendData()
+    }
+
+    Scaffold(
+        topBar = {
+            DailyRecommendTopBar(
+                selectedMode = selectedMode,
+                onModeChange = { selectedMode = it },
+                onBackClick = onBackClick
+            )
+        }
+    ) { paddingValues ->
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        } else if (errorMessage != null) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = errorMessage ?: "")
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
+                // 日期和功能区
+                item {
+                    DailyHeaderSection(
+                        onHistoryClick = { presenter.onHistoryClick() },
+                        onFortuneClick = { presenter.onTodayFortuneClick() }
+                    )
+                }
+
+                // 播放全部按钮区域
+                item {
+                    PlayAllSection(
+                        songCount = dailySongs.size,
+                        onPlayAllClick = { presenter.onPlayAllClick() }
+                    )
+                }
+
+                // 歌曲列表
+                itemsIndexed(dailySongs) { index, song ->
+                    DailySongItem(
+                        index = index,
+                        song = song,
+                        onSongClick = { presenter.onSongClick(song.songId, index + 1) },
+                        onPlayClick = { presenter.onSongClick(song.songId, index + 1) }
+                    )
+                }
+
+                // 底部留白
+                item {
+                    Spacer(modifier = Modifier.height(80.dp))
+                }
+            }
+        }
+    }
+}

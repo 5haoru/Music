@@ -1,0 +1,42 @@
+[
+  {
+    "id": "fan_001",
+    "name": "GeminiFan1",
+    "avatarUrl": "avatar/1.png",
+    "subtitle": "热爱音乐，热爱生活",
+    "vipType": "svip",
+    "fanTime": 1700000000000
+  },
+  {
+    "id": "fan_002",
+    "name": "MusicLover2",
+    "avatarUrl": "avatar/2.png",
+    "subtitle": "点赞狂魔",
+    "vipType": "vip",
+    "fanTime": 1699900000000
+  },
+  {
+    "id": "fan_003",
+    "name": "CoolUser3",
+    "avatarUrl": "avatar/3.png",
+    "subtitle": "个性签名在此",
+    "vipType": null,
+    "fanTime": 1699800000000
+  },
+  {
+    "id": "fan_004",
+    "name": "HappyListener",
+    "avatarUrl": "avatar/4.png",
+    "subtitle": "听歌使我快乐",
+    "vipType": "vip",
+    "fanTime": 1699700000000
+  },
+  {
+    "id": "fan_005",
+    "name": "SoundWave",
+    "avatarUrl": "avatar/5.png",
+    "subtitle": "沉迷音乐无法自拔",
+    "vipType": "svip",
+    "fanTime": 1699600000000
+  }
+]

@@ -1,6 +1,7 @@
 package com.example.mymusic
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -8,17 +9,37 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.mymusic.data.Playlist
-import com.example.mymusic.presenter.MainContract
+import com.example.mymusic.contract.MainContract
 import com.example.mymusic.presenter.MainPresenter
 import com.example.mymusic.ui.theme.MyMusicTheme
 import com.example.mymusic.utils.AutoTestHelper
-import com.example.mymusic.view.*
+import com.example.mymusic.utils.DataLoader
+
+// 导入所有自定义的Tab Composable
+import com.example.mymusic.presentation.mvplayer.MVPlayerTab
+import com.example.mymusic.presentation.singer.SingerTab
+import com.example.mymusic.presentation.listenrecognize.ListenRecognizeTab
+import com.example.mymusic.presentation.modeselection.ModeSelectionTab
+import com.example.mymusic.presentation.searchresult.SearchResultTab
+import com.example.mymusic.presentation.comment.CommentTab
+import com.example.mymusic.presentation.lyric.LyricTab
+import com.example.mymusic.presentation.subscribe.SubscribeTab
+import com.example.mymusic.presentation.duration.DurationTab
+import com.example.mymusic.presentation.fan.FanTab
+import com.example.mymusic.presentation.songsort.SongSortTab
+import com.example.mymusic.presentation.songdel.SongDelTab
+import com.example.mymusic.presentation.playlistsetting.PlaylistSettingTab
+import com.example.mymusic.presentation.playlist.PlaylistTab
+import com.example.mymusic.presentation.stroll.StrollTab
+import com.example.mymusic.presentation.play.PlayTab
+import com.example.mymusic.presentation.recommend.RecommendTab
+import com.example.mymusic.presentation.dailyrecommend.DailyRecommendTab
+import com.example.mymusic.presentation.me.MeTab
 
 class MainActivity : ComponentActivity(), MainContract.View {
 
@@ -30,6 +51,9 @@ class MainActivity : ComponentActivity(), MainContract.View {
 
         // 初始化自动化测试辅助工具
         AutoTestHelper.init(this)
+
+        // 初始化粉丝数据文件
+        DataLoader.initFanItems(this)
 
         presenter = MainPresenter(this, this)
 
@@ -51,6 +75,7 @@ class MainActivity : ComponentActivity(), MainContract.View {
         var showLyric by remember { mutableStateOf(false) }
         var showSubscribe by remember { mutableStateOf(false) }
         var showDuration by remember { mutableStateOf(false) }
+        var showFanTab by remember { mutableStateOf(false) }
         var showPlaylist by remember { mutableStateOf(false) }
         var showPlaylistSetting by remember { mutableStateOf(false) }
         var showSongSort by remember { mutableStateOf(false) }
@@ -175,6 +200,12 @@ class MainActivity : ComponentActivity(), MainContract.View {
         // 听歌时长页面不显示底部导航栏
         if (showDuration) {
             DurationTab(onBackClick = { showDuration = false })
+            return
+        }
+
+        // 粉丝页面不显示底部导航栏
+        if (showFanTab) {
+            FanTab(onBackClick = { showFanTab = false })
             return
         }
 
@@ -332,6 +363,7 @@ class MainActivity : ComponentActivity(), MainContract.View {
                                     onNavigateToPlayTab = { currentTab = 2 },
                                     onNavigateToSubscribe = { showSubscribe = true },
                                     onNavigateToDuration = { showDuration = true },
+                                    onNavigateToFans = { showFanTab = true },
                                     onNavigateToPlaylist = { playlist ->
                                         selectedPlaylist = playlist
                                         showPlaylist = true
@@ -359,6 +391,10 @@ class MainActivity : ComponentActivity(), MainContract.View {
 
     override fun showError(message: String) {
         // 显示错误信息
+    }
+
+    override fun showSuccess(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroy() {

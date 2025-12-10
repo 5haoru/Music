@@ -1,0 +1,110 @@
+package com.example.mymusic.presentation.fan
+
+import android.widget.Toast
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import com.example.mymusic.data.model.FanRecord
+import com.example.mymusic.data.repository.FanRepository
+import com.example.mymusic.presentation.fan.components.FanItemCard
+import com.example.mymusic.presentation.fan.components.FanTabTopBar
+
+@Composable
+fun FanTab(
+    onBackClick: () -> Unit = {},
+    onFanCountUpdated: (Int) -> Unit = {} // Callback to update fan count on My Page
+) {
+    val context = LocalContext.current
+
+    // State
+    var fans by remember { mutableStateOf<List<FanRecord>>(emptyList()) }
+    var isLoading by remember { mutableStateOf(true) }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    // Presenter
+    val presenter = remember {
+        val fanRepository = FanRepository(context)
+        FanPresenter(
+            object : FanContract.View {
+                override fun showFans(newFans: List<FanRecord>) {
+                    fans = newFans
+                }
+
+                override fun showLoading() {
+                    isLoading = true
+                }
+
+                override fun hideLoading() {
+                    isLoading = false
+                }
+
+                override fun showError(message: String) {
+                    errorMessage = message
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                }
+
+                override fun navigateBack() {
+                    onBackClick()
+                }
+
+                override fun updateFanCountOnMyPage(count: Int) {
+                    onFanCountUpdated(count)
+                }
+            },
+            fanRepository
+        )
+    }
+
+    // Load data when the Composable is first launched
+    LaunchedEffect(Unit) {
+                override fun showSuccess(message: String) {
+                    android.widget.Toast.makeText(context, message, android.widget.Toast.LENGTH_SHORT).show()
+                }
+
+        presenter.loadFans()
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        // Top Navigation Bar
+        FanTabTopBar(onBackClick = onBackClick)
+
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            if (isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            } else if (errorMessage != null) {
+                Text(
+                    text = errorMessage ?: "",
+                    modifier = Modifier.align(Alignment.Center),
+                    color = MaterialTheme.colorScheme.error
+                )
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(vertical = 8.dp)
+                ) {
+                    items(fans) { fan ->
+                        FanItemCard(
+                            fan = fan,
+                            onFollowClick = { presenter.onFollowButtonClicked(fan) }
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
