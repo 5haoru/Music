@@ -68,27 +68,27 @@ class SongProfilePresenter(
 
     override fun onProductionClick() {
         // TODO: 展开制作信息详情
-        // 目前只是占位，后续可以实现弹窗或跳转详情�?
+        // 目前只是占位，后续可以实现弹窗或跳转详情《
     }
 
     override fun onIntroductionClick() {
-        // TODO: 展开完整简�?
-        // 目前只是占位，后续可以实现弹窗或跳转详情�?
+        // TODO: 展开完整简《
+        // 目前只是占位，后续可以实现弹窗或跳转详情《
     }
 
     override fun onFilmTvClick() {
         // TODO: 显示影综列表
-        // 目前只是占位，后续可以实现弹窗或跳转列表�?
+        // 目前只是占位，后续可以实现弹窗或跳转列表《
     }
 
     override fun onAwardsClick() {
         // TODO: 显示奖项列表
-        // 目前只是占位，后续可以实现弹窗或跳转列表�?
+        // 目前只是占位，后续可以实现弹窗或跳转列表《
     }
 
     override fun onScoresClick() {
         // TODO: 显示乐谱列表
-        // 目前只是占位，后续可以实现弹窗或跳转列表�?
+        // 目前只是占位，后续可以实现弹窗或跳转列表《
     }
 
     override fun onDestroy() {

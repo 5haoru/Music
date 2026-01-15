@@ -12,6 +12,7 @@ interface PlaylistContract {
     interface View : BaseView {
         fun showSongs(songs: List<Song>)
         fun navigateToPlay(song: Song)
+        fun navigateToUnderDevelopment(feature: String)
         override fun showSuccess(message: String)
     }
 

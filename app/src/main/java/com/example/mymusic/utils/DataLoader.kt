@@ -30,7 +30,7 @@ object DataLoader {
      * 从assets加载JSON文件
      */
     private fun loadJsonFromAssets(context: Context, fileName: String): String {
-        return context.assets.open("data/$fileName").bufferedReader().use { it.readText() }
+        return context.assets.open("data/$fileName").bufferedReader(Charsets.UTF_8).use { it.readText() }
     }
 
     /**
@@ -38,7 +38,7 @@ object DataLoader {
      */
     private fun loadJsonFromInternalStorage(context: Context, fileName: String): String {
         val file = File(context.filesDir, "autotest/$fileName")
-        return file.readText()
+        return file.readText(Charsets.UTF_8)
     }
 
     /**
@@ -136,7 +136,7 @@ object DataLoader {
             file.parentFile?.mkdirs()
 
             FileOutputStream(file).use { output ->
-                output.write(json.toByteArray())
+                output.write(json.toByteArray(Charsets.UTF_8))
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -160,7 +160,7 @@ object DataLoader {
             file.parentFile?.mkdirs()
 
             FileOutputStream(file).use { output ->
-                output.write(json.toByteArray())
+                output.write(json.toByteArray(Charsets.UTF_8))
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -181,7 +181,7 @@ object DataLoader {
             }
 
             // 从内部存储读取
-            val json = file.readText()
+            val json = file.readText(Charsets.UTF_8)
             val type = object : TypeToken<List<CommentRecord>>() {}.type
             gson.fromJson(json, type) ?: emptyList()
         } catch (e: Exception) {
@@ -237,7 +237,7 @@ object DataLoader {
             file.parentFile?.mkdirs()
 
             FileOutputStream(file).use { output ->
-                output.write(json.toByteArray())
+                output.write(json.toByteArray(Charsets.UTF_8))
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -262,7 +262,7 @@ object DataLoader {
             }
 
             // 从内部存储读取
-            val json = file.readText()
+            val json = file.readText(Charsets.UTF_8)
             val type = object : TypeToken<List<ShareRecord>>() {}.type
             gson.fromJson(json, type) ?: emptyList()
         } catch (e: Exception) {
@@ -297,7 +297,7 @@ object DataLoader {
             val file = File(context.filesDir, "data/collection_records.json")
             file.parentFile?.mkdirs()
             FileOutputStream(file).use { output ->
-                output.write(json.toByteArray())
+                output.write(json.toByteArray(Charsets.UTF_8))
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -319,7 +319,7 @@ object DataLoader {
                     return emptyList()
                 }
             }
-            val json = file.readText()
+            val json = file.readText(Charsets.UTF_8)
             val type = object : TypeToken<List<CollectionRecord>>() {}.type
             gson.fromJson(json, type) ?: emptyList()
         } catch (e: Exception) {
@@ -354,7 +354,7 @@ object DataLoader {
             val file = File(context.filesDir, "data/download_records.json")
             file.parentFile?.mkdirs()
             FileOutputStream(file).use { output ->
-                output.write(json.toByteArray())
+                output.write(json.toByteArray(Charsets.UTF_8))
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -376,7 +376,7 @@ object DataLoader {
                     return emptyList()
                 }
             }
-            val json = file.readText()
+            val json = file.readText(Charsets.UTF_8)
             val type = object : TypeToken<List<DownloadRecord>>() {}.type
             gson.fromJson(json, type) ?: emptyList()
         } catch (e: Exception) {
@@ -411,7 +411,7 @@ object DataLoader {
             val file = File(context.filesDir, "data/artist_follow_records.json")
             file.parentFile?.mkdirs()
             FileOutputStream(file).use { output ->
-                output.write(json.toByteArray())
+                output.write(json.toByteArray(Charsets.UTF_8))
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -433,7 +433,7 @@ object DataLoader {
                     return emptyList()
                 }
             }
-            val json = file.readText()
+            val json = file.readText(Charsets.UTF_8)
             val type = object : TypeToken<List<ArtistFollowRecord>>() {}.type
             gson.fromJson(json, type) ?: emptyList()
         } catch (e: Exception) {
@@ -505,7 +505,7 @@ object DataLoader {
             val json = gson.toJson(playlists)
 
             FileOutputStream(playlistsFile).use { fos ->
-                fos.write(json.toByteArray())
+                fos.write(json.toByteArray(Charsets.UTF_8))
             }
         } catch (e: Exception) {
             e.printStackTrace()

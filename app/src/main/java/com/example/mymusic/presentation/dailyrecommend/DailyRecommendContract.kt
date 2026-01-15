@@ -5,7 +5,7 @@ import com.example.mymusic.base.BaseView
 import com.example.mymusic.data.Song
 
 /**
- * 每日推荐页面�?MVP 契约
+ * 每日推荐页面《MVP 契约
  */
 interface DailyRecommendContract {
 
@@ -16,7 +16,7 @@ interface DailyRecommendContract {
         fun showDailyRecommendedSongs(songs: List<Song>)
 
         /**
-         * 导航到播放页面播放指定歌�?
+         * 导航到播放页面播放指定歌曲
          */
         fun navigateToPlay(songId: String)
 

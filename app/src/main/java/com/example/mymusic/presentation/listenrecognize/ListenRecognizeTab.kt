@@ -24,7 +24,7 @@ fun ListenRecognizeTab(
 ) {
     val context = LocalContext.current
 
-    // 状�?
+    // 状《
     var isRecording by remember { mutableStateOf(false) }
     var recordingDuration by remember { mutableIntStateOf(0) }
     var isFloatingWindowEnabled by remember { mutableStateOf(false) }
@@ -99,7 +99,7 @@ fun ListenRecognizeTab(
         presenter.loadData()
     }
 
-    // 录音计时�?
+    // 录音计时《
     LaunchedEffect(isRecording) {
         if (isRecording) {
             while (isRecording) {
@@ -141,7 +141,7 @@ fun ListenRecognizeTab(
                     .fillMaxSize()
                     .padding(paddingValues)
             ) {
-                // 功能提示�?
+                // 功能提示《
                 FloatingWindowTipBar(
                     isEnabled = isFloatingWindowEnabled,
                     onToggle = { presenter.onFloatingWindowToggle(it) }

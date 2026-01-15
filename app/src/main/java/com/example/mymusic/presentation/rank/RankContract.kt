@@ -10,7 +10,7 @@ import com.example.mymusic.data.Song
 interface RankContract {
 
     /**
-     * 榜单详情数据�?
+     * 榜单详情数据《
      */
     data class RankDetail(
         val rankId: String,
@@ -80,6 +80,11 @@ interface RankContract {
          * 导航到播放页面
          */
         fun navigateToPlay(songId: String)
+
+        /**
+         * 导航到正在开发中页面
+         */
+        fun navigateToUnderDevelopment(feature: String)
     }
 
     interface Presenter : BasePresenter {

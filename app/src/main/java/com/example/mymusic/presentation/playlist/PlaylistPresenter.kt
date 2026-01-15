@@ -53,13 +53,11 @@ class PlaylistPresenter(
     }
 
     override fun onShareClick() {
-        // TODO: 分享功能
-        view.showError("分享功能待开发")
+        view.navigateToUnderDevelopment("分享")
     }
 
     override fun onCommentClick() {
-        // TODO: 评论功能
-        view.showError("评论功能待开发")
+        view.navigateToUnderDevelopment("评论")
     }
 
     override fun onCollectClick() {

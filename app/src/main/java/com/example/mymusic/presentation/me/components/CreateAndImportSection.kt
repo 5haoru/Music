@@ -20,7 +20,10 @@ import androidx.compose.ui.unit.dp
  * 新建和导入歌单区域
  */
 @Composable
-fun CreateAndImportSection(onCreatePlaylistClick: () -> Unit) {
+fun CreateAndImportSection(
+    onCreatePlaylistClick: () -> Unit,
+    onImportPlaylistClick: () -> Unit = {}
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -58,7 +61,7 @@ fun CreateAndImportSection(onCreatePlaylistClick: () -> Unit) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { /* TODO: 导入外部歌单 */ }
+                .clickable(onClick = onImportPlaylistClick)
                 .padding(vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {

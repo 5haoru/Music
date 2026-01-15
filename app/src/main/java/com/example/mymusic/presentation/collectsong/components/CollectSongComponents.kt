@@ -136,7 +136,7 @@ fun PlaylistItem(
                 )
             }
 
-            // 已添加标�?
+            // 已添加标《
             if (isAdded) {
                 Surface(
                     shape = RoundedCornerShape(12.dp),

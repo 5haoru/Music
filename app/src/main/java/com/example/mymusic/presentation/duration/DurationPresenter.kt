@@ -37,14 +37,14 @@ class DurationPresenter(
     override fun onTabSelected(tab: Int) {
         // 记录用户查看的统计类型到AutoTest
         when (tab) {
-            0 -> AutoTestHelper.updateViewedStats("weekly")   // 周统�?
-            1 -> AutoTestHelper.updateViewedStats("monthly")  // 月统�?
-            // tab=2 是年度统计，测试任务不需要记�?
+            0 -> AutoTestHelper.updateViewedStats("weekly")   // 周统《
+            1 -> AutoTestHelper.updateViewedStats("monthly")  // 月统《
+            // tab=2 是年度统计，测试任务不需要记录
         }
     }
 
     override fun onBackClick() {
-        // 返回由View层处�?
+        // 返回由View层处《
     }
 
     override fun onDestroy() {

@@ -1,6 +1,7 @@
 package com.example.mymusic.presentation.rank
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,12 +19,12 @@ import com.example.mymusic.presentation.rank.components.*
 /**
  * 榜单详情页面
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RankTab(
     rankId: String,
     onBackClick: () -> Unit = {},
-    onNavigateToPlay: (String) -> Unit = {}
+    onNavigateToPlay: (String) -> Unit = {},
+    onNavigateToUnderDevelopment: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
 
@@ -71,6 +72,10 @@ fun RankTab(
                     onNavigateToPlay(songId)
                 }
 
+                override fun navigateToUnderDevelopment(feature: String) {
+                    onNavigateToUnderDevelopment(feature)
+                }
+
                 override fun showLoading() {
                     isLoading = true
                 }
@@ -94,36 +99,33 @@ fun RankTab(
         presenter.loadRankDetail(rankId)
     }
 
-    Scaffold(
-        topBar = {
-            RankTopBar(onBackClick = onBackClick)
-        }
-    ) { paddingValues ->
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
         if (isLoading) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+            )
         } else if (errorMessage != null) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(text = errorMessage ?: "")
-            }
+            Text(
+                text = errorMessage ?: "",
+                modifier = Modifier.align(Alignment.Center)
+            )
         } else {
-            rankDetail?.let { detail ->
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues)
-                ) {
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                // 顶部栏
+                RankTopBar(onBackClick = onBackClick)
+
+                // 内容区域
+                rankDetail?.let { detail ->
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(bottom = 16.dp)
+                    ) {
                     // 榜单头部信息
                     item {
                         RankHeader(
@@ -180,6 +182,9 @@ fun RankTab(
                     }
                 }
             }
+            }
         }
     }
 }
+
+

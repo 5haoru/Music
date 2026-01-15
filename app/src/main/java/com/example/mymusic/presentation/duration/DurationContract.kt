@@ -14,7 +14,7 @@ interface DurationContract {
 
     interface Presenter : BasePresenter {
         fun loadData()
-        fun onTabSelected(tab: Int) // 0:�? 1:�? 2:�?
+        fun onTabSelected(tab: Int) // 0:《 1:《 2:《
         fun onBackClick()
     }
 }

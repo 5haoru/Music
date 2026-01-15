@@ -11,7 +11,7 @@ import com.example.mymusic.data.repository.SongRepository
 import kotlin.random.Random
 
 /**
- * 歌手详情页面�?Presenter
+ * 歌手详情页面《Presenter
  */
 class SingerPresenter(
     private val view: SingerContract.View,
@@ -76,10 +76,10 @@ class SingerPresenter(
     }
 
     /**
-     * 生成丰富的歌曲详情信�?
+     * 生成丰富的歌曲详情信息
      */
     private fun generateSongDetail(song: Song, index: Int): SongDetail {
-        // 根据索引生成不同的展示信�?
+        // 根据索引生成不同的展示信息
         return when (index) {
             0 -> SongDetail.fromSong(
                 song,
@@ -92,28 +92,28 @@ class SingerPresenter(
             )
             1 -> SongDetail.fromSong(
                 song,
-                version = "(动画电影�?{song.album}�?..)",
+                version = "(动画电影《${song.album}》...)",
                 qualityTags = listOf("超清母带"),
                 permissionTags = listOf("VIP", "原唱"),
                 commentCount = null,
-                hotComment = "最近爱�?· 万人收藏"
+                hotComment = "最近爱听 · 万人收藏"
             )
             2 -> SongDetail.fromSong(
                 song,
-                version = "(电视剧�?{song.album}》主...)",
+                version = "(电视剧《${song.album}》主...)",
                 qualityTags = listOf("超清母带"),
                 permissionTags = listOf("VIP", "原唱"),
                 commentCount = null,
                 hotComment = "曾经听过 · 悲伤时都在听"
             )
             else -> {
-                // 随机生成其他歌曲的展示信�?
+                // 随机生成其他歌曲的展示信息
                 val hasVIP = index % 2 == 0
                 val hasQuality = index % 3 == 0
                 val commentTexts = listOf(
                     "热评：这首歌真的太好听了...",
                     "曾经听过",
-                    "最近爱�?· 万人收藏",
+                    "最近爱听 · 万人收藏",
                     "悲伤时都在听 · 十万评论",
                     null
                 )

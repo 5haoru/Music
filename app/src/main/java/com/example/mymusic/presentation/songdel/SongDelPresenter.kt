@@ -149,7 +149,7 @@ class SongDelPresenter(
                 mutableListOf()
             }
 
-            // 添加新记�?
+            // 添加新记录
             val newRecord = SongDeletionRecord(
                 recordId = UUID.randomUUID().toString(),
                 playlistId = currentPlaylistId,
@@ -158,7 +158,7 @@ class SongDelPresenter(
             )
             existingRecords.add(newRecord)
 
-            // 保存到文�?
+            // 保存到文《
             val json = gson.toJson(existingRecords)
             file.writeText(json)
         } catch (e: Exception) {

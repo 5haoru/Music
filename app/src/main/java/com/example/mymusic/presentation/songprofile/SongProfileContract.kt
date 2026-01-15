@@ -15,7 +15,7 @@ interface SongProfileContract {
         fun showSongProfile(profile: SongProfile)
 
         /**
-         * 导航返回上一�?
+         * 导航返回上一《
          */
         fun navigateBack()
     }
@@ -37,7 +37,7 @@ interface SongProfileContract {
         fun onProductionClick()
 
         /**
-         * 点击简�?
+         * 点击简《
          */
         fun onIntroductionClick()
 

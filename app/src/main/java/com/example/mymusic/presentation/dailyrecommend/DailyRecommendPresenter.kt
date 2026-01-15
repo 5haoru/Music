@@ -5,7 +5,7 @@ import com.example.mymusic.data.repository.SongRepository
 import com.example.mymusic.utils.AutoTestHelper
 
 /**
- * 每日推荐页面�?Presenter
+ * 每日推荐页面《Presenter
  */
 class DailyRecommendPresenter(
     private val view: DailyRecommendContract.View,

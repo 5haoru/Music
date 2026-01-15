@@ -16,7 +16,7 @@ class SharePresenter(
     private var currentSong: Song? = null
 
     /**
-     * 直接设置当前歌曲（用于从外部传入Song对象�?
+     * 直接设置当前歌曲（用于从外部传入Song对象《
      */
     fun setSong(song: Song) {
         currentSong = song
@@ -43,35 +43,7 @@ class SharePresenter(
     }
 
     override fun onShareToPlatform(platform: String) {
-        currentSong?.let { song ->
-            try {
-                // 生成分享记录ID
-                val shareId = DataLoader.generateShareId(context)
-
-                // 创建分享记录
-                val shareRecord = ShareRecord(
-                    shareId = shareId,
-                    songId = song.songId,
-                    songName = song.songName,
-                    shareTime = System.currentTimeMillis(),
-                    platform = platform,
-                    isSuccess = true
-                )
-
-                // 保存分享记录
-                DataLoader.saveShareRecord(context, shareRecord)
-
-                // 显示成功提示
-                view.showShareSuccess(platform)
-
-                // 延迟关闭对话�?
-                view.closeShareDialog()
-            } catch (e: Exception) {
-                view.showShareFailure("分享失败: ${e.message}")
-            }
-        } ?: run {
-            view.showShareFailure("歌曲信息不存在")
-        }
+        view.navigateToUnderDevelopment(platform)
     }
 
     override fun onCloseClick() {

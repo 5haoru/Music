@@ -24,11 +24,11 @@ fun DurationTab(
 ) {
     val context = LocalContext.current
 
-    // 状�?
+    // 状《
     var durationData by remember { mutableStateOf<ListeningDuration?>(null) }
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
-    var selectedTab by remember { mutableStateOf(0) } // 0:�? 1:�? 2:�?
+    var selectedTab by remember { mutableStateOf(0) } // 0:《 1:《 2:《
 
     // Presenter
     val presenter = remember {

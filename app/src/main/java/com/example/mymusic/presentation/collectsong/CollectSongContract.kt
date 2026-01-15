@@ -5,7 +5,7 @@ import com.example.mymusic.base.BaseView
 import com.example.mymusic.data.Playlist
 
 /**
- * 收藏到歌单页面契约接�?
+ * 收藏到歌单页面契约接《
  * 用于展示歌单列表并将歌曲收藏到选定的歌单中
  */
 interface CollectSongContract {

@@ -20,6 +20,7 @@ import com.example.mymusic.presentation.dailyrecommend.DailyRecommendTab
 import com.example.mymusic.presentation.listenrecognize.ListenRecognizeTab
 import com.example.mymusic.presentation.playlist.PlaylistTab
 import com.example.mymusic.presentation.rank.RankListTab
+import com.example.mymusic.presentation.rank.RankTab
 import com.example.mymusic.presentation.recommend.RecommendContract
 import com.example.mymusic.presentation.recommend.RecommendPresenter
 import com.example.mymusic.presentation.search.SearchTab
@@ -33,13 +34,16 @@ import com.example.mymusic.ui.components.*
 fun RecommendTab(
     onNavigateToListenRecognize: () -> Unit = {},
     onNavigateToSearchResult: (String) -> Unit = {},
-    onNavigateToPlay: (String) -> Unit = {}
+    onNavigateToPlay: (String) -> Unit = {},
+    onNavigateToUnderDevelopment: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
 
-    // 导航状�?
+    // 导航状《
     var showDailyRecommendDetail by remember { mutableStateOf(false) }
     var showRankListDetail by remember { mutableStateOf(false) }
+    var showRankDetail by remember { mutableStateOf(false) }
+    var selectedRankId by remember { mutableStateOf<String?>(null) }
     var showSearchPage by remember { mutableStateOf(false) }
     var showPlaylistDetail by remember { mutableStateOf(false) }
     var selectedPlaylistForDetail by remember { mutableStateOf<Playlist?>(null) }
@@ -57,7 +61,21 @@ fun RecommendTab(
     if (showRankListDetail) {
         RankListTab(
             onBackClick = { showRankListDetail = false },
-            onNavigateToPlay = onNavigateToPlay
+            onNavigateToPlay = onNavigateToPlay,
+            onNavigateToUnderDevelopment = onNavigateToUnderDevelopment
+        )
+        return
+    }
+
+    if (showRankDetail && selectedRankId != null) {
+        RankTab(
+            rankId = selectedRankId!!,
+            onBackClick = {
+                showRankDetail = false
+                selectedRankId = null
+            },
+            onNavigateToPlay = onNavigateToPlay,
+            onNavigateToUnderDevelopment = onNavigateToUnderDevelopment
         )
         return
     }
@@ -123,6 +141,11 @@ fun RecommendTab(
                         selectedPlaylistForDetail = playlist
                         showPlaylistDetail = true
                     }
+                }
+
+                override fun openRank(rankId: String) {
+                    selectedRankId = rankId
+                    showRankDetail = true
                 }
 
                 override fun openSearch() {

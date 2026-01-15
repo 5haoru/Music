@@ -27,17 +27,17 @@ class SearchResultPresenter(
     override fun loadSearchResults(query: String) {
         view.showLoading()
         try {
-            // 保存当前搜索�?
+            // 保存当前搜索词
             currentSearchQuery = query
 
-            // 加载所有数�?
+            // 加载所有数据
             allSongs = DataLoader.loadSongs(context)
             allArtists = DataLoader.loadArtists(context)
             allMVs = loadMusicVideos()
 
-            // 搜索匹配的歌�?
-            // 中文：部分匹配（contains�?
-            // 拼音：完全匹配（equals），只有输入完整拼音才能搜索�?
+            // 搜索匹配的歌手
+            // 中文：部分匹配（contains）
+            // 拼音：完全匹配（equals），只有输入完整拼音才能搜索到
             val matchedArtist = allArtists.find { artist ->
                 artist.artistName.contains(query, ignoreCase = true) ||
                 artist.pinyin?.equals(query, ignoreCase = true) == true ||
@@ -53,9 +53,9 @@ class SearchResultPresenter(
             }
             view.showMusicVideo(matchedMV)
 
-            // 搜索匹配的歌�?
-            // 中文：部分匹配（contains�?
-            // 拼音：完全匹配（equals），只有输入完整拼音才能搜索�?
+            // 搜索匹配的歌曲
+            // 中文：部分匹配（contains）
+            // 拼音：完全匹配（equals），只有输入完整拼音才能搜索到
             val matchedSongs = allSongs.filter { song ->
                 song.songName.contains(query, ignoreCase = true) ||
                 song.pinyin?.equals(query, ignoreCase = true) == true ||
@@ -101,7 +101,7 @@ class SearchResultPresenter(
     }
 
     override fun onCategorySelected(category: String) {
-        // TODO: 实现分类筛选功�?
+        // TODO: 实现分类筛选功能
     }
 
     override fun onFollowArtist(artistId: String) {
@@ -115,7 +115,7 @@ class SearchResultPresenter(
     }
 
     override fun onSongClick(songId: String) {
-        // 记录搜索并播放到AutoTest（任�?3�?
+        // 记录搜索并播放到AutoTest（任务13）
         if (currentSearchQuery.isNotEmpty()) {
             AutoTestHelper.addSearchRecord(currentSearchQuery, "song", songId, "play")
         }
@@ -127,8 +127,8 @@ class SearchResultPresenter(
     }
 
     override fun onArtistClick(artistId: String) {
-        // 记录搜索歌手到AutoTest（任�?4、任�?8�?
-        // 点击歌手即认为会播放歌曲，记录action�?play"
+        // 记录搜索歌手到AutoTest（任务14、任务18）
+        // 点击歌手即认为会播放歌曲，记录action为"play"
         if (currentSearchQuery.isNotEmpty()) {
             AutoTestHelper.addSearchRecord(currentSearchQuery, "artist", artistId, "play")
         }
@@ -137,7 +137,7 @@ class SearchResultPresenter(
 
     private fun loadMusicVideos(): List<MusicVideo> {
         return try {
-            val json = context.assets.open("data/music_videos.json").bufferedReader().use { it.readText() }
+            val json = context.assets.open("data/music_videos.json").bufferedReader(Charsets.UTF_8).use { it.readText() }
             val type = object : TypeToken<List<MusicVideo>>() {}.type
             Gson().fromJson(json, type)
         } catch (e: Exception) {

@@ -76,7 +76,7 @@ class RankPresenter(
         val random = Random.nextInt(100)
         return when {
             rank <= 5 && random < 10 -> {
-                // �?名有10%概率是新上榜
+                // 《名有10%概率是新上榜
                 Pair(RankContract.RankChange.NEW, 0)
             }
             random < 30 -> {
@@ -123,6 +123,18 @@ class RankPresenter(
                 "国风榜",
                 "精选国风音乐排行榜，每周更新"
             )
+            "rank_guofeng" -> Pair(
+                "国风榜",
+                "网易云用户一周内收听所有国风歌曲官方TOP排行榜，每周更新"
+            )
+            "rank_acg" -> Pair(
+                "ACG榜",
+                "网易云用户一周内收听所有ACG歌曲官方TOP排行榜，每周更新"
+            )
+            "rank_japanese" -> Pair(
+                "日语榜",
+                "网易云用户一周内收听所有日语歌曲官方TOP排行榜，每周更新"
+            )
             else -> Pair(
                 "网易云日语榜",
                 "网易云用户一周内收听所有日语歌曲官方TOP排行榜，每周更新"
@@ -140,11 +152,11 @@ class RankPresenter(
     }
 
     override fun onShareClick() {
-        view.showSuccess("分享功能待开发")
+        view.navigateToUnderDevelopment("分享")
     }
 
     override fun onCommentClick() {
-        view.showSuccess("评论功能待开发")
+        view.navigateToUnderDevelopment("评论")
     }
 
     override fun onLikeClick() {

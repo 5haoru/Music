@@ -18,6 +18,13 @@ import com.example.mymusic.data.Song
 import com.example.mymusic.presentation.stroll.StrollContract
 import com.example.mymusic.presentation.stroll.StrollPresenter
 import com.example.mymusic.presentation.stroll.components.*
+import com.example.mymusic.presentation.comment.CommentTab
+import com.example.mymusic.presentation.share.ShareTab
+import com.example.mymusic.presentation.lyric.LyricTab
+import com.example.mymusic.presentation.playcustomize.PlayCustomizeTab
+import com.example.mymusic.presentation.player.PlayerTab
+import com.example.mymusic.presentation.songprofile.SongProfileTab
+import com.example.mymusic.presentation.collectsong.CollectSongTab
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -28,12 +35,13 @@ import kotlinx.coroutines.launch
 fun StrollTab(
     currentMode: String = "伤感",
     onBackToRecommend: () -> Unit = {},
-    onNavigateToModeSelection: () -> Unit = {}
+    onNavigateToModeSelection: () -> Unit = {},
+    onNavigateToUnderDevelopment: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
-    // 状�?
+    // 状《
     var currentSong by remember { mutableStateOf<Song?>(null) }
     var isPlaying by remember { mutableStateOf(false) }
     var isFavorite by remember { mutableStateOf(false) }
@@ -41,13 +49,13 @@ fun StrollTab(
     var currentTime by remember { mutableStateOf("00:00") }
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
-    var showComment by remember { mutableStateOf(false) } // 评论页面状�?
-    var showShare by remember { mutableStateOf(false) } // 分享弹窗状�?
-    var showLyric by remember { mutableStateOf(false) } // 歌词页面状�?
-    var showPlayCustomize by remember { mutableStateOf(false) } // 播放定制弹窗状�?
-    var showPlayerStyle by remember { mutableStateOf(false) } // 播放器样式页面状�?
-    var showSongProfile by remember { mutableStateOf(false) } // 歌曲档案页面状�?
-    var showCollectSong by remember { mutableStateOf(false) } // 收藏到歌单页面状�?
+    var showComment by remember { mutableStateOf(false) } // 评论页面状《
+    var showShare by remember { mutableStateOf(false) } // 分享弹窗状《
+    var showLyric by remember { mutableStateOf(false) } // 歌词页面状《
+    var showPlayCustomize by remember { mutableStateOf(false) } // 播放定制弹窗状《
+    var showPlayerStyle by remember { mutableStateOf(false) } // 播放器样式页面状《
+    var showSongProfile by remember { mutableStateOf(false) } // 歌曲档案页面状《
+    var showCollectSong by remember { mutableStateOf(false) } // 收藏到歌单页面状《
 
     // Presenter
     val presenter = remember {
@@ -100,7 +108,7 @@ fun StrollTab(
         presenter.setProgressUpdateCallback {
             coroutineScope.launch {
                 while (isPlaying) {
-                    delay(1000) // 每秒更新一�?
+                    delay(1000) // 每秒更新一《
                     presenter.updateProgressAutomatically()
                 }
             }
@@ -119,7 +127,7 @@ fun StrollTab(
     LaunchedEffect(isPlaying) {
         if (isPlaying) {
             while (isPlaying) {
-                delay(1000) // 每秒更新一�?
+                delay(1000) // 每秒更新一《
                 presenter.updateProgressAutomatically()
             }
         }
@@ -145,7 +153,7 @@ fun StrollTab(
                 Column(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    // 顶部�?
+                    // 顶部《
                     StrollTopBar(
                         currentMode = currentMode,
                         onBackClick = onBackToRecommend,
@@ -153,7 +161,7 @@ fun StrollTab(
                         onTitleClick = onNavigateToModeSelection
                     )
 
-                    // 中央播放器区�?
+                    // 中央播放器区《
                     Column(
                         modifier = Modifier
                             .weight(1f)
@@ -191,7 +199,7 @@ fun StrollTab(
                             .fillMaxWidth()
                             .padding(horizontal = 24.dp, vertical = 16.dp)
                     ) {
-                        // 进度�?
+                        // 进度《
                         ProgressSection(
                             song = song,
                             progress = progress,
@@ -221,75 +229,79 @@ fun StrollTab(
             }
         }
 
-//        // 评论页面（作为全屏页面显示）
-//        if (showComment && currentSong != null) {
-//            CommentTab(
-//                songId = currentSong!!.songId,
-//                onBackClick = { showComment = false }
-//            )
-//        }
-//
-//        // 分享弹窗（作为overlay层叠加显示）
-//        if (showShare && currentSong != null) {
-//            ShareTab(
-//                song = currentSong!!,
-//                onCloseClick = { showShare = false }
-//            )
-//        }
-//
-//        // 歌词页面（作为全屏页面显示）
-//        if (showLyric && currentSong != null) {
-//            LyricTab(
-//                songId = currentSong!!.songId,
-//                onBackClick = { showLyric = false }
-//            )
-//        }
-//
-//        // 播放定制弹窗（作为overlay层叠加显示）
-//        if (showPlayCustomize && currentSong != null) {
-//            PlayCustomizeTab(
-//                song = currentSong!!,
-//                onCloseClick = { showPlayCustomize = false },
-//                onShareClick = { showShare = true },
-//                onNavigateToPlayerStyle = {
-//                    showPlayCustomize = false
-//                    showPlayerStyle = true
-//                },
-//                onNavigateToSongProfile = {
-//                    showPlayCustomize = false
-//                    showSongProfile = true
-//                },
-//                onNavigateToCollectSong = {
-//                    showPlayCustomize = false
-//                    showCollectSong = true
-//                }
-//            )
-//        }
-//
-//        // 播放器样式选择页面（作为全屏页面显示）
-//        if (showPlayerStyle) {
-//            PlayerTab(
-//                onBackClick = { showPlayerStyle = false }
-//            )
-//        }
-//
-//        // 歌曲档案页面（作为全屏页面显示）
-//        if (showSongProfile && currentSong != null) {
-//            SongProfileTab(
-//                songId = currentSong!!.songId,
-//                onBackClick = { showSongProfile = false }
-//            )
-//        }
-//
-//        // 收藏到歌单页面（作为全屏页面显示�?
-//        if (showCollectSong && currentSong != null) {
-//            CollectSongTab(
-//                songId = currentSong!!.songId,
-//                onBackClick = { showCollectSong = false },
-//                onNavigateToCreatePlaylist = {
-//                    // 跳转到创建歌单页面（暂未实现�?
-//                }
-//            )
-//        }
+        // 评论页面（作为全屏页面显示）
+        if (showComment && currentSong != null) {
+            CommentTab(
+                songId = currentSong!!.songId,
+                onBackClick = { showComment = false }
+            )
+        }
+
+        // 分享弹窗（作为overlay层叠加显示）
+        if (showShare && currentSong != null) {
+            ShareTab(
+                song = currentSong!!,
+                onCloseClick = { showShare = false },
+                onNavigateToUnderDevelopment = { feature ->
+                    showShare = false
+                    onNavigateToUnderDevelopment(feature)
+                }
+            )
+        }
+
+        // 歌词页面（作为全屏页面显示）
+        if (showLyric && currentSong != null) {
+            LyricTab(
+                songId = currentSong!!.songId,
+                onBackClick = { showLyric = false }
+            )
+        }
+
+        // 播放定制弹窗（作为overlay层叠加显示）
+        if (showPlayCustomize && currentSong != null) {
+            PlayCustomizeTab(
+                song = currentSong!!,
+                onCloseClick = { showPlayCustomize = false },
+                onShareClick = { showShare = true },
+                onNavigateToPlayerStyle = {
+                    showPlayCustomize = false
+                    showPlayerStyle = true
+                },
+                onNavigateToSongProfile = {
+                    showPlayCustomize = false
+                    showSongProfile = true
+                },
+                onNavigateToCollectSong = {
+                    showPlayCustomize = false
+                    showCollectSong = true
+                }
+            )
+        }
+
+        // 播放器样式选择页面（作为全屏页面显示）
+        if (showPlayerStyle) {
+            PlayerTab(
+                onBackClick = { showPlayerStyle = false }
+            )
+        }
+
+        // 歌曲档案页面（作为全屏页面显示）
+        if (showSongProfile && currentSong != null) {
+            SongProfileTab(
+                songId = currentSong!!.songId,
+                onBackClick = { showSongProfile = false }
+            )
+        }
+
+        // 收藏到歌单页面（作为全屏页面显示）
+        if (showCollectSong && currentSong != null) {
+            CollectSongTab(
+                songId = currentSong!!.songId,
+                onBackClick = { showCollectSong = false },
+                onNavigateToCreatePlaylist = {
+                    // 跳转到创建歌单页面（暂未实现）
+                }
+            )
+        }
     }
 }

@@ -7,7 +7,7 @@ import com.example.mymusic.data.MusicVideo
 import com.example.mymusic.data.SongDetail
 
 /**
- * 歌手详情页面�?MVP 契约
+ * 歌手详情页面《MVP 契约
  */
 interface SingerContract {
 
@@ -28,7 +28,7 @@ interface SingerContract {
         fun showMVs(mvs: List<MusicVideo>)
 
         /**
-         * 更新关注状�?
+         * 更新关注状《
          */
         fun updateFollowStatus(isFollowing: Boolean)
 
@@ -38,7 +38,7 @@ interface SingerContract {
         fun navigateBack()
 
         /**
-         * 导航到播放页�?
+         * 导航到播放页《
          */
         fun navigateToPlay(songId: String)
 

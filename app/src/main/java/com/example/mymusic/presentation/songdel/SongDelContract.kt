@@ -15,7 +15,7 @@ interface SongDelContract {
         fun showSongInfo(song: Song)
 
         /**
-         * 显示删除确认对话�?
+         * 显示删除确认对话《
          */
         fun showDeleteConfirmDialog()
 
@@ -67,7 +67,7 @@ interface SongDelContract {
         fun onRingtoneClick()
 
         /**
-         * 音乐礼品卡点�?
+         * 音乐礼品卡点《
          */
         fun onGiftCardClick()
     }

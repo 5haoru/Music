@@ -30,7 +30,8 @@ import com.example.mymusic.ui.components.OfficialRankItem
 @Composable
 fun RankListTab(
     onBackClick: () -> Unit = {},
-    onNavigateToPlay: (String) -> Unit = {}
+    onNavigateToPlay: (String) -> Unit = {},
+    onNavigateToUnderDevelopment: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
 
@@ -52,7 +53,8 @@ fun RankListTab(
                 showRankDetail = false
                 selectedRankId = null
             },
-            onNavigateToPlay = onNavigateToPlay
+            onNavigateToPlay = onNavigateToPlay,
+            onNavigateToUnderDevelopment = onNavigateToUnderDevelopment
         )
         return
     }

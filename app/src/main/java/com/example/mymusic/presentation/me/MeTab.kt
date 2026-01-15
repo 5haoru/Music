@@ -23,7 +23,8 @@ fun MeTab(
     onNavigateToSubscribe: () -> Unit = {},
     onNavigateToDuration: () -> Unit = {},
     onNavigateToFans: () -> Unit = {},
-    onNavigateToPlaylist: (Playlist) -> Unit = {}
+    onNavigateToPlaylist: (Playlist) -> Unit = {},
+    onNavigateToUnderDevelopment: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
 
@@ -130,7 +131,11 @@ fun MeTab(
 
                 // 功能按钮行
                 item {
-                    FunctionButtonsRow()
+                    FunctionButtonsRow(
+                        onFunctionClick = { feature ->
+                            onNavigateToUnderDevelopment(feature)
+                        }
+                    )
                 }
 
                 // 歌单管理区域
@@ -152,6 +157,9 @@ fun MeTab(
                         onCreatePlaylistClick = {
                             presenter.onCreatePlaylistClick()
                             showCreatePlaylistDialog = true
+                        },
+                        onImportPlaylistClick = {
+                            onNavigateToUnderDevelopment("导入外部歌单")
                         }
                     )
                 }

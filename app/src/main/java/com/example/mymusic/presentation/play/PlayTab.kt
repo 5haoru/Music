@@ -32,7 +32,8 @@ fun PlayTab(
     initialSongId: String? = null,
     onBackToRecommend: () -> Unit = {},
     onNavigateToComment: (String) -> Unit = {},
-    onNavigateToLyric: (String) -> Unit = {}
+    onNavigateToLyric: (String) -> Unit = {},
+    onNavigateToUnderDevelopment: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
 
@@ -218,7 +219,11 @@ fun PlayTab(
         if (showShare && currentSong != null) {
             ShareTab(
                 song = currentSong!!,
-                onCloseClick = { showShare = false }
+                onCloseClick = { showShare = false },
+                onNavigateToUnderDevelopment = { feature ->
+                    showShare = false
+                    onNavigateToUnderDevelopment(feature)
+                }
             )
         }
 

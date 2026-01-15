@@ -29,12 +29,13 @@ import com.example.mymusic.presentation.share.SharePresenter
 
 /**
  * 分享页面Tab
- * 半透明蒙版背景，覆盖在播放页面�?
+ * 半透明蒙版背景，覆盖在播放页面《
  */
 @Composable
 fun ShareTab(
     song: Song,
-    onCloseClick: () -> Unit = {}
+    onCloseClick: () -> Unit = {},
+    onNavigateToUnderDevelopment: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
 
@@ -56,6 +57,10 @@ fun ShareTab(
 
                 override fun closeShareDialog() {
                     onCloseClick()
+                }
+
+                override fun navigateToUnderDevelopment(feature: String) {
+                    onNavigateToUnderDevelopment(feature)
                 }
 
                 override fun showLoading() {
@@ -106,7 +111,7 @@ fun ShareTab(
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            // 分享平台图标�?
+            // 分享平台图标《
             SharePlatformRow(
                 onPlatformClick = { platform ->
                     presenter.onShareToPlatform(platform)
@@ -123,7 +128,7 @@ fun ShareTab(
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            // 扩展功能卡片�?
+            // 扩展功能卡片《
             ExtendedShareRow(
                 song = song,
                 onCardClick = { type ->
@@ -137,7 +142,7 @@ fun ShareTab(
 }
 
 /**
- * 分享平台图标�?
+ * 分享平台图标《
  */
 @Composable
 private fun SharePlatformRow(
@@ -234,7 +239,7 @@ private fun SharePlatformItem(
 }
 
 /**
- * 扩展分享功能卡片�?
+ * 扩展分享功能卡片《
  */
 @Composable
 private fun ExtendedShareRow(
@@ -308,7 +313,7 @@ private fun ExtendedShareCard(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                // 图标或封�?
+                // 图标或封《
                 if (icon != null) {
                     Icon(
                         imageVector = icon,

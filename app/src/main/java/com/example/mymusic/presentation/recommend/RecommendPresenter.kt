@@ -51,8 +51,21 @@ class RecommendPresenter(
     }
 
     override fun onPlaylistClick(playlist: Playlist) {
-        // 直接传递从UI层接收的playlist对象
-        view.openPlaylist(playlist)
+        // 判断是否是排行榜
+        val rankingPlaylistMap = mapOf(
+            "playlist_009" to "rank_guofeng",
+            "playlist_010" to "rank_acg",
+            "playlist_011" to "rank_japanese"
+        )
+
+        val rankId = rankingPlaylistMap[playlist.playlistId]
+        if (rankId != null) {
+            // 是排行榜，打开排行榜详情页
+            view.openRank(rankId)
+        } else {
+            // 是普通歌单，打开歌单详情页
+            view.openPlaylist(playlist)
+        }
     }
 
     override fun onSearchClick() {

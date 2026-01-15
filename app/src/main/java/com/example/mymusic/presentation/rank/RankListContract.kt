@@ -10,7 +10,7 @@ import com.example.mymusic.data.Song
 interface RankListContract {
 
     /**
-     * 榜单数据�?
+     * 榜单数据《
      */
     data class RankData(
         val rankId: String,
@@ -21,22 +21,22 @@ interface RankListContract {
     )
 
     /**
-     * TOP歌曲�?
+     * TOP歌曲《
      */
     data class TopSongItem(
         val rank: Int,               // 排名 1,2,3
         val song: Song,
-        val status: SongStatus       // 歌曲状�?
+        val status: SongStatus       // 歌曲状《
     )
 
     /**
-     * 歌曲状态枚�?
+     * 歌曲状态枚《
      */
     enum class SongStatus {
         NEW,        // 新歌
         UP,         // 上升
         DOWN,       // 下降
-        STABLE      // 稳定（无标识�?
+        STABLE      // 稳定（无标识《
     }
 
     /**
@@ -45,7 +45,7 @@ interface RankListContract {
     data class FeaturedRank(
         val id: String,
         val name: String,
-        val gradientColors: List<Long>  // 渐变�?
+        val gradientColors: List<Long>  // 渐变《
     )
 
     interface View : BaseView {
@@ -65,7 +65,7 @@ interface RankListContract {
         fun navigateToRankDetail(rankId: String)
 
         /**
-         * 导航到播放页面播放指定歌�?
+         * 导航到播放页面播放指定歌曲
          */
         fun navigateToPlay(songId: String)
     }

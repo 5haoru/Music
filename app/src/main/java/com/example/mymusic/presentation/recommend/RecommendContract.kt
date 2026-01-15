@@ -16,6 +16,7 @@ interface RecommendContract {
         fun showRankingPlaylists(playlists: List<Playlist>)
         fun playSong(song: Song)
         fun openPlaylist(playlist: Playlist)
+        fun openRank(rankId: String)
         fun openSearch()
         fun openListenRecognize()
     }

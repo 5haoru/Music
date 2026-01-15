@@ -30,7 +30,7 @@ fun SongDelTab(
 ) {
     val context = LocalContext.current
 
-    // 状�?
+    // 状《
     var currentSong by remember { mutableStateOf<Song?>(null) }
     var showDeleteConfirmDialog by remember { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(true) }
@@ -78,7 +78,7 @@ fun SongDelTab(
         presenter.loadSongInfo(songId, playlistId)
     }
 
-    // 删除确认对话�?
+    // 删除确认对话《
     if (showDeleteConfirmDialog && currentSong != null) {
         DeleteConfirmDialog(
             song = currentSong!!,
@@ -106,7 +106,7 @@ fun SongDelTab(
             Column(
                 modifier = Modifier.fillMaxSize()
             ) {
-                // 顶部�?
+                // 顶部《
                 SongDelTopBar(
                     onBackClick = { presenter.onBackClick() }
                 )

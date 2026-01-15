@@ -32,7 +32,7 @@ fun DailyRecommendTab(
 ) {
     val context = LocalContext.current
 
-    // 状�?
+    // 状《
     var dailySongs by remember { mutableStateOf<List<Song>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }

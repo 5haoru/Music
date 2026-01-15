@@ -27,7 +27,8 @@ fun PlaylistTab(
     onBackClick: () -> Unit = {},
     onNavigateToPlay: (Song) -> Unit = {},
     onNavigateToSetting: (Playlist) -> Unit = {},
-    onNavigateToSongDel: (String, String) -> Unit = { _, _ -> }
+    onNavigateToSongDel: (String, String) -> Unit = { _, _ -> },
+    onNavigateToUnderDevelopment: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
 
@@ -52,6 +53,10 @@ fun PlaylistTab(
 
                 override fun navigateToPlay(song: Song) {
                     onNavigateToPlay(song)
+                }
+
+                override fun navigateToUnderDevelopment(feature: String) {
+                    onNavigateToUnderDevelopment(feature)
                 }
 
                 override fun showLoading() {

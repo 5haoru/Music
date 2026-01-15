@@ -35,10 +35,10 @@ class SearchPresenter(
             // 显示猜你喜欢（推荐歌曲）
             view.showRecommendedSongs(allSongs.take(6))
 
-            // 显示热搜榜（�?0首歌�?
+            // 显示热搜榜（前10首歌曲）
             view.showHotSearchList(allSongs.take(10))
 
-            // 显示热歌榜（�?0首歌�?
+            // 显示热歌榜（前10首歌曲）
             view.showHotSongList(allSongs.takeLast(10).reversed())
 
             view.hideLoading()
@@ -50,16 +50,16 @@ class SearchPresenter(
 
     override fun onSearchTextChanged(query: String) {
         if (query.isEmpty()) {
-            // 清空搜索结果，显示默认内�?
+            // 清空搜索结果，显示默认内容
             currentSearchQuery = ""
             loadData()
         } else {
-            // 保存当前搜索�?
+            // 保存当前搜索词
             currentSearchQuery = query
 
             // 搜索歌曲
-            // 中文：部分匹配（contains�?
-            // 拼音：完全匹配（equals），只有输入完整拼音才能搜索�?
+            // 中文：部分匹配（contains）
+            // 拼音：完全匹配（equals），只有输入完整拼音才能搜索到
             val results = allSongs.filter { song ->
                 song.songName.contains(query, ignoreCase = true) ||
                 song.artist.contains(query, ignoreCase = true) ||
@@ -88,7 +88,7 @@ class SearchPresenter(
     override fun onSongClick(songId: String) {
         val song = allSongs.find { it.songId == songId }
         song?.let {
-            // 记录搜索并播放到AutoTest（任�?3�?
+            // 记录搜索并播放到AutoTest（任务13）
             if (currentSearchQuery.isNotEmpty()) {
                 AutoTestHelper.addSearchRecord(currentSearchQuery, "song", songId, "play")
             }
@@ -123,7 +123,7 @@ class SearchPresenter(
         searchHistory.remove(query)
         searchHistory.add(0, query)
 
-        // 最多保�?0条记�?
+        // 最多保存20条记录
         if (searchHistory.size > 20) {
             searchHistory = searchHistory.take(20).toMutableList()
         }

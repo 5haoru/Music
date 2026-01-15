@@ -29,7 +29,7 @@ fun SongSortTab(
 ) {
     val context = LocalContext.current
 
-    // 状�?
+    // 状《
     var selectedSortType by remember { mutableStateOf(SortOrderRecord.SORT_TIME_DESC) }
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
@@ -90,7 +90,7 @@ fun SongSortTab(
             Column(
                 modifier = Modifier.fillMaxSize()
             ) {
-                // 顶部�?
+                // 顶部《
                 SongSortTopBar(
                     onBackClick = { presenter.onBackClick() }
                 )

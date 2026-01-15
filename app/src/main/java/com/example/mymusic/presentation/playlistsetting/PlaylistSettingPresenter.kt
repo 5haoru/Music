@@ -35,26 +35,24 @@ class PlaylistSettingPresenter(
     }
 
     override fun onCopyDeepSeekClick() {
-        view.showToast("复制DeepSeek锐评指令")
-        // TODO: Implement actual copy logic
+        view.navigateToUnderDevelopment("复制DeepSeek锐评指令")
     }
 
     override fun onWifiAutoDownloadChanged(enabled: Boolean) {
         wifiAutoDownloadEnabled = enabled
         view.showToast("WiFi自动下载已${if (enabled) "开启" else "关闭"}")
-        // TODO: Save setting
     }
 
     override fun onPlaylistWallpaperClick() {
-        view.showToast("歌单壁纸功能待开发")
+        view.navigateToUnderDevelopment("歌单壁纸")
     }
 
     override fun onAddSongClick() {
-        view.showToast("添加歌曲功能待开发")
+        view.navigateToUnderDevelopment("添加歌曲")
     }
 
     override fun onLikedSongsClick() {
-        view.showToast("歌曲红心记录功能待开发")
+        view.navigateToUnderDevelopment("歌曲红心记录")
     }
 
     override fun onChangeSortOrderClick() {
@@ -64,17 +62,16 @@ class PlaylistSettingPresenter(
     }
 
     override fun onClearDownloadsClick() {
-        view.showToast("清空下载文件功能待开发")
+        view.navigateToUnderDevelopment("清空下载文件")
     }
 
     override fun onAddWidgetClick() {
-        view.showToast("添加小组件功能待开发")
+        view.navigateToUnderDevelopment("添加小组件")
     }
 
     override fun onShowAlbumCoverChanged(enabled: Boolean) {
         showAlbumCoverEnabled = enabled
         view.showToast("展示专辑封面已${if (enabled) "开启" else "关闭"}")
-        // TODO: Save setting
     }
 
     override fun onDestroy() {

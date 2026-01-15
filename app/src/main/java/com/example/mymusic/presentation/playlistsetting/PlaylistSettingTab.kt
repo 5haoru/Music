@@ -25,7 +25,8 @@ import com.example.mymusic.presentation.playlistsetting.components.*
 fun PlaylistSettingTab(
     playlist: Playlist,
     onBackClick: () -> Unit = {},
-    onNavigateToSongSort: (Playlist) -> Unit = {}
+    onNavigateToSongSort: (Playlist) -> Unit = {},
+    onNavigateToUnderDevelopment: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
 
@@ -55,6 +56,10 @@ fun PlaylistSettingTab(
 
                 override fun navigateToSongSort(playlist: Playlist) {
                     onNavigateToSongSort(playlist)
+                }
+
+                override fun navigateToUnderDevelopment(feature: String) {
+                    onNavigateToUnderDevelopment(feature)
                 }
 
                 override fun showLoading() {

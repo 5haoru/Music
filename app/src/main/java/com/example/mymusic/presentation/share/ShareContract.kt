@@ -13,6 +13,7 @@ interface ShareContract {
         fun showShareSuccess(platform: String)
         fun showShareFailure(message: String)
         fun closeShareDialog()
+        fun navigateToUnderDevelopment(feature: String)
     }
 
     interface Presenter : BasePresenter {

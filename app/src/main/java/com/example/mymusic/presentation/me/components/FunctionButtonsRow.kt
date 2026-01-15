@@ -20,26 +20,26 @@ import androidx.compose.ui.unit.sp
  * 功能按钮行
  */
 @Composable
-fun FunctionButtonsRow() {
+fun FunctionButtonsRow(onFunctionClick: (String) -> Unit = {}) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 12.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        FunctionButton(icon = Icons.Default.History, label = "最近")
-        FunctionButton(icon = Icons.Default.PhoneAndroid, label = "本地")
-        FunctionButton(icon = Icons.Default.Cloud, label = "网盘")
-        FunctionButton(icon = Icons.Default.Style, label = "装扮")
-        FunctionButton(icon = Icons.Default.MoreHoriz, label = "更多")
+        FunctionButton(icon = Icons.Default.History, label = "最近", onClick = { onFunctionClick("最近") })
+        FunctionButton(icon = Icons.Default.PhoneAndroid, label = "本地", onClick = { onFunctionClick("本地") })
+        FunctionButton(icon = Icons.Default.Cloud, label = "网盘", onClick = { onFunctionClick("网盘") })
+        FunctionButton(icon = Icons.Default.Style, label = "装扮", onClick = { onFunctionClick("装扮") })
+        FunctionButton(icon = Icons.Default.MoreHoriz, label = "更多", onClick = { onFunctionClick("更多") })
     }
 }
 
 @Composable
-private fun FunctionButton(icon: ImageVector, label: String) {
+private fun FunctionButton(icon: ImageVector, label: String, onClick: () -> Unit = {}) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable { /* TODO */ }
+        modifier = Modifier.clickable(onClick = onClick)
     ) {
         Surface(
             shape = RoundedCornerShape(12.dp),

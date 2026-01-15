@@ -40,6 +40,7 @@ import com.example.mymusic.presentation.play.PlayTab
 import com.example.mymusic.presentation.recommend.RecommendTab
 import com.example.mymusic.presentation.dailyrecommend.DailyRecommendTab
 import com.example.mymusic.presentation.me.MeTab
+import com.example.mymusic.presentation.underdevelopment.UnderDevelopmentTab
 
 class MainActivity : ComponentActivity(), MainContract.View {
 
@@ -93,6 +94,20 @@ class MainActivity : ComponentActivity(), MainContract.View {
         var selectedArtistId by remember { mutableStateOf("") }
         var showMVPlayer by remember { mutableStateOf(false) }
         var selectedMVId by remember { mutableStateOf("") }
+        var showUnderDevelopment by remember { mutableStateOf(false) }
+        var underDevelopmentFeature by remember { mutableStateOf("") }
+
+        // 正在开发中页面不显示底部导航栏
+        if (showUnderDevelopment) {
+            UnderDevelopmentTab(
+                featureName = underDevelopmentFeature,
+                onBackClick = {
+                    showUnderDevelopment = false
+                    underDevelopmentFeature = ""
+                }
+            )
+            return
+        }
 
         // MV播放页面不显示底部导航栏
         if (showMVPlayer && selectedMVId.isNotEmpty()) {
@@ -128,6 +143,7 @@ class MainActivity : ComponentActivity(), MainContract.View {
                     playTabSongId = songId
                     currentTab = 2
                     showSinger = false
+                    showSearchResult = false // 确保不会返回搜索结果页
                 },
                 onNavigateToMVPlayer = { mvId ->
                     selectedMVId = mvId
@@ -168,6 +184,7 @@ class MainActivity : ComponentActivity(), MainContract.View {
                 onNavigateToSinger = { artistId ->
                     selectedArtistId = artistId
                     showSinger = true
+                    showSearchResult = false // 清除搜索结果页标志
                 }
             )
             return
@@ -246,6 +263,10 @@ class MainActivity : ComponentActivity(), MainContract.View {
                 onNavigateToSongSort = { playlist ->
                     selectedSortPlaylist = playlist
                     showSongSort = true
+                },
+                onNavigateToUnderDevelopment = { feature ->
+                    underDevelopmentFeature = feature
+                    showUnderDevelopment = true
                 }
             )
             return
@@ -273,6 +294,10 @@ class MainActivity : ComponentActivity(), MainContract.View {
                     selectedDelSongId = songId
                     selectedDelPlaylistId = playlistId
                     showSongDel = true
+                },
+                onNavigateToUnderDevelopment = { feature ->
+                    underDevelopmentFeature = feature
+                    showUnderDevelopment = true
                 }
             )
             return
@@ -288,7 +313,11 @@ class MainActivity : ComponentActivity(), MainContract.View {
                 StrollTab(
                     currentMode = selectedStrollMode,
                     onBackToRecommend = { currentTab = 0 },
-                    onNavigateToModeSelection = { showModeSelection = true }
+                    onNavigateToModeSelection = { showModeSelection = true },
+                    onNavigateToUnderDevelopment = { feature ->
+                        underDevelopmentFeature = feature
+                        showUnderDevelopment = true
+                    }
                 )
             }
             2 -> {
@@ -309,6 +338,10 @@ class MainActivity : ComponentActivity(), MainContract.View {
                     onNavigateToLyric = { songId ->
                         selectedSongId = songId
                         showLyric = true
+                    },
+                    onNavigateToUnderDevelopment = { feature ->
+                        underDevelopmentFeature = feature
+                        showUnderDevelopment = true
                     }
                 )
             }
@@ -351,6 +384,10 @@ class MainActivity : ComponentActivity(), MainContract.View {
                                     onNavigateToPlay = { songId ->
                                         playTabSongId = songId
                                         currentTab = 2
+                                    },
+                                    onNavigateToUnderDevelopment = { feature ->
+                                        underDevelopmentFeature = feature
+                                        showUnderDevelopment = true
                                     }
                                 )
                             }
@@ -367,6 +404,10 @@ class MainActivity : ComponentActivity(), MainContract.View {
                                     onNavigateToPlaylist = { playlist ->
                                         selectedPlaylist = playlist
                                         showPlaylist = true
+                                    },
+                                    onNavigateToUnderDevelopment = { feature ->
+                                        underDevelopmentFeature = feature
+                                        showUnderDevelopment = true
                                     }
                                 )
                             }

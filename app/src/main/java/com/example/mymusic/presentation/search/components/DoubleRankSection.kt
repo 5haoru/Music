@@ -154,7 +154,7 @@ private fun RankSongItem(
                 modifier = Modifier.weight(1f)
             )
 
-            // 标签或图�?
+            // 标签或图《
             if (showHotBadge) {
                 Spacer(modifier = Modifier.width(4.dp))
                 Surface(

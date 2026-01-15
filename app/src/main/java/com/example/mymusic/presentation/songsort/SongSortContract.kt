@@ -4,7 +4,7 @@ import com.example.mymusic.base.BasePresenter
 import com.example.mymusic.base.BaseView
 
 /**
- * 歌曲排序选择页面�?MVP Contract
+ * 歌曲排序选择页面《MVP Contract
  */
 interface SongSortContract {
 
@@ -13,7 +13,7 @@ interface SongSortContract {
      */
     interface View : BaseView {
         /**
-         * 显示当前选中的排序方�?
+         * 显示当前选中的排序方《
          */
         fun showCurrentSortOrder(sortType: String)
 
@@ -33,7 +33,7 @@ interface SongSortContract {
      */
     interface Presenter : BasePresenter {
         /**
-         * 加载当前歌单的排序方�?
+         * 加载当前歌单的排序方《
          */
         fun loadCurrentSortOrder(playlistId: String)
 

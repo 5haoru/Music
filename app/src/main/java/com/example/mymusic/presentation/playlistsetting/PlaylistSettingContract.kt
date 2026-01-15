@@ -32,6 +32,11 @@ interface PlaylistSettingContract {
          * 导航到歌曲排序页面
          */
         fun navigateToSongSort(playlist: Playlist)
+
+        /**
+         * 导航到正在开发中页面
+         */
+        fun navigateToUnderDevelopment(feature: String)
     }
 
     /**

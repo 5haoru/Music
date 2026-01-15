@@ -32,6 +32,16 @@ class MePresenter(
 
             // 加载歌单数据（优先从缓存加载）
             userPlaylists = DataLoader.loadPlaylistsWithCache(context)
+
+            // 同步所有歌单到AutoTestHelper用于自动化测试验证
+            userPlaylists.forEach { playlist ->
+                AutoTestHelper.ensurePlaylistTracked(
+                    playlistId = playlist.playlistId,
+                    playlistName = playlist.playlistName,
+                    songIds = playlist.songIds
+                )
+            }
+
             view.showPlaylists(userPlaylists)
 
             // 加载当前播放歌曲（使用第一首歌）
