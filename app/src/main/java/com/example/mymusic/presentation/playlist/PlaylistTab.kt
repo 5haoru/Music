@@ -78,7 +78,8 @@ fun PlaylistTab(
                 }
             },
             RepositoryProvider.getSongRepository(),
-            RepositoryProvider.getCollectionRepository()
+            RepositoryProvider.getCollectionRepository(),
+            RepositoryProvider.getPlaylistRepository()
         )
     }
 
@@ -125,9 +126,10 @@ fun PlaylistTab(
                 songId = selectedSongId!!,
                 playlistId = playlist.playlistId,
                 onBackClick = {
+                    // 删除成功后立即从列表中移除
+                    songs = songs.filter { it.songId != selectedSongId }
                     showSongDelTab = false
                     selectedSongId = null
-                    needReload = true // 返回时重新加载歌单
                 }
             )
         } else if (isLoading) {

@@ -15,7 +15,11 @@ class PlaylistRepository(private val context: Context) {
 
     fun getAllPlaylists(): List<Playlist> {
         if (cachedPlaylists == null) {
-            val json = context.assets.open("data/playlists.json").bufferedReader().use { it.readText() }
+            val json = try {
+                context.openFileInput("playlists.json").bufferedReader().use { it.readText() }
+            } catch (e: Exception) {
+                context.assets.open("data/playlists.json").bufferedReader().use { it.readText() }
+            }
             val type = object : TypeToken<List<Playlist>>() {}.type
             cachedPlaylists = gson.fromJson(json, type)
         }
@@ -23,6 +27,7 @@ class PlaylistRepository(private val context: Context) {
     }
 
     fun addSongToPlaylist(playlistId: String, songId: String): Boolean {
+        cachedPlaylists = null  // 清除缓存
         val currentPlaylists = getAllPlaylists().toMutableList()
         val playlistToUpdate = currentPlaylists.find { it.playlistId == playlistId }
 
@@ -32,7 +37,10 @@ class PlaylistRepository(private val context: Context) {
 
         val updatedSongIds = playlistToUpdate.songIds.toMutableList()
         updatedSongIds.add(songId)
-        val newPlaylist = playlistToUpdate.copy(songIds = updatedSongIds)
+        val newPlaylist = playlistToUpdate.copy(
+            songIds = updatedSongIds,
+            songCount = updatedSongIds.size
+        )
 
         val index = currentPlaylists.indexOfFirst { it.playlistId == playlistId }
         if (index != -1) {
@@ -44,6 +52,7 @@ class PlaylistRepository(private val context: Context) {
     }
 
     fun removeSongFromPlaylist(playlistId: String, songId: String): Boolean {
+        cachedPlaylists = null  // 清除缓存
         val currentPlaylists = getAllPlaylists().toMutableList()
         val playlistToUpdate = currentPlaylists.find { it.playlistId == playlistId }
 
@@ -53,7 +62,10 @@ class PlaylistRepository(private val context: Context) {
 
         val updatedSongIds = playlistToUpdate.songIds.toMutableList()
         updatedSongIds.remove(songId)
-        val newPlaylist = playlistToUpdate.copy(songIds = updatedSongIds)
+        val newPlaylist = playlistToUpdate.copy(
+            songIds = updatedSongIds,
+            songCount = updatedSongIds.size
+        )
 
         val index = currentPlaylists.indexOfFirst { it.playlistId == playlistId }
         if (index != -1) {

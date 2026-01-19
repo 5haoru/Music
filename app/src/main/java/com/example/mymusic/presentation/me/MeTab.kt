@@ -7,6 +7,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import com.example.mymusic.data.Playlist
 import com.example.mymusic.data.Song
 import com.example.mymusic.data.User
@@ -27,6 +30,7 @@ fun MeTab(
     onNavigateToUnderDevelopment: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
 
     // 状态
     var currentUser by remember { mutableStateOf<User?>(null) }
@@ -84,6 +88,19 @@ fun MeTab(
     // 加载数据
     LaunchedEffect(Unit) {
         presenter.loadData()
+    }
+
+    // 监听生命周期，在页面可见时重新加载数据
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                presenter.loadData()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
     }
 
     // 加载粉丝数

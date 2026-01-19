@@ -496,14 +496,8 @@ object DataLoader {
      */
     fun savePlaylists(context: Context, playlists: List<Playlist>) {
         try {
-            val dataDir = File(context.filesDir, "data")
-            if (!dataDir.exists()) {
-                dataDir.mkdirs()
-            }
-
-            val playlistsFile = File(dataDir, "playlists.json")
+            val playlistsFile = File(context.filesDir, "playlists.json")
             val json = gson.toJson(playlists)
-
             FileOutputStream(playlistsFile).use { fos ->
                 fos.write(json.toByteArray(Charsets.UTF_8))
             }
@@ -517,8 +511,13 @@ object DataLoader {
      */
     fun loadPlaylistsWithCache(context: Context): List<Playlist> {
         try {
-            // 始终从assets加载以确保数据最新
-            val json = loadJsonFromAssets(context, "playlists.json")
+            // 优先从内部存储加载
+            val internalFile = File(context.filesDir, "playlists.json")
+            val json = if (internalFile.exists()) {
+                internalFile.readText()
+            } else {
+                loadJsonFromAssets(context, "playlists.json")
+            }
             val type = object : TypeToken<List<Playlist>>() {}.type
             return gson.fromJson(json, type)
         } catch (e: Exception) {

@@ -66,7 +66,7 @@ fun FavoriteMusicItem(
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "147首·477次播放",
+                text = "${playlist.songCount}首",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
