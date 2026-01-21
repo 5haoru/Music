@@ -2,13 +2,14 @@ package com.example.mymusic.presentation.songsort
 
 import android.content.Context
 import com.example.mymusic.data.SortOrderRecord
+import com.example.mymusic.utils.AutoTestHelper
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
 import java.io.FileWriter
 
 /**
- * 歌曲排序选择页面�?Presenter
+ * 歌曲排序选择页面�?Presenter
  */
 class SongSortPresenter(
     private val view: SongSortContract.View,
@@ -24,7 +25,7 @@ class SongSortPresenter(
             val records = loadSortOrderRecords()
             val currentRecord = records.find { it.playlistId == playlistId }
 
-            // 默认按收藏时间从新到旧排�?
+            // 默认按收藏时间从新到旧排序
             val sortType = currentRecord?.sortType ?: SortOrderRecord.SORT_TIME_DESC
             view.showCurrentSortOrder(sortType)
             view.hideLoading()
@@ -38,10 +39,10 @@ class SongSortPresenter(
         try {
             val records = loadSortOrderRecords().toMutableList()
 
-            // 移除该歌单的旧记�?
+            // 移除该歌单的旧记录
             records.removeAll { it.playlistId == playlistId }
 
-            // 添加新记�?
+            // 添加新记录
             val newRecord = SortOrderRecord(
                 recordId = "sort_${System.currentTimeMillis()}",
                 playlistId = playlistId,
@@ -50,10 +51,13 @@ class SongSortPresenter(
             )
             records.add(newRecord)
 
-            // 保存到文�?
+            // 保存到文件
             saveSortOrderRecords(records)
 
-            view.showToast("已切换为�?sortType")
+            // 更新AutoTestHelper中的歌单排序顺序
+            AutoTestHelper.updatePlaylistSortOrder(playlistId, sortType)
+
+            view.showToast("已切换为：$sortType")
             view.navigateBack()
         } catch (e: Exception) {
             view.showError("保存排序设置失败: ${e.message}")
@@ -69,7 +73,7 @@ class SongSortPresenter(
     }
 
     /**
-     * 从文件加载排序记�?
+     * 从文件加载排序记录
      */
     private fun loadSortOrderRecords(): List<SortOrderRecord> {
         return try {
@@ -89,7 +93,7 @@ class SongSortPresenter(
     }
 
     /**
-     * 保存排序记录到文�?
+     * 保存排序记录到文件
      */
     private fun saveSortOrderRecords(records: List<SortOrderRecord>) {
         val json = gson.toJson(records)

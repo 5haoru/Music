@@ -6,6 +6,7 @@ import com.example.mymusic.data.repository.LyricRepository
 import com.example.mymusic.data.repository.PlaylistRepository
 import com.example.mymusic.data.repository.SongRepository
 import com.example.mymusic.data.model.CollectionRecord
+import com.example.mymusic.utils.AutoTestHelper
 
 /**
  * 歌词页面Presenter
@@ -68,7 +69,9 @@ class LyricPresenter(
     }
 
     override fun onEncyclopediaClick() {
-        // TODO: 打开歌曲百科
+        currentSong?.let { song ->
+            view.navigateToSongProfile(song.songId)
+        }
     }
 
     override fun onPlayPauseClick() {
@@ -92,15 +95,23 @@ class LyricPresenter(
                 if (success) {
                     isFavorite = false
                     view.updateFavoriteState(isFavorite)
+
+                    // 记录取消收藏到AutoTestHelper
+                    AutoTestHelper.removeFavoriteSong(song.songId)
+                    view.showSuccess("已取消收藏")
                 } else {
                     view.showError("取消收藏失败")
                 }
             } else {
-                // 未收藏，添加到“我喜欢的音乐”
+                // 未收藏，添加到"我喜欢的音乐"
                 val success = playlistRepository.addSongToPlaylist("my_favorites", song.songId)
                 if (success) {
                     isFavorite = true
                     view.updateFavoriteState(isFavorite)
+
+                    // 记录到AutoTestHelper
+                    AutoTestHelper.addFavoriteSong(song.songId, song.songName, song.artist)
+
                     val record = CollectionRecord(
                         collectionId = collectionRepository.generateCollectionId(),
                         contentType = "song_to_favorites",

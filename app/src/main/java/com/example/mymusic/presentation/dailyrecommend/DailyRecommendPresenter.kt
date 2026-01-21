@@ -34,9 +34,11 @@ class DailyRecommendPresenter(
                 songId = it.songId,
                 songName = it.songName,
                 artist = it.artist,
+                isPlaying = true,  // 设置为播放状态
                 source = "daily_recommend",
                 sourceDetail = "daily_recommend_item_${songIndex}"
-            )        }
+            )
+        }
         view.navigateToPlay(songId)
     }
 

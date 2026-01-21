@@ -23,6 +23,7 @@ interface MeContract {
         fun onFollowClick()
         fun onCreatePlaylistClick()
         fun createPlaylist(title: String, isPrivate: Boolean, isMusic: Boolean)
+        fun deletePlaylist(playlist: Playlist)
         fun onPlaylistClick(playlist: Playlist)
         fun onMiniPlayerClick()
         fun onMiniPlayerPlayPauseClick()

@@ -1,9 +1,12 @@
 package com.example.mymusic.presentation.rank
 
 import android.content.Context
+import com.example.mymusic.data.repository.CollectionRepository
 import com.example.mymusic.data.repository.PlaylistRepository
 import com.example.mymusic.data.repository.SongRepository
+import com.example.mymusic.data.model.CollectionRecord
 import com.example.mymusic.utils.AutoTestHelper
+import com.example.mymusic.utils.DataLoader
 import kotlin.random.Random
 
 /**
@@ -12,7 +15,9 @@ import kotlin.random.Random
 class RankPresenter(
     private val view: RankContract.View,
     private val songRepository: SongRepository,
-    private val playlistRepository: PlaylistRepository
+    private val playlistRepository: PlaylistRepository,
+    private val collectionRepository: CollectionRepository,
+    private val context: Context
 ) : RankContract.Presenter {
 
     private var currentRankDetail: RankContract.RankDetail? = null
@@ -26,8 +31,8 @@ class RankPresenter(
             val favoritesPlaylist = playlistRepository.getAllPlaylists().find { it.playlistId == "my_favorites" }
             val favoriteSongIds = favoritesPlaylist?.songIds.orEmpty()
 
-            // 生成100首歌曲
-            val rankSongs = (1..100).map { i ->
+            // 生成30首歌曲
+            val rankSongs = (1..30).map { i ->
                 val song = allSongs[(i - 1) % allSongs.size]
                 val (rankChange, changeValue) = generateRankChange(i)
                 RankContract.RankSongItem(
@@ -162,6 +167,28 @@ class RankPresenter(
     override fun onLikeClick() {
         currentRankDetail?.let { detail ->
             isLiked = !isLiked
+            if (isLiked) {
+                // 收藏榜单
+                AutoTestHelper.addCollectedPlaylist(
+                    playlistId = detail.rankId,
+                    playlistName = detail.rankName
+                )
+
+                val record = CollectionRecord(
+                    collectionId = collectionRepository.generateCollectionId(),
+                    contentType = "playlist",
+                    contentId = detail.rankId,
+                    contentName = detail.rankName,
+                    collectionTime = System.currentTimeMillis(),
+                    isSuccess = true
+                )
+                collectionRepository.saveCollectionRecord(record)
+
+                view.showSuccess("成功收藏《${detail.rankName}》")
+            } else {
+                // 取消收藏
+                view.showSuccess("已取消收藏《${detail.rankName}》")
+            }
             val newLikeCount = if (isLiked) detail.likeCount + 1 else detail.likeCount - 1
             view.updateLikeStatus(isLiked, newLikeCount)
         }
@@ -197,6 +224,9 @@ class RankPresenter(
                     source = "rank_list",
                     sourceDetail = "${detail.rankName} - 第${it.rank}名"
                 )
+
+                // 保存播放记录到 data/play_records.json
+                DataLoader.savePlayRecord(context, it.song.songId)
             }
         }
         view.navigateToPlay(songId)
@@ -212,6 +242,11 @@ class RankPresenter(
             } else {
                 val success = playlistRepository.addSongToPlaylist("my_favorites", songId)
                 if (success) {
+                    // 获取歌曲信息并记录到AutoTestHelper
+                    val song = songRepository.getSongById(songId)
+                    if (song != null) {
+                        AutoTestHelper.addFavoriteSong(song.songId, song.songName, song.artist)
+                    }
                     view.updateSongFavoriteStatus(songId, true)
                     view.showSuccess("成功收藏")
                 } else {

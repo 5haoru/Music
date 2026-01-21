@@ -15,7 +15,8 @@ class PlayerStyleRepository(private val context: Context) {
             val type = object : TypeToken<List<PlayerStyle>>() {}.type
             gson.fromJson(json, type)
         } catch (e: Exception) {
-            emptyList()
+            // 如果文件不存在，返回预设样式
+            PlayerStyle.getAllStyles()
         }
     }
 }

@@ -110,7 +110,14 @@ class SongDelPresenter(
                     return@launch
                 }
 
-                // 2. 同步到AutoTest
+                // 2. 如果是从"我喜欢的音乐"删除，记录取消收藏
+                if (currentPlaylistId == "my_favorites") {
+                    withContext(Dispatchers.IO) {
+                        AutoTestHelper.removeFavoriteSong(currentSongId)
+                    }
+                }
+
+                // 3. 同步到AutoTest
                 withContext(Dispatchers.IO) {
                     val updatedPlaylist = DataLoader.getPlaylistById(context, currentPlaylistId)
                     updatedPlaylist?.let {
@@ -118,7 +125,7 @@ class SongDelPresenter(
                     }
                 }
 
-                // 3. 保存删除记录
+                // 4. 保存删除记录
                 withContext(Dispatchers.IO) {
                     saveDeletionRecord()
                 }
@@ -134,11 +141,17 @@ class SongDelPresenter(
     }
 
     /**
-     * 保存删除记录到song_deletion_records.json
+     * 保存删除记录到autotest/song_deletion_records.json
      */
     private fun saveDeletionRecord() {
         try {
-            val file = File(context.filesDir, "song_deletion_records.json")
+            // 确保 autotest 目录存在
+            val autotestDir = File(context.filesDir, "autotest")
+            if (!autotestDir.exists()) {
+                autotestDir.mkdirs()
+            }
+
+            val file = File(autotestDir, "song_deletion_records.json")
 
             // 读取现有记录
             val existingRecords = if (file.exists()) {
@@ -158,7 +171,7 @@ class SongDelPresenter(
             )
             existingRecords.add(newRecord)
 
-            // 保存到文《
+            // 保存到文件
             val json = gson.toJson(existingRecords)
             file.writeText(json)
         } catch (e: Exception) {

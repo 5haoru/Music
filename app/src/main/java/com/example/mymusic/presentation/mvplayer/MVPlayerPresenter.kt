@@ -62,6 +62,8 @@ class MVPlayerPresenter(
             // For simplicity, directly add to "my_favorites" playlist for now
             val success = playlistRepository.addSongToPlaylist("my_favorites", mv.songId)
             if (success) {
+                // 记录到AutoTestHelper
+                AutoTestHelper.addFavoriteSong(mv.songId, mv.title, mv.artist)
                 view.showSuccess("已收藏MV")
             } else {
                 view.showError("收藏MV失败")

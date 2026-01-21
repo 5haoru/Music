@@ -24,14 +24,8 @@ class CommentRepository(private val context: Context) {
     }
 
     fun generateCommentId(): String {
-        val allComments = getAllComments()
-        return if (allComments.isEmpty()) {
-            "C001"
-        } else {
-            val lastId = allComments.maxByOrNull { it.commentId.substring(1).toInt() }?.commentId ?: "C000"
-            val num = lastId.substring(1).toInt() + 1
-            "C" + String.format("%03d", num)
-        }
+        val timestamp = System.currentTimeMillis()
+        return "comment_$timestamp"
     }
 
     private fun getAllComments(): List<Comment> {

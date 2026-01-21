@@ -91,11 +91,11 @@ class SubscribePresenter(
         // 从列表中移除该关注项
         allFollowItems = allFollowItems.filter { it.id != item.id }
 
-        // 如果是歌手类型，同步到AutoTest
-        // 注意：这里使用item.id作为artistId，用于测试验证
-        if (item.type == "artist") {
-            AutoTestHelper.removeFollowedArtist(item.id)
-        }
+        // 保存到内部存储
+        DataLoader.saveFollowItems(context, allFollowItems)
+
+        // 同步到AutoTest（所有类型都同步）
+        AutoTestHelper.removeFollowedArtist(item.id)
 
         // 根据当前筛选条件更新显示
         filterByType(currentFilterType)

@@ -29,6 +29,9 @@ class AlbumPresenter(
                 return
             }
 
+            // 记录当前查看的专辑ID
+            AutoTestHelper.updateCurrentAlbumId(albumId)
+
             view.showAlbumInfo(currentAlbum!!)
 
             val allSongs = songRepository.getAllSongs()

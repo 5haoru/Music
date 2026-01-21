@@ -23,7 +23,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun LyricTab(
     songId: String,
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onNavigateToSongProfile: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -76,6 +77,10 @@ fun LyricTab(
 
                 override fun closeLyricPage() {
                     onBackClick()
+                }
+
+                override fun navigateToSongProfile(songId: String) {
+                    onNavigateToSongProfile(songId)
                 }
 
                 override fun showLoading() {

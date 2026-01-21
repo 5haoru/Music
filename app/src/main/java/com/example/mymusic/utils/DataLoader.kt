@@ -446,9 +446,37 @@ object DataLoader {
      * 加载关注列表
      */
     fun loadFollowItems(context: Context): List<FollowItem> {
+        // 先尝试从内部存储加载
+        val internalFile = File(context.filesDir, "follow_items.json")
+        if (internalFile.exists()) {
+            try {
+                val json = internalFile.readText()
+                val type = object : TypeToken<List<FollowItem>>() {}.type
+                return gson.fromJson(json, type)
+            } catch (e: Exception) {
+                // 如果读取失败，继续从assets加载
+            }
+        }
+
+        // 从assets加载并保存到内部存储
         val json = loadJsonFromAssets(context, "follow_items.json")
         val type = object : TypeToken<List<FollowItem>>() {}.type
-        return gson.fromJson(json, type)
+        val items: List<FollowItem> = gson.fromJson(json, type)
+        saveFollowItems(context, items)
+        return items
+    }
+
+    /**
+     * 保存关注列表到内部存储
+     */
+    fun saveFollowItems(context: Context, items: List<FollowItem>) {
+        try {
+            val file = File(context.filesDir, "follow_items.json")
+            val json = gson.toJson(items)
+            file.writeText(json)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     /**
@@ -673,6 +701,42 @@ object DataLoader {
         val allSongs = loadSongs(context)
         return album.songIds.mapNotNull { songId ->
             allSongs.find { it.songId == songId }
+        }
+    }
+
+    /**
+     * 保存播放记录到 data/play_records.json
+     */
+    fun savePlayRecord(context: Context, songId: String, timestamp: Long = System.currentTimeMillis()) {
+        try {
+            val dataDir = File(context.filesDir, "data")
+            if (!dataDir.exists()) {
+                dataDir.mkdirs()
+            }
+
+            val file = File(dataDir, "play_records.json")
+
+            // 读取现有记录
+            val records = if (file.exists()) {
+                val json = file.readText(Charsets.UTF_8)
+                val type = object : TypeToken<MutableList<Map<String, Any>>>() {}.type
+                gson.fromJson<MutableList<Map<String, Any>>>(json, type) ?: mutableListOf()
+            } else {
+                mutableListOf()
+            }
+
+            // 添加新记录
+            val newRecord = mapOf(
+                "songId" to songId,
+                "timestamp" to timestamp
+            )
+            records.add(newRecord)
+
+            // 保存回文件
+            val json = gson.toJson(records)
+            file.writeText(json, Charsets.UTF_8)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

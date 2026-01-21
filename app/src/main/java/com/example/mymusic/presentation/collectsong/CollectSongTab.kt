@@ -36,6 +36,7 @@ fun CollectSongTab(
     var playlists by remember { mutableStateOf<List<Playlist>>(emptyList()) }
     val playlistAddedStates = remember { mutableStateMapOf<String, Boolean>() }
     var isLoading by remember { mutableStateOf(false) }
+    var refreshTrigger by remember { mutableStateOf(0) }
 
     // Presenter
     val presenter = remember {
@@ -80,9 +81,15 @@ fun CollectSongTab(
         )
     }
 
-    // 加载数据
-    LaunchedEffect(songId) {
+    // 加载数据 - 当songId或refreshTrigger变化时重新加载
+    LaunchedEffect(songId, refreshTrigger) {
         presenter.loadPlaylists(songId)
+    }
+
+    // 当页面重新显示时自动刷新
+    DisposableEffect(Unit) {
+        refreshTrigger++
+        onDispose { }
     }
 
     Scaffold(
@@ -103,6 +110,13 @@ fun CollectSongTab(
                     }
                 },
                 actions = {
+                    // 刷新按钮
+                    IconButton(onClick = { refreshTrigger++ }) {
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            contentDescription = "刷新"
+                        )
+                    }
                     // 常用按钮
                     TextButton(onClick = { presenter.onCommonClick() }) {
                         Row(verticalAlignment = Alignment.CenterVertically) {

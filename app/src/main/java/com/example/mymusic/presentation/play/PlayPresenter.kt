@@ -7,6 +7,7 @@ import com.example.mymusic.data.repository.SongRepository
 import com.example.mymusic.data.model.CollectionRecord
 import com.example.mymusic.utils.AutoTestHelper
 import kotlin.random.Random
+import kotlinx.coroutines.*
 
 class PlayPresenter(
     private val view: PlayContract.View,
@@ -22,6 +23,12 @@ class PlayPresenter(
     private var isFavorite: Boolean = false
     private var currentPlayMode: PlayMode = PlayMode.SEQUENCE
     private var progressUpdateCallback: (() -> Unit)? = null
+
+    // 进度更新相关
+    private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+    private var playbackJob: Job? = null
+    private var currentProgress: Float = 0f
+    private val songDuration: Float = 240f  // 模拟歌曲时长4分钟
 
     override fun loadData() {
         view.showLoading()
@@ -78,6 +85,10 @@ class PlayPresenter(
     override fun onPlayPauseClick() {
         isPlaying = !isPlaying
         view.updatePlayState(isPlaying)
+
+        // 更新播放状态到 AutoTestHelper
+        AutoTestHelper.updatePlayback(isPlaying = isPlaying)
+
         if (isPlaying) {
             startPlayback()
         } else {
@@ -163,11 +174,36 @@ class PlayPresenter(
     }
 
     override fun startPlayback() {
-        // TODO: Start playback timer or media player
+        // 取消之前的播放任务
+        playbackJob?.cancel()
+
+        // 启动新的播放任务，模拟进度更新
+        playbackJob = scope.launch {
+            while (isActive && isPlaying) {
+                delay(1000)  // 每秒更新一次
+                currentProgress += 1f
+                if (currentProgress >= songDuration) {
+                    currentProgress = 0f
+                    // 歌曲播放完毕，自动播放下一首
+                    onNextClick()
+                }
+                // 更新进度显示
+                val progress = currentProgress / songDuration
+                val currentTime = formatTime(currentProgress.toInt())
+                view.updateProgress(progress, currentTime)
+            }
+        }
     }
 
     override fun stopPlayback() {
-        // TODO: Stop playback timer or media player
+        playbackJob?.cancel()
+        playbackJob = null
+    }
+
+    private fun formatTime(seconds: Int): String {
+        val minutes = seconds / 60
+        val secs = seconds % 60
+        return String.format("%02d:%02d", minutes, secs)
     }
 
     override fun setProgressUpdateCallback(callback: () -> Unit) {
@@ -181,9 +217,18 @@ class PlayPresenter(
             PlayMode.SINGLE -> PlayMode.SEQUENCE
         }
         view.updatePlayMode(currentPlayMode)
+
+        // 更新播放模式到 AutoTestHelper
+        val playbackModeString = when (currentPlayMode) {
+            PlayMode.SEQUENCE -> "sequential"
+            PlayMode.SHUFFLE -> "shuffle"
+            PlayMode.SINGLE -> "single_loop"
+        }
+        AutoTestHelper.updatePlayback(playbackMode = playbackModeString)
     }
 
     override fun onDestroy() {
         stopPlayback()
+        scope.cancel()  // 取消协程作用域
     }
 }

@@ -2,6 +2,7 @@ package com.example.mymusic.data.repository
 
 import android.content.Context
 import com.example.mymusic.data.model.ArtistFollowRecord
+import com.example.mymusic.utils.AutoTestHelper
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.OutputStreamWriter
@@ -21,11 +22,17 @@ class ArtistFollowRecordRepository(private val context: Context) {
             isSuccess = true
         )
         saveArtistFollowRecord(record)
+
+        // 同步到AutoTestHelper
+        AutoTestHelper.addFollowedArtist(artistId, artistName)
     }
 
     fun removeFollowRecord(artistId: String) {
         val records = getAllRecords().filterNot { it.artistId == artistId }
         saveAllRecords(records)
+
+        // 同步到AutoTestHelper
+        AutoTestHelper.removeFollowedArtist(artistId)
     }
 
     fun saveArtistFollowRecord(record: ArtistFollowRecord) {

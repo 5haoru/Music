@@ -16,6 +16,7 @@ interface LyricContract {
         fun updateFavoriteState(isFavorite: Boolean)
         fun updateProgress(progress: Float, currentTime: String)
         fun closeLyricPage()
+        fun navigateToSongProfile(songId: String)
     }
 
     interface Presenter : BasePresenter {

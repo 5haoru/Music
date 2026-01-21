@@ -25,6 +25,10 @@ class PlaylistPresenter(
     override fun loadPlaylistSongs(playlist: Playlist) {
         view.showLoading()
         currentPlaylist = playlist
+
+        // 记录当前查看的歌单ID
+        AutoTestHelper.updateCurrentPlaylistId(playlist.playlistId)
+
         try {
             // 重新从存储加载最新的歌单数据
             val latestPlaylist = playlistRepository.getAllPlaylists()

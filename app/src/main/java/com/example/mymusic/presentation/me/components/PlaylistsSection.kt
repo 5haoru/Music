@@ -12,7 +12,8 @@ import com.example.mymusic.data.Playlist
 @Composable
 fun PlaylistsSection(
     playlists: List<Playlist>,
-    onPlaylistClick: (Playlist) -> Unit
+    onPlaylistClick: (Playlist) -> Unit,
+    onDeletePlaylist: (Playlist) -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -34,7 +35,8 @@ fun PlaylistsSection(
         playlists.filter { it.playlistId != "my_favorites" }.forEach { playlist ->
             PlaylistItem(
                 playlist = playlist,
-                onClick = { onPlaylistClick(playlist) }
+                onClick = { onPlaylistClick(playlist) },
+                onDeleteClick = { onDeletePlaylist(playlist) }
             )
         }
     }

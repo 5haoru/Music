@@ -4,12 +4,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,9 +25,11 @@ import com.example.mymusic.data.Playlist
 @Composable
 fun PlaylistItem(
     playlist: Playlist,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onDeleteClick: () -> Unit = {}
 ) {
     val context = LocalContext.current
+    var showMenu by remember { mutableStateOf(false) }
 
     Row(
         modifier = Modifier
@@ -68,12 +68,33 @@ fun PlaylistItem(
             )
         }
 
-        IconButton(onClick = { /* TODO: 更多选项 */ }) {
-            Icon(
-                imageVector = Icons.Default.MoreVert,
-                contentDescription = "更多",
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+        Box {
+            IconButton(onClick = { showMenu = true }) {
+                Icon(
+                    imageVector = Icons.Default.MoreVert,
+                    contentDescription = "更多",
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            DropdownMenu(
+                expanded = showMenu,
+                onDismissRequest = { showMenu = false }
+            ) {
+                DropdownMenuItem(
+                    text = { Text("删除歌单") },
+                    onClick = {
+                        showMenu = false
+                        onDeleteClick()
+                    },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "删除"
+                        )
+                    }
+                )
+            }
         }
     }
 }

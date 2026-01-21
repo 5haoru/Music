@@ -101,6 +101,29 @@ class MePresenter(
         }
     }
 
+    override fun deletePlaylist(playlist: Playlist) {
+        try {
+            // 不允许删除"我喜欢的音乐"
+            if (playlist.playlistId == "my_favorites") {
+                view.showError("不能删除「我喜欢的音乐」")
+                return
+            }
+
+            // 从列表中移除
+            val updatedPlaylists = userPlaylists.filter { it.playlistId != playlist.playlistId }
+            userPlaylists = updatedPlaylists
+
+            // 保存到本地
+            DataLoader.savePlaylists(context, userPlaylists)
+
+            // 刷新UI
+            view.showPlaylists(userPlaylists)
+            view.showSuccess("已删除歌单「${playlist.playlistName}」")
+        } catch (e: Exception) {
+            view.showError("删除歌单失败: ${e.message}")
+        }
+    }
+
     override fun onPlaylistClick(playlist: Playlist) {
         // 记录当前正在查看的歌单到AutoTestHelper
         AutoTestHelper.updateCurrentViewingPlaylist(playlist.playlistId)

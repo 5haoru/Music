@@ -409,28 +409,26 @@ def task_28_check_collect_album(album_id):
 
 def task_29_check_unfollow_artist(artist_id=None):
     """
-    任务29: 将关注列表中的一位歌手删除
-    验证: 检查followed_artists.json中followedArtists是否不包含指定歌手
-    如果未指定artist_id，则检查关注列表是否有减少
-    :param artist_id: 取消关注的歌手ID (可选)
+    任务29: 将关注列表中的一位删除
+    验证: 检查followed_artists.json中是否有recentlyUnfollowed字段记录了取消关注的项目
+    :param artist_id: 取消关注的项目ID (可选)
     """
     data = read_json_from_device('autotest/followed_artists.json')
 
-    if artist_id:
-        # 指定了artist_id，检查该歌手是否不在列表中
-        if data and 'followedArtists' in data:
-            artist_ids = [a.get('artistId') for a in data['followedArtists']]
-            return artist_id not in artist_ids
+    if not data:
         return False
-    else:
-        # 未指定artist_id，检查关注列表变化
-        # 简单检查：如果关注列表存在且数量小于初始数量（假设初始有5个歌手）
-        if data and 'followedArtists' in data:
-            initial_artist_count = 5  # 假设初始状态有5个歌手
-            current_count = len(data['followedArtists'])
-            # 如果当前数量少于初始数量，说明有歌手被取消关注
-            return current_count < initial_artist_count
-        return True  # 如果列表为空或不存在，也算通过
+
+    # 检查是否有recentlyUnfollowed字段且不为空
+    recently_unfollowed = data.get('recentlyUnfollowed')
+    if not recently_unfollowed:
+        return False
+
+    # 如果指定了artist_id，检查是否匹配
+    if artist_id:
+        return recently_unfollowed == artist_id
+
+    # 如果没有指定artist_id，只要有recentlyUnfollowed记录就算通过
+    return True
 
 
 def task_30_check_play_mv(mv_id):

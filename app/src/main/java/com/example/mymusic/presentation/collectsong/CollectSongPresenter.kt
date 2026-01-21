@@ -74,6 +74,11 @@ class CollectSongPresenter(
             playlists = playlistRepository.getAllPlaylists()
             AutoTestHelper.updatePlaylistSongs(playlistId, playlists.find { it.playlistId == playlistId }?.songIds ?: emptyList())
 
+            // 如果是收藏到"我喜欢的音乐"，还需要更新user_favorites.json
+            if (playlistId == "my_favorites" && song != null) {
+                AutoTestHelper.addFavoriteSong(song.songId, song.songName, song.artist)
+            }
+
             addedPlaylistIds.add(playlistId)
             view.updatePlaylistAddedState(playlistId, true)
             view.showSuccess("已成功收藏到「$playlistName」")

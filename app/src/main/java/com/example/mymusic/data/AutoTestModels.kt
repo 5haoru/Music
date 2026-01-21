@@ -20,6 +20,8 @@ data class AppState(
     val currentPage: String,
     val navigationHistory: List<NavigationRecord> = emptyList(),
     val currentSongId: String? = null,  // 用于歌曲详情页面
+    val currentPlaylistId: String? = null,  // 用于歌单详情页面
+    val currentAlbumId: String? = null,  // 用于专辑详情页面
     val showLyrics: Boolean = false,     // 是否显示歌词
     val lastUpdated: String
 )
@@ -73,6 +75,7 @@ data class FavoriteSongRecord(
  */
 data class UserFavorites(
     val favoriteSongs: List<FavoriteSongRecord>,
+    val recentUnfavorited: String? = null,  // 最近取消收藏的歌曲ID
     val lastUpdated: String
 )
 
@@ -84,7 +87,7 @@ data class PlaylistRecord(
     val playlistName: String,
     val songIds: List<String>,
     val songCount: Int,
-    val createdTime: String,
+    val createTime: Long,  // 改为Long类型的时间戳，字段名改为createTime
     val sortOrder: String = "default"  // "default", "time_desc", "time_asc", "name_asc", "name_desc"
 )
 
@@ -140,6 +143,7 @@ data class FollowedArtistRecord(
  */
 data class FollowedArtists(
     val followedArtists: List<FollowedArtistRecord>,
+    val recentlyUnfollowed: String? = null,  // 最近取消关注的项目ID
     val lastUpdated: String
 )
 

@@ -253,7 +253,11 @@ fun StrollTab(
         if (showLyric && currentSong != null) {
             LyricTab(
                 songId = currentSong!!.songId,
-                onBackClick = { showLyric = false }
+                onBackClick = { showLyric = false },
+                onNavigateToSongProfile = {
+                    showLyric = false
+                    showSongProfile = true
+                }
             )
         }
 

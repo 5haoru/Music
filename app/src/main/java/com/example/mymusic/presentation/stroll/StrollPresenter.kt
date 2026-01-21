@@ -5,6 +5,7 @@ import com.example.mymusic.data.Song
 import com.example.mymusic.data.model.CollectionRecord
 import com.example.mymusic.presentation.stroll.StrollContract
 import com.example.mymusic.utils.DataLoader
+import com.example.mymusic.utils.AutoTestHelper
 import kotlin.random.Random
 
 /**
@@ -146,6 +147,9 @@ class StrollPresenter(
                 if (success) {
                     isFavorite = true
                     view.updateFavoriteState(isFavorite)
+
+                    // 记录到AutoTestHelper
+                    AutoTestHelper.addFavoriteSong(song.songId, song.songName, song.artist)
 
                     // 保存收藏记录
                     try {

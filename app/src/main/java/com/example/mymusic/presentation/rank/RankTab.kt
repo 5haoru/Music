@@ -90,7 +90,9 @@ fun RankTab(
                 }
             },
             RepositoryProvider.getSongRepository(),
-            RepositoryProvider.getPlaylistRepository()
+            RepositoryProvider.getPlaylistRepository(),
+            RepositoryProvider.getCollectionRepository(),
+            context
         )
     }
 

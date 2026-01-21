@@ -5,7 +5,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.ThumbUp
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -54,9 +54,9 @@ fun InteractionButtonsRow(
             backgroundColor = MaterialTheme.colorScheme.surfaceVariant
         )
 
-        // 点赞按钮（金色背景）
+        // 收藏按钮（金色背景）
         InteractionButton(
-            icon = Icons.Default.ThumbUp,
+            icon = Icons.Default.Favorite,
             text = formatLikeCount(likeCount),
             onClick = onLikeClick,
             modifier = Modifier.weight(1f),

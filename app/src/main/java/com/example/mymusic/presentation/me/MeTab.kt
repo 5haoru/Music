@@ -38,6 +38,8 @@ fun MeTab(
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var showCreatePlaylistDialog by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    var playlistToDelete by remember { mutableStateOf<Playlist?>(null) }
     var fanCount by remember { mutableIntStateOf(0) }
 
     // Presenter
@@ -164,7 +166,11 @@ fun MeTab(
                 item {
                     PlaylistsSection(
                         playlists = playlists,
-                        onPlaylistClick = { presenter.onPlaylistClick(it) }
+                        onPlaylistClick = { presenter.onPlaylistClick(it) },
+                        onDeletePlaylist = { playlist ->
+                            playlistToDelete = playlist
+                            showDeleteDialog = true
+                        }
                     )
                 }
 
@@ -191,6 +197,31 @@ fun MeTab(
                     presenter.createPlaylist(title, isPrivate, isMusic)
                     showCreatePlaylistDialog = false
                     android.widget.Toast.makeText(context, "创建成功", android.widget.Toast.LENGTH_SHORT).show()
+                }
+            )
+        }
+
+        // 删除歌单确认对话框
+        if (showDeleteDialog && playlistToDelete != null) {
+            AlertDialog(
+                onDismissRequest = { showDeleteDialog = false },
+                title = { Text("删除歌单") },
+                text = { Text("确定要删除歌单「${playlistToDelete?.playlistName}」吗？") },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            playlistToDelete?.let { presenter.deletePlaylist(it) }
+                            showDeleteDialog = false
+                            playlistToDelete = null
+                        }
+                    ) {
+                        Text("删除")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showDeleteDialog = false }) {
+                        Text("取消")
+                    }
                 }
             )
         }

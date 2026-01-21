@@ -28,6 +28,7 @@ import com.example.mymusic.presentation.modeselection.ModeSelectionTab
 import com.example.mymusic.presentation.searchresult.SearchResultTab
 import com.example.mymusic.presentation.comment.CommentTab
 import com.example.mymusic.presentation.lyric.LyricTab
+import com.example.mymusic.presentation.songprofile.SongProfileTab
 import com.example.mymusic.presentation.subscribe.SubscribeTab
 import com.example.mymusic.presentation.duration.DurationTab
 import com.example.mymusic.presentation.fan.FanTab
@@ -96,6 +97,7 @@ class MainActivity : ComponentActivity(), MainContract.View {
         var selectedMVId by remember { mutableStateOf("") }
         var showUnderDevelopment by remember { mutableStateOf(false) }
         var underDevelopmentFeature by remember { mutableStateOf("") }
+        var showSongProfile by remember { mutableStateOf(false) }
 
         // 正在开发中页面不显示底部导航栏
         if (showUnderDevelopment) {
@@ -203,7 +205,21 @@ class MainActivity : ComponentActivity(), MainContract.View {
         if (showLyric) {
             LyricTab(
                 songId = selectedSongId,
-                onBackClick = { showLyric = false }
+                onBackClick = { showLyric = false },
+                onNavigateToSongProfile = { songId ->
+                    showLyric = false
+                    selectedSongId = songId
+                    showSongProfile = true
+                }
+            )
+            return
+        }
+
+        // 歌曲百科页面不显示底部导航栏
+        if (showSongProfile) {
+            SongProfileTab(
+                songId = selectedSongId,
+                onBackClick = { showSongProfile = false }
             )
             return
         }
@@ -281,7 +297,8 @@ class MainActivity : ComponentActivity(), MainContract.View {
                     selectedPlaylist = null
                 },
                 onNavigateToPlay = { song ->
-                    // TODO: 导航到播放页面
+                    // 导航到播放页面并加载指定歌曲
+                    playTabSongId = song.songId
                     currentTab = 2
                     showPlaylist = false
                     selectedPlaylist = null

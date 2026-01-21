@@ -32,7 +32,7 @@ object AutoTestHelper {
             }
 
             // 初始化默认文件
-            initDefaultFiles()
+            initDefaultFiles(context)
         } catch (e: Exception) {
             Log.e(TAG, "初始化失败", e)
         }
@@ -41,13 +41,17 @@ object AutoTestHelper {
     /**
      * 初始化默认JSON文件
      */
-    private fun initDefaultFiles() {
+    private fun initDefaultFiles(context: Context) {
         try {
             // app_state.json
             if (!getFile("app_state.json").exists()) {
                 val defaultAppState = AppState(
                     currentPage = "unknown",
                     navigationHistory = emptyList(),
+                    currentSongId = null,
+                    currentPlaylistId = null,
+                    currentAlbumId = null,
+                    showLyrics = false,
                     lastUpdated = getCurrentTimestamp()
                 )
                 saveAppState(defaultAppState)
@@ -96,12 +100,31 @@ object AutoTestHelper {
             }
 
             // followed_artists.json
+            // 从assets的follow_items.json加载所有关注项（用户+歌手）
             if (!getFile("followed_artists.json").exists()) {
-                val defaultFollowed = FollowedArtists(
-                    followedArtists = emptyList(),
-                    lastUpdated = getCurrentTimestamp()
-                )
-                saveFollowedArtists(defaultFollowed)
+                try {
+                    val followItemsJson = context.assets.open("data/follow_items.json").bufferedReader().use { it.readText() }
+                    val followItemsType = object : com.google.gson.reflect.TypeToken<List<com.example.mymusic.data.FollowItem>>() {}.type
+                    val followItems: List<com.example.mymusic.data.FollowItem> = gson.fromJson(followItemsJson, followItemsType)
+
+                    // 加载所有关注项（不区分用户和歌手）
+                    val followRecords = followItems.map { FollowedArtistRecord(it.id, it.name, getCurrentTimestamp()) }
+
+                    val defaultFollowed = FollowedArtists(
+                        followedArtists = followRecords,
+                        recentlyUnfollowed = null,
+                        lastUpdated = getCurrentTimestamp()
+                    )
+                    saveFollowedArtists(defaultFollowed)
+                } catch (e: Exception) {
+                    // 如果加载失败，使用空列表
+                    val defaultFollowed = FollowedArtists(
+                        followedArtists = emptyList(),
+                        recentlyUnfollowed = null,
+                        lastUpdated = getCurrentTimestamp()
+                    )
+                    saveFollowedArtists(defaultFollowed)
+                }
             }
 
             // search_history.json
@@ -216,7 +239,7 @@ object AutoTestHelper {
     // ==================== App状态 ====================
 
     fun getAppState(): AppState {
-        return readJson("app_state.json", AppState("unknown", emptyList(), null, false, getCurrentTimestamp()))
+        return readJson("app_state.json", AppState("unknown", emptyList(), null, null, null, false, getCurrentTimestamp()))
     }
 
     fun saveAppState(state: AppState) {
@@ -243,6 +266,16 @@ object AutoTestHelper {
     fun updateCurrentSongId(songId: String?) {
         val state = getAppState()
         saveAppState(state.copy(currentSongId = songId, lastUpdated = getCurrentTimestamp()))
+    }
+
+    fun updateCurrentPlaylistId(playlistId: String?) {
+        val state = getAppState()
+        saveAppState(state.copy(currentPlaylistId = playlistId, lastUpdated = getCurrentTimestamp()))
+    }
+
+    fun updateCurrentAlbumId(albumId: String?) {
+        val state = getAppState()
+        saveAppState(state.copy(currentAlbumId = albumId, lastUpdated = getCurrentTimestamp()))
     }
 
     // ==================== 播放状态 ====================
@@ -292,7 +325,7 @@ object AutoTestHelper {
     // ==================== 用户收藏 ====================
 
     fun getUserFavorites(): UserFavorites {
-        return readJson("user_favorites.json", UserFavorites(emptyList(), getCurrentTimestamp()))
+        return readJson("user_favorites.json", UserFavorites(emptyList(), null, getCurrentTimestamp()))
     }
 
     fun saveUserFavorites(favorites: UserFavorites) {
@@ -306,14 +339,14 @@ object AutoTestHelper {
         // 检查是否已收藏
         if (songs.none { it.songId == songId }) {
             songs.add(FavoriteSongRecord(songId, songName, artist, getCurrentTimestamp()))
-            saveUserFavorites(UserFavorites(songs, getCurrentTimestamp()))
+            saveUserFavorites(UserFavorites(songs, null, getCurrentTimestamp()))
         }
     }
 
     fun removeFavoriteSong(songId: String) {
         val favorites = getUserFavorites()
         val songs = favorites.favoriteSongs.filter { it.songId != songId }
-        saveUserFavorites(UserFavorites(songs, getCurrentTimestamp()))
+        saveUserFavorites(UserFavorites(songs, songId, getCurrentTimestamp()))
     }
 
     // ==================== 用户歌单 ====================
@@ -329,7 +362,7 @@ object AutoTestHelper {
     fun addPlaylist(playlistId: String, playlistName: String, songIds: List<String>) {
         val playlists = getUserPlaylists()
         val list = playlists.playlists.toMutableList()
-        list.add(PlaylistRecord(playlistId, playlistName, songIds, songIds.size, getCurrentTimestamp()))
+        list.add(PlaylistRecord(playlistId, playlistName, songIds, songIds.size, System.currentTimeMillis()))
         saveUserPlaylists(UserPlaylists(list, playlists.currentViewingPlaylist, getCurrentTimestamp()))
     }
 
@@ -355,7 +388,7 @@ object AutoTestHelper {
                 playlistName = playlistName,
                 songIds = songIds,
                 songCount = songIds.size,
-                createdTime = getCurrentTimestamp()
+                createTime = System.currentTimeMillis()
             )
             val updatedList = playlists.playlists + newPlaylist
             saveUserPlaylists(playlists.copy(playlists = updatedList, lastUpdated = getCurrentTimestamp()))
@@ -422,7 +455,7 @@ object AutoTestHelper {
     // ==================== 关注歌手 ====================
 
     fun getFollowedArtists(): FollowedArtists {
-        return readJson("followed_artists.json", FollowedArtists(emptyList(), getCurrentTimestamp()))
+        return readJson("followed_artists.json", FollowedArtists(emptyList(), null, getCurrentTimestamp()))
     }
 
     fun saveFollowedArtists(artists: FollowedArtists) {
@@ -434,14 +467,14 @@ object AutoTestHelper {
         val artists = followed.followedArtists.toMutableList()
         if (artists.none { it.artistId == artistId }) {
             artists.add(FollowedArtistRecord(artistId, artistName, getCurrentTimestamp()))
-            saveFollowedArtists(FollowedArtists(artists, getCurrentTimestamp()))
+            saveFollowedArtists(FollowedArtists(artists, null, getCurrentTimestamp()))
         }
     }
 
     fun removeFollowedArtist(artistId: String) {
         val followed = getFollowedArtists()
         val artists = followed.followedArtists.filter { it.artistId != artistId }
-        saveFollowedArtists(FollowedArtists(artists, getCurrentTimestamp()))
+        saveFollowedArtists(FollowedArtists(artists, artistId, getCurrentTimestamp()))
     }
 
     // ==================== 搜索历史 ====================
